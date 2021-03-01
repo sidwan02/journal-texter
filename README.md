@@ -1,10 +1,16 @@
 # cs0320 Term Project 2021
 
-**Team Members:** _Fill this in!_
+**Team Members:** 
+Riki Fameli
+Siddharth Diwan
+Theodore Fernandez
+Thet Htay Zaw
 
-**Team Strengths and Weaknesses:** _Fill this in!_
+Please check [Project Outline](https://github.com/cs0320-2021/term-project-rfameli1-sdiwan2-tfernan4-tzaw/blob/master/Term%20Project%20Outline.pdf)
 
-**Project Idea(s):** _Fill this in with three unique ideas! (Due by March 1)_
+**Team Strengths and Weaknesses:** 
+
+**Project Idea(s):**
 ### Idea 1
 
 ### Idea 2
