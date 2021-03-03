@@ -101,6 +101,8 @@ Or, make sure that only word-to-vecs with ‘middle’ to ‘low’ frequency ar
     * This would not immediately add the question into the question bank, any user submitted questions would be vetted
 * A functionality that allows users to edit, hide, or delete previous journal entries they don’t want to see
 
+**HTA Approval (dpark20):** Idea approved contingent on your word processing algo not being just NLP. This is not a Deep Learning class! If you can't think of anything that will add algorithmic complexity beyond that, don't do this idea.
+
 
 ### StudyBuddy
 StudyBuddy is a system which will match you with people who are close in location and are studying similar topics to you.  StudyBuddy will give users an initial survey asking them about their study habits, including where they like to study, when they like to study, where they live, their courses, their intended concentrations, and general interests/hobbies.  Users can also select whether they want to be matched with people with similar answers, or if they would want to be matched with everyone.  Then, the algorithm will suggest other profiles to the user.  As the user decides to meet with certain people, the algorithm can suggest other profiles similar to the ones that the user likes.  Users will also have the option to message other users and to plan meetups in the app.  Ideally, as the user uses the StudyBuddy more, the app will get better at suggesting other users to study with.
@@ -129,6 +131,8 @@ The algorithmic complexity comes from the apps ability to suggest new profiles t
 * Possibly link to the open dining halls and their menus
 * High quality graphics
 * Blacklist/blocking functionality
+
+**HTA Approval (dpark20):** Idea approved
 
 **Mentor TA:** _Put your mentor TA's name and email here once you're assigned one!_
 
