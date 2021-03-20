@@ -1,5 +1,11 @@
 # cs0320 Term Project 2021
 
+**Packages to remember to install in frontend (Remove later)**
+
+`npm install react-router-dom --save`
+(This allows for multiple pages)
+
+
 **Team Members:**
 Riki Fameli,
 Siddharth Diwan,

@@ -1,23 +1,35 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { Component } from "react";
+//Import all needed Component for this tutorial
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+  Redirect
+} from "react-router-dom";
+
+//Pages
+import MainPage from "./pages/landing";
+import LoginPage from "./pages/login"
+import JournallerPage from "./pages/journaller"
+import NotFoundPage from "./pages/404";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        {/*All our Routes goes here!*/}
+        <Switch>
+          <Route exact path="/" component={MainPage} />
+          <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/journaller" component={JournallerPage} />
+          <Route exact path="/404" component={NotFoundPage} />
+          {/*This next line lets us default to the 404 page otherwise*/}
+          <Redirect to="/404" />
+        </Switch>
+      </Router>
     </div>
   );
 }
