@@ -1,0 +1,52 @@
+.dashboardElement {
+    border: medium solid black;
+    width: 230px;
+    height: 300px;
+    margin: 0 0 30px 30px;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 20%;
+    /*border-bottom: medium dotted black;*/
+}
+
+#logo {
+    margin-left: 20%;
+    padding: 10px 5px;
+    width: 200px;
+    height: 30px;
+    font-size: 30px;
+}
+
+#signout {
+    margin-right: 4%;
+    padding: 10px 10px;
+    border: medium solid black;
+}
+
+.entries {
+    display: flex;
+    flex-flow: row wrap;
+    margin-top: 10px;
+}
+
+#newEntry {
+    border: medium dashed black;
+    font-size: 40px;
+}
+
+.newEntryTitle {
+    width: 200px;
+}
+
+.dashboardElementText {
+    font-size: 20px;
+}

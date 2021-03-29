@@ -10,9 +10,10 @@ import {
 } from "react-router-dom";
 
 //Pages
-import MainPage from "./MainPage"
+import LandingPage from "./LandingPage"
 import LoginPage from "./LoginPage"
-import SignInPage from "./SignInPage";
+import SignUpPage from "./SignUpPage";
+import Dashboard from "./Dashboard";
 import JournallerPage from "./JournallerPage"
 import NotFoundPage from "./NotFoundPage";
 
@@ -22,9 +23,10 @@ function App() {
       <Router>
         {/*All our Routes goes here!*/}
         <Switch>
-          <Route exact path="/" component={MainPage} />
+          <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/signin" component={SignInPage} />
+          <Route exact path="/signup" component={SignUpPage} />
+          <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/journaller" component={JournallerPage} />
           <Route exact path="/404" component={NotFoundPage} />
           {/*This next line lets us default to the 404 page otherwise*/}

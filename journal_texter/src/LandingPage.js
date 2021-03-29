@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React from "react";
 
-function MainPage() {
+function LandingPage() {
     return (
         <div>
             <h3>Journal Texter Main Page</h3>
@@ -12,4 +12,4 @@ function MainPage() {
     );
 }
 
-export default MainPage;
+export default LandingPage;

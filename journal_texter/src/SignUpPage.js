@@ -3,7 +3,7 @@ import TextBox from "./TextBox";
 import './css/LoginPage.css'
 import {useHistory} from "react-router-dom";
 
-function LoginPage() {
+function SignUpPage() {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -31,4 +31,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default SignUpPage;

@@ -11,7 +11,7 @@ function LoginPage() {
     function handleClick() {
         console.log(username);
         console.log(password);
-        // history.push('/login');
+        history.push('/dashboard');
     }
 
     return (
@@ -23,7 +23,7 @@ function LoginPage() {
                 <button onClick={handleClick}>Submit</button>
             </p>
             <p>
-                <Link to="/signin">Sign Up!</Link>
+                <Link to="/signup">Sign Up!</Link>
             </p>
         </div>
     );
