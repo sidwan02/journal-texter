@@ -1,8 +1,7 @@
-/*landing.jsx*/
-import React from "react";
 import {Link} from "react-router-dom";
+import React from "react";
 
-const MainPage = () => {
+function MainPage() {
     return (
         <div>
             <h3>Journal Texter Main Page</h3>
@@ -11,6 +10,6 @@ const MainPage = () => {
             <Link to="/journaller">Journaller Here</Link>
         </div>
     );
-};
+}
 
 export default MainPage;

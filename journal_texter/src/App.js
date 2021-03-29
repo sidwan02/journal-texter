@@ -11,10 +11,10 @@ import {
 } from "react-router-dom";
 
 //Pages
-import MainPage from "./pages/landing";
-import LoginPage from "./pages/login"
-import JournallerPage from "./pages/journaller"
-import NotFoundPage from "./pages/404";
+import MainPage from "./MainPage"
+import LoginPage from "./LoginPage"
+import JournallerPage from "./JournallerPage"
+import NotFoundPage from "./NotFoundPage";
 
 function App() {
   return (
