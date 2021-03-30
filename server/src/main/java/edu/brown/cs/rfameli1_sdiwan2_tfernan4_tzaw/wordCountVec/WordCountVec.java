@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 public class WordCountVec {
   public String cleanText(String text) {
-    return text.toLowerCase().replaceAll("[^a-zA-Z0-9]", " ");
+    return text.toLowerCase().replaceAll("[^a-zA-Z0-9 ]", "");
   }
 
   public List<String> splitText(String cleanedText, String delimiter) {
