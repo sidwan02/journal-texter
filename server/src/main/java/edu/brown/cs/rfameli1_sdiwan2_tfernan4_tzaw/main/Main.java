@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.WordnikAPIHandler.WordnikAPIHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -56,7 +55,7 @@ public final class Main {
 
 //    // Wordnik API connection
 //    System.setProperty("WORDNIK_API_KEY", "70538348db6b42e43a5181e32070feebc0b303e293ed13a97");
-//    WordnikAPIHandler blooh = new WordnikAPIHandler();
+//    wordnikAPIHandler blooh = new wordnikAPIHandler();
 //    blooh.getSynonyms("earth");
 //
 //    try {

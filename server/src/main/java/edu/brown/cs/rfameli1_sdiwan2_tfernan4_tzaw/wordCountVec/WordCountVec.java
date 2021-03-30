@@ -1,6 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.WordnikAPIHandler.WordnikAPIHandler;
+import com.google.common.collect.ImmutableMap;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler.WordnikAPIHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,4 +69,8 @@ public class WordCountVec {
     }
     return nWordFrequencies;
   }
+
+//  public ImmutableMap<String, Object> ParseToGui {
+//
+//  }
 }
