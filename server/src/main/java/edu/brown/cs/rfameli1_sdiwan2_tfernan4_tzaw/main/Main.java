@@ -56,8 +56,8 @@ public final class Main {
 
 //    // Wordnik API connection
 //    System.setProperty("WORDNIK_API_KEY", "70538348db6b42e43a5181e32070feebc0b303e293ed13a97");
-    WordnikAPIHandler blooh = new WordnikAPIHandler();
-    blooh.getSynonyms("earth");
+//    WordnikAPIHandler blooh = new WordnikAPIHandler();
+//    blooh.getSynonyms("earth");
 //
 //    try {
 //      TokenStatus status = AccountApi.apiTokenStatus();

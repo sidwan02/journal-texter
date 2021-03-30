@@ -18,7 +18,7 @@ public class WordnikAPIHandler {
 //    "https://api.wordnik.com/v4/word.json/earth/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=YOURAPIKEY"
 
     System.setProperty("WORDNIK_API_KEY", "70538348db6b42e43a5181e32070feebc0b303e293ed13a97");
-
+    Set<String> synonymsSet = new HashSet<>();
     try {
       List<Related> list= WordApi.related(
         word,
@@ -26,14 +26,14 @@ public class WordnikAPIHandler {
         EnumSet.of(Knicker.RelationshipType.synonym),
         100);
       for(Related synonymCollection : list){
-        for(String synonym : synonymCollection.getWords())
-          System.out.println(synonym);
+        synonymsSet.addAll(synonymCollection.getWords());
+//          System.out.println(synonym);
       }
     }
     catch (KnickerException e) {
       e.printStackTrace();
     }
 
-    return new HashSet<>();
+    return synonymsSet;
   }
 }

@@ -1,5 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.WordnikAPIHandler.WordnikAPIHandler;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,9 +46,24 @@ public class WordCountVec {
 
     for (String nDiffWords : nDiffWordCombinations) {
       if (nWordFrequencies.containsKey(nDiffWords)) {
+        // word in map
         nWordFrequencies.put(nDiffWords, nWordFrequencies.get(nDiffWords) + 1);
       } else {
-        nWordFrequencies.put(nDiffWords, 1);
+        // word not in map
+
+        WordnikAPIHandler wordnikConnection = new WordnikAPIHandler();
+        // check if any synonyms in map
+        int synCount = 0;
+        for (String synonym : wordnikConnection.getSynonyms(nDiffWords)) {
+          if (nWordFrequencies.containsKey(synonym)) {
+            nWordFrequencies.put(synonym, nWordFrequencies.get(synonym) + 1);
+            synCount ++;
+          }
+        }
+        // synonym not in map
+        if (synCount == 0) {
+          nWordFrequencies.put(nDiffWords, 1);
+        }
       }
     }
     return nWordFrequencies;
