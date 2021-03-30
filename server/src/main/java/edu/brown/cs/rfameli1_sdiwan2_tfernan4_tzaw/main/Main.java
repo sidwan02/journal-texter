@@ -5,9 +5,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.EnumSet;
+import java.util.List;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.WordnikAPIHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import net.jeremybrooks.knicker.AccountApi;
+import net.jeremybrooks.knicker.Knicker;
+import net.jeremybrooks.knicker.KnickerException;
+import net.jeremybrooks.knicker.WordApi;
+import net.jeremybrooks.knicker.dto.Related;
+import net.jeremybrooks.knicker.dto.TokenStatus;
 import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
@@ -53,7 +62,39 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
-    // THIS IS WERE WE WERE CALLING THE REPL AND STUFF
+//    // Wordnik API connection
+//    System.setProperty("WORDNIK_API_KEY", "70538348db6b42e43a5181e32070feebc0b303e293ed13a97");
+    WordnikAPIHandler blooh = new WordnikAPIHandler();
+    blooh.getSynonyms("earth");
+//
+//    try {
+//      TokenStatus status = AccountApi.apiTokenStatus();
+//      if (status.isValid()) {
+//        System.out.println("API key is valid.");
+//      } else {
+//        System.out.println("API key is invalid!");
+//        System.exit(1);
+//      }
+//    } catch (KnickerException e) {
+//      System.out.println("shit");
+//      e.printStackTrace();
+//    }
+
+//    try {
+//      List<Related> list= WordApi.related(
+//        "earth",
+//        false,
+//        EnumSet.of(Knicker.RelationshipType.synonym),
+//        100);
+//      for(Related synonymCollection : list){
+//        for(String synonym : synonymCollection.getWords())
+//          System.out.println(synonym);
+//      }
+//    }
+//    catch (KnickerException e) {
+//      e.printStackTrace();
+//    }
+
   }
 
   private static FreeMarkerEngine createEngine() {
