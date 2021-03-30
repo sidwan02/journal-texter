@@ -70,7 +70,7 @@ public class WordCountVec {
     return nWordFrequencies;
   }
 
-//  public ImmutableMap<String, Object> ParseToGui {
-//
-//  }
+  public ImmutableMap<String, Object> parseToGui() {
+    return ImmutableMap.of();
+  }
 }

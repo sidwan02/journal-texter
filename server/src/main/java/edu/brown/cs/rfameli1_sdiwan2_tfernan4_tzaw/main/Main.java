@@ -1,11 +1,11 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -46,47 +46,15 @@ public final class Main {
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
-    .defaultsTo(DEFAULT_PORT);
+      .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(args);
 
     if (options.has("gui")) {
       runSparkServer((int) options.valueOf("port"));
     }
-
-//    // Wordnik API connection
-//    System.setProperty("WORDNIK_API_KEY", "70538348db6b42e43a5181e32070feebc0b303e293ed13a97");
-//    wordnikAPIHandler blooh = new wordnikAPIHandler();
-//    blooh.getSynonyms("earth");
-//
-//    try {
-//      TokenStatus status = AccountApi.apiTokenStatus();
-//      if (status.isValid()) {
-//        System.out.println("API key is valid.");
-//      } else {
-//        System.out.println("API key is invalid!");
-//        System.exit(1);
-//      }
-//    } catch (KnickerException e) {
-//      System.out.println("shit");
-//      e.printStackTrace();
-//    }
-
-//    try {
-//      List<Related> list= WordApi.related(
-//        "earth",
-//        false,
-//        EnumSet.of(Knicker.RelationshipType.synonym),
-//        100);
-//      for(Related synonymCollection : list){
-//        for(String synonym : synonymCollection.getWords())
-//          System.out.println(synonym);
-//      }
-//    }
-//    catch (KnickerException e) {
-//      e.printStackTrace();
-//    }
-
   }
+
+//  private static String loadedFileState = "*No file loaded*";
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
@@ -95,26 +63,11 @@ public final class Main {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
       System.out.printf("ERROR: Unable use %s for template loading.%n",
-          templates);
+        templates);
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
   }
-
-//  private void runSparkServer(int port) {
-//    Spark.port(port);
-//    Spark.externalStaticFileLocation("src/main/resources/static");
-//    Spark.exception(Exception.class, new ExceptionPrinter());
-//
-//    FreeMarkerEngine freeMarker = createEngine();
-//
-//    // Setup Spark Routes
-//    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
-//    // get user input
-//    Spark.post("/csvLoaded", new StarsGuiHandler.SubmitHandlerCsv(), freeMarker);
-//    Spark.post("/results", new StarsGuiHandler.SubmitHandlerCommand(), freeMarker);
-//    Spark.post("/stars", new StarsGuiHandler.SubmitHandlerStars(), freeMarker);
-//  }
 
   private void runSparkServer(int port) {
 
@@ -144,7 +97,7 @@ public final class Main {
     // Setup Spark Routes
 //    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
     // get user input
-//    Spark.post("/csvLoaded", new StarsGuiHandler.SubmitHandlerCsv(), freeMarker);
+    Spark.post("/tags", new GUIHandler.TagsHandler());
   }
 
   /**

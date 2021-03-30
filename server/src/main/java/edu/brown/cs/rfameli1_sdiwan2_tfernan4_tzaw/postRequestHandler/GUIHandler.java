@@ -1,6 +1,8 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
 import com.google.gson.Gson;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler.WordnikAPIHandler;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -36,7 +38,8 @@ public class GUIHandler {
       // probably will not even need this, ideally from backend should be able to detect
       // the most recently saved entry and get that from SQL using a query
 
-      variables = CheckinObjectPersistence.getCheckinObj().getLatestCheckinsGui();
+      WordCountVec vectorizor = new WordCountVec();
+      variables = vectorizor.parseToGui();
 
       return GSON.toJson(variables);
     }
