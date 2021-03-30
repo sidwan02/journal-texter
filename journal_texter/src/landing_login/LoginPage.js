@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import TextBox from "../general_components/TextBox";
+import LoginTextBox from "./LoginTextBox";
 import '../css/LoginPage.css'
 import {Link, useHistory} from "react-router-dom";
 
@@ -17,8 +17,8 @@ function LoginPage() {
     return (
         <div className="loginBox">
             <h1>JournalTexter</h1>
-            <TextBox text="Username" change={setUserName} type="text"/>
-            <TextBox text="Password" change={setPassword} type="password"/>
+            <LoginTextBox text="Username" change={setUserName} type="text"/>
+            <LoginTextBox text="Password" change={setPassword} type="password"/>
             <p>
                 <button onClick={handleClick}>Submit</button>
             </p>
