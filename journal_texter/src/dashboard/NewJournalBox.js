@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import './css/Dashboard.css'
+import '../css/Dashboard.css'
 import {useHistory} from "react-router-dom";
 
-function NewJournal(props) {
+function NewJournalBox(props) {
     const history = useHistory();
 
     function handleClick() {
@@ -16,4 +16,4 @@ function NewJournal(props) {
     );
 }
 
-export default NewJournal;
+export default NewJournalBox;

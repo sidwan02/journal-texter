@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import TextBox from "./TextBox";
-import './css/LoginPage.css'
+import TextBox from "../general_components/TextBox";
+import '../css/LoginPage.css'
 import {useHistory} from "react-router-dom";
 
 function SignUpPage() {
