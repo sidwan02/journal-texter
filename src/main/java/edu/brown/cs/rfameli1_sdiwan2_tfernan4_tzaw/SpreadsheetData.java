@@ -1,4 +1,4 @@
-package java.edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
 import java.util.ArrayList;
 import java.util.List;
