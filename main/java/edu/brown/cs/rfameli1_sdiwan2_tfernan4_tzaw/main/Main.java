@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
+package java.edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
 
 
 import java.io.File;
@@ -63,6 +63,7 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
+    System.out.println("started");
     // THIS IS WERE WE WERE CALLING THE REPL AND STUFF
   }
 
