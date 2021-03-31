@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import JournalTextBox from "./JournalTextBox";
+import JournalTextBox_Button from "./JournalTextBox_Button";
 import {useHistory} from "react-router-dom";
 
 function JournallerPage() {
@@ -16,8 +16,17 @@ function JournallerPage() {
 
     const userInput = () => {
         let journalHistoryDiv = document.getElementById("journalHistory")
+        // Sadly I don't know enough regex to actually parse this
+        let filteredExpression = currentLine.replaceAll('<', '');
+        filteredExpression = filteredExpression.replaceAll('>', '');
+        filteredExpression = filteredExpression.replaceAll(';', '');
+
+        if (filteredExpression !== '') {
         journalHistoryDiv.innerHTML += "<div style=\"float: right; border-style: solid; padding: 10px; margin: 10px\">"
-            + currentLine + "</div> <br/><div style=\"height: 50px\"/><br/>"
+            + filteredExpression + "</div> <br/><div style=\"height: 50px\"/><br/>"
+        }
+
+        setCurrentLine("");
 
     }
 
@@ -45,10 +54,7 @@ function JournallerPage() {
             <br/>
             <div id="journalHistory" className="journalHistory" style={historyStyle}/>
             <br/>
-            <div id="entryComponents">
-            <JournalTextBox id="inputBox" change={setCurrentLine} type="text"/>
-            <button onClick={userInput}>Send</button>
-            </div>
+            <JournalTextBox_Button id="inputBox" change={setCurrentLine} click={userInput} type="text"/>
         </div>
     );
 }

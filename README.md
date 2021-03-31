@@ -5,6 +5,9 @@
 `npm install react-router-dom --save`
 (This allows for multiple pages)
 
+`npm install --save react-awesome-button`
+(Because normal HTML buttons are kinda depressing)
+
 
 **Team Members:**
 Riki Fameli,
