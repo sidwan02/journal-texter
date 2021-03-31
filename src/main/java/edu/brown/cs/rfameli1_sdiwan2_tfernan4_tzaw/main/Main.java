@@ -1,21 +1,10 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.gui.MapsGuiHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.gui.StarsGuiHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.maps.MapCommandHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.maps.NearestCommandHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.maps.RouteCommandsHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.maps.WaysCommandHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.repl.Repl;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.stars.KdTreeCommandsHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.stars.NaiveCommandsHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.commandHandlers.stars.StarsCommandHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -118,15 +107,6 @@ public final class Main {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
-
-    // Setup Spark Routes
-    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
-    // get user input
-    Spark.post("/csvLoaded", new StarsGuiHandler.SubmitHandlerCsv(), freeMarker);
-    Spark.post("/results", new StarsGuiHandler.SubmitHandlerCommand(), freeMarker);
-    Spark.post("/stars", new StarsGuiHandler.SubmitHandlerStars(), freeMarker);
-
-    Spark.post("/route", new MapsGuiHandler.RouteHandler());
   }
 
   /**
