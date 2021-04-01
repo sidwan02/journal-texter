@@ -2,6 +2,5 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.dialectTranslati
 
 public enum DialectType {
   AMERICAN,
-  AUSTRALIAN,
-  YODA,
+  PIRATE,
 }

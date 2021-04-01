@@ -24,7 +24,7 @@ public class WordnikAPIHandler {
 //    Event[] eventBody = response.getBody();
 
     // https://docs.spring.io/spring-android/docs/current/reference/html/rest-template.html
-    ResponseEntity<String> response = rt.exchange("https://api.wordnik.com/v4/word.json/earth/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=70538348db6b42e43a5181e32070feebc0b303e293ed13a97",
+    ResponseEntity<String> response = rt.exchange("https://api.wordnik.com/v4/word.json/" + word + "/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=70538348db6b42e43a5181e32070feebc0b303e293ed13a97",
       HttpMethod.GET, entity, String.class);
 
     String eventBody = response.getBody();
