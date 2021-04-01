@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.EnumSet;
-import java.util.List;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler.WordnikAPIHandler;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.WordnikAPIHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;

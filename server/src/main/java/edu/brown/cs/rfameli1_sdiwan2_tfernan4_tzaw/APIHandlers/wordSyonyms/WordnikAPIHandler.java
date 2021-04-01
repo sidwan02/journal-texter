@@ -1,19 +1,12 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms;
 
-import com.google.common.reflect.TypeToken;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.EventObject;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 

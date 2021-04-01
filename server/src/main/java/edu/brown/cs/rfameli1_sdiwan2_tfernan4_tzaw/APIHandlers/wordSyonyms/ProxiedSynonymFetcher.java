@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

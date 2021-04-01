@@ -2,7 +2,6 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
 import com.google.gson.Gson;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler.WordnikAPIHandler;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;

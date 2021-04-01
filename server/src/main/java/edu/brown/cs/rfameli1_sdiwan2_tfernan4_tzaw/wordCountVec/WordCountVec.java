@@ -1,7 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec;
 
 import com.google.common.collect.ImmutableMap;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler.WordnikAPIHandler;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.WordnikAPIHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
