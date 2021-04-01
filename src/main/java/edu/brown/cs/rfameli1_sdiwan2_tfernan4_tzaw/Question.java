@@ -14,7 +14,6 @@ public class Question {
   public List<String> getTags() {
     return new ArrayList<>(tags);
   }
-
   public String getText() {
     return text;
   }
