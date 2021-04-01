@@ -11,8 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class JournalTexterDB {
   private final Connection conn;
@@ -62,7 +63,6 @@ public class JournalTexterDB {
             }
           }
         }
-
       } catch (HeaderException | IOException | SQLException e) {
         System.out.println(e.getMessage());
       }
@@ -79,7 +79,7 @@ public class JournalTexterDB {
         String questionText = questionsResults.getString(1);
         ps = conn.prepareStatement("SELECT tag_text FROM tags WHERE "
             + "(SELECT question_id FROM questions WHERE question_text=?)");
-        List<String> tags = new ArrayList<>();
+        Set<String> tags = new HashSet<>();
         ResultSet tagsResults = ps.executeQuery();
         while (tagsResults.next()) {
           tags.add(tagsResults.getString(1));
@@ -92,7 +92,21 @@ public class JournalTexterDB {
   }
 
   public class UsersAndEntries {
+    public List<Entry> getUserEntriesByUserId(Integer userId) throws SQLException {
+      PreparedStatement ps = conn.prepareStatement("SELECT * FROM entries WHERE user_id=?");
+      ps.setInt(1, userId);
+      ResultSet rs = ps.executeQuery();
+      return null;
+      // For every entry, I would have to query the database to find the tags for every question
+      // that was presented in the entry given the current structure of the classes
 
-
+      // TODO
+//      List<Entry> userEntries = new ArrayList<>();
+//      while (rs.next()) {
+//        userEntries.add(new Entry(
+//
+//        ))
+//      }
+    }
   }
 }
