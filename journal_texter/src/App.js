@@ -1,10 +1,9 @@
 import './css/App.css';
-import React, {Component} from "react";
+import React from "react";
 import {
     BrowserRouter as Router,
     Route,
     Switch,
-    Link,
     Redirect
 } from "react-router-dom";
 
@@ -31,6 +30,7 @@ function App() {
                         <LoginPage setToken={setToken}/>
                     </Route>
                     <Route exact path="/signup" component={SignUpPage}/>
+                    <Route exact path="/dashboard" component={LoginPage}/>
 
                     {/*TODO eventually move journaller and journalentry so you have to login*/}
                     <Route exact path="/journaller" component={JournallerPage}/>
@@ -51,6 +51,7 @@ function App() {
                 <Switch>
                     <Route exact path="/" component={LandingPage}/>
                     <Route exact path="/login" component={Dashboard}/>
+                    <Route exact path="/signup" component={Dashboard}/>
                     <Route exact path="/dashboard" component={Dashboard}/>
                     <Route exact path="/journaller" component={JournallerPage}/>
                     <Route exact path="/journalentry" component={OldJournalEntry}/>
