@@ -1,7 +1,8 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet;
+
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetData;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public final class SpreadsheetReader {
    * @throws HeaderException if the headers do not match those that were passed in as an input
    */
   public static SpreadsheetData parseSpreadsheet(String filename, String separator,
-                                                    List<String> headers)
+                                                 List<String> headers)
       throws HeaderException, IOException {
     BufferedReader br = new BufferedReader(new FileReader(filename));
 
@@ -40,8 +41,8 @@ public final class SpreadsheetReader {
       return null;
     }
 
+    // check that fileHeaders match the input headers
     List<String> fileHeaders = Arrays.asList(line.split(separator));
-
     if (!fileHeaders.equals(headers)) {
       throw new HeaderException("Headers do not match the provided headers given in "
           + "parseSpreadsheet");
@@ -51,28 +52,17 @@ public final class SpreadsheetReader {
     if (fileHeaders.size() == 0) {
       return null;
     }
-
     List<List<String>> allLines = new ArrayList<>();
-    List<String> cleanedLine = new ArrayList<>();
     while ((line = br.readLine()) != null) {
       // Convert each line into a List<String>, with Strings representing comma-separated values
-      cleanedLine = Arrays.asList(line.split(separator, -1));
+      List<String> cleanedLine = Arrays.asList(line.split(separator, -1));
+      if (cleanedLine.size() != fileHeaders.size()) {
+        throw new HeaderException("Found row longer than number of headers in file " + filename);
+      }
       allLines.add(cleanedLine);
     }
-
     return new SpreadsheetData(fileHeaders, allLines);
   }
 
-  /**
-   * Exception class for when a spreadsheet's headers are incorrect.
-   */
-  public static class HeaderException extends Exception {
-    /**
-     * Exception constructor.
-     * @param message - the message to be presented to the user on throw
-     */
-    public HeaderException(String message) {
-      super(message);
-    }
-  }
+
 }
