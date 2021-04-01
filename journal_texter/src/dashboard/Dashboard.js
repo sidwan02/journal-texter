@@ -4,23 +4,27 @@ import {Link, useHistory} from "react-router-dom";
 import OldJournalEntryBox from "./OldJournalEntryBox";
 import NewJournalBox from "./NewJournalBox";
 
-
-function Dashboard() {
+export default function Dashboard() {
     const history = useHistory();
 
-    function handleClick() {
+    function handleReturnToHome() {
         history.push('/');
     }
 
     function handleSignOut() {
-        history.push("/login");
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
+
+        history.push('/login');
+
+        window.location.reload(false);
     }
 
     return (
         <div className="dashboard">
             <nav>
                 <div>
-                    <h1 id="logo" onClick={handleClick}>JournalTexter</h1>
+                    <h1 id="logo" onClick={handleReturnToHome}>JournalTexter</h1>
                 </div>
                 <div id="signout" onClick={handleSignOut}>
                     Sign Out
@@ -28,14 +32,12 @@ function Dashboard() {
             </nav>
             <div className="entries">
                 <NewJournalBox title="Create New Entry" link="journaller"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journalentry"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journalentry"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journalentry"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journalentry"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journalentry"/>
+                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
+                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
+                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
+                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
+                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
             </div>
         </div>
     );
 }
-
-export default Dashboard;

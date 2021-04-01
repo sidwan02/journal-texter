@@ -8,6 +8,10 @@
 `npm install --save react-awesome-button`
 (Because normal HTML buttons are kinda depressing)
 
+`npm install --save-dev express cors`
+In order to run a temporary login server
+Then, in the journal_texter folder, run `node server.js`.
+
 
 **Team Members:**
 Riki Fameli,
