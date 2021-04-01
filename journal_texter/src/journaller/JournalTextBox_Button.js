@@ -5,18 +5,30 @@ import "react-awesome-button/dist/styles.css";
 
 function JournalTextBox_Button(props) {
 
-    const onChangeEvent = (event) => {
+    const typeTextEvent = (event) => {
         {
-            props.change(event.target.value)
+            props.typeText(event.target.value)
         }
     }
 
-    const onClickEvent = (event) => {
+    const sendClickEvent = (event) => {
         {
-            props.click(event)
+            props.sendClick(event)
         }
         let journalTextBox = document.getElementById("journalTextBox");
         journalTextBox.value = "";
+    }
+
+    const promptQuestionEvent = (event) => {
+        {
+            props.promptClick(event)
+        }
+    }
+
+    const overallStyle = {
+        width: 1000,
+        padding: 10,
+        margin: 'auto',
     }
 
     const TextBoxStyle = {
@@ -27,10 +39,15 @@ function JournalTextBox_Button(props) {
 
     return (
         <p>
+        <div style={overallStyle}>
             <input id="journalTextBox" type={props.type} placeholder={props.text} style={TextBoxStyle}
-                   onChange={onChangeEvent}/>
+                   onChange={typeTextEvent} />
             <br/><br/>
-            <AwesomeButton type="primary" onPress={onClickEvent}>Send</AwesomeButton>
+            <AwesomeButton type="primary" onPress={sendClickEvent}
+                           style={{float: 'right'}}>Send</AwesomeButton>
+            <AwesomeButton type="secondary" onPress={promptQuestionEvent} style={{float: 'left'}}>
+                Request Question</AwesomeButton>
+        </div>
         </p>
     );
 }

@@ -22,12 +22,28 @@ function JournallerPage() {
         filteredExpression = filteredExpression.replaceAll(';', '');
 
         if (filteredExpression !== '') {
-        journalHistoryDiv.innerHTML += "<div style=\"float: right; border-style: solid; padding: 10px; margin: 10px\">"
-            + filteredExpression + "</div> <br/><div style=\"height: 50px\"/><br/>"
+            journalHistoryDiv.innerHTML += "<div style=\"float: right; border-style: solid;"
+                + "padding: 8px; margin-top: 10px;"
+                + "max-width: 600px; word-wrap: break-word\">"
+                + filteredExpression + "</div>"
+                + "<div style=\"float: right; height: 1px; width: 1000px;\"/>"
         }
 
         setCurrentLine("");
 
+    }
+
+    const journallerPrompt = () => {
+        let journalHistoryDiv = document.getElementById("journalHistory")
+
+        // We will post request to get the retrieved question from the backend in the future
+        let retrievedQuestion = "How are you doing?"
+
+        journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
+            + "padding: 8px; margin-top: 10px;"
+            + "max-width: 600px; word-wrap: break-word\">"
+            + retrievedQuestion + "</div>"
+            + "<div style=\"float: left; height: 1px; width: 1000px; \"/>"
     }
 
     const historyStyle = {
@@ -35,7 +51,8 @@ function JournallerPage() {
         width: 1000,
         margin: 'auto',
         border: '2px solid black',
-        overflow: 'auto'
+        overflow: 'auto',
+        padding: 10,
     }
 
     return (
@@ -53,8 +70,8 @@ function JournallerPage() {
 
             <br/>
             <div id="journalHistory" className="journalHistory" style={historyStyle}/>
-            <br/>
-            <JournalTextBox_Button id="inputBox" change={setCurrentLine} click={userInput} type="text"/>
+            <JournalTextBox_Button id="inputBox" typeText={setCurrentLine} sendClick={userInput}
+                                   promptClick={journallerPrompt} type="text"/>
         </div>
     );
 }
