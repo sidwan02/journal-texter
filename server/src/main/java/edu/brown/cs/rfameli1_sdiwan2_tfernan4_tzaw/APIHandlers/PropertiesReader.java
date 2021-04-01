@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 
+// https://itnext.io/how-to-store-passwords-and-api-keys-in-project-code-1eaf5cb235c9
 /**
  * The class Properties reader.
  */
@@ -35,6 +35,7 @@ public final class PropertiesReader {
   private PropertiesReader() {
   }
 
+  // https://mkyong.com/java/java-properties-file-examples/
   static {
     PROPERTIES = new Properties();
     try (InputStream input = new FileInputStream(PROP_FILE)) {
