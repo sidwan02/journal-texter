@@ -1,39 +1,31 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler;
 
-import net.jeremybrooks.knicker.Knicker;
-import net.jeremybrooks.knicker.KnickerException;
-import net.jeremybrooks.knicker.WordApi;
-import net.jeremybrooks.knicker.dto.Related;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class WordnikAPIHandler {
-
   public Set<String> getSynonyms(String word) {
-//    HttpHeaders header = new HttpHeaders();
-//    HttpEntity<String> entity = new HttpEntity<String>("parameters", header);
-//    "https://api.wordnik.com/v4/word.json/earth/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=YOURAPIKEY"
+    HttpHeaders header = new HttpHeaders();
 
-    System.setProperty("WORDNIK_API_KEY", "70538348db6b42e43a5181e32070feebc0b303e293ed13a97");
-    Set<String> synonymsSet = new HashSet<>();
-    try {
-      List<Related> list= WordApi.related(
-        word,
-        false,
-        EnumSet.of(Knicker.RelationshipType.synonym),
-        100);
-      for(Related synonymCollection : list){
-        synonymsSet.addAll(synonymCollection.getWords());
-//          System.out.println(synonym);
-      }
-    }
-    catch (KnickerException e) {
-      e.printStackTrace();
-    }
+    HttpEntity<String> entity = new HttpEntity<>("parameters", header);
+    RestTemplate rt = new RestTemplate();
 
-    return synonymsSet;
+    ResponseEntity<WordSynonym> response = rt.exchange("https://api.wordnik.com/v4/word.json/earth/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=70538348db6b42e43a5181e32070feebc0b303e293ed13a97",
+      HttpMethod.GET, entity, WordSynonym.class);
+
+    WordSynonym synonyms = response.getBody();
+
+    assert synonyms != null;
+    System.out.println("ha: " + synonyms.getSynonyms());
+
+    return synonyms.getSynonyms();
   }
 }

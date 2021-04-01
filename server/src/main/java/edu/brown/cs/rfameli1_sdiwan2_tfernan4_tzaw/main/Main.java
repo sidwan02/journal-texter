@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.EnumSet;
+import java.util.List;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordnikAPIHandler.WordnikAPIHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -52,9 +55,10 @@ public final class Main {
     if (options.has("gui")) {
       runSparkServer((int) options.valueOf("port"));
     }
-  }
 
-//  private static String loadedFileState = "*No file loaded*";
+    WordnikAPIHandler hoho = new WordnikAPIHandler();
+    hoho.getSynonyms("earth");
+  }
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();

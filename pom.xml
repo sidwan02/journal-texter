@@ -127,15 +127,21 @@
       <version>0.0.20131108.vaadin1</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/net.jeremybrooks/knicker
-    Dependency to Access the Wordnik API
-    -->
-    <dependency>
-      <groupId>net.jeremybrooks</groupId>
-      <artifactId>knicker</artifactId>
-      <version>2.4.1</version>
-    </dependency>
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/net.jeremybrooks/knicker-->
+<!--    Dependency to Access the Wordnik API-->
+<!--    &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>net.jeremybrooks</groupId>-->
+<!--      <artifactId>knicker</artifactId>-->
+<!--      <version>2.4.1</version>-->
+<!--    </dependency>-->
 
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>5.3.5</version>
+    </dependency>
 
   </dependencies>
 
