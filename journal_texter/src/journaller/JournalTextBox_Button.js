@@ -19,6 +19,16 @@ function JournalTextBox_Button(props) {
         journalTextBox.value = "";
     }
 
+    const enterPressEvent = (event) => {
+        if (event.key === 'Enter') {
+            {
+                props.sendClick(event)
+            }
+            let journalTextBox = document.getElementById("journalTextBox");
+            journalTextBox.value = "";
+        }
+    }
+
     const promptQuestionEvent = (event) => {
         {
             props.promptClick(event)
@@ -37,18 +47,27 @@ function JournalTextBox_Button(props) {
         fontSize: 20,
     }
 
+
+    /*
+    let textBox = document.getElementById("journalTextBox")
+    textBox.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            document.getElementById("sendButton").click();
+        }
+    })
+    */
+
     return (
-        <p>
         <div style={overallStyle}>
             <input id="journalTextBox" type={props.type} placeholder={props.text} style={TextBoxStyle}
-                   onChange={typeTextEvent} />
+                   onChange={typeTextEvent} onKeyPress={enterPressEvent}/>
             <br/><br/>
-            <AwesomeButton type="primary" onPress={sendClickEvent}
+            <AwesomeButton id="sendButton" type="primary" onPress={sendClickEvent}
                            style={{float: 'right'}}>Send</AwesomeButton>
             <AwesomeButton type="secondary" onPress={promptQuestionEvent} style={{float: 'left'}}>
                 Request Question</AwesomeButton>
         </div>
-        </p>
     );
 }
 
