@@ -2,6 +2,8 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.pythonConnection;
 // https://stackoverflow.com/questions/16460468/can-we-call-a-python-method-from-java
 import org.python.core.PyInstance;
 
+import java.util.HashMap;
+
 
 public class PythonInterpreter
 {
@@ -36,13 +38,16 @@ public class PythonInterpreter
 
 //    int something = 10;
 
-    ie.interpreter.set("something", 21);
+    HashMap<Integer, String> map = new HashMap<>();
+    map.put(0, "hi");
+
+    ie.interpreter.set("something", map);
 //    PyObject pyResult = ie.interpreter.get("hello");
 
     // for invoke -> http://web.mit.edu/jython/jythonRelease_2_2alpha1/Doc/javadoc/org/python/core/PyInstance.html
 //    hello.invoke("run");
     // https://stackoverflow.com/questions/9381906/how-to-call-a-python-method-from-a-java-class
 //    ie.interpreter.eval("repr(Hello().run(something))");
-    ie.interpreter.eval("repr(run(something))");
+    ie.interpreter.eval("repr(run2(something))");
   }
 }

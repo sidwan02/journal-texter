@@ -1,23 +1,23 @@
+#-*- coding: utf-8 -*-
 # class Hello:
 # #     __gui = None
 # #
 #     def __init__(self):
 #         # self.__gui = gui
+#
 
-import time
-import json
-import csv
-import preprocessor as p
-import re
-import string
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import emoji
-import itertools
-import spacy
-import numpy as np
 import en_core_web_sm
+import numpy as np
+import spacy
+import itertools
+import emoji
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import string
+import re
+
+
 spice = en_core_web_sm.load()
 
 
@@ -26,6 +26,15 @@ def run():
         reviews = f.read()
     with open('data\stanfordSentimentTreebank\sentiment_labels.txt', 'r') as f:
         labels = f.read()
+
+    # convert into dict of phrase ID | phrase
+    # phrase_dict = {}
+    # reviews_split = reviews.split('\n')
+    # for (review in reviews_split):
+    #     phrase_components = reviews.split('\n')
+    #     phrase_dict
+
+    # print(reviews_split)
 
 
 def clean(sentence):
@@ -91,6 +100,10 @@ def lemma(sentence):
     return ' '.join(lemma_sentence)
 
 
-print(lemma(filter(clean("The camera twirls ! Oh, look at that clever angle ! Wow, a jump cut !"))))
+# print(lemma(filter(clean("The camera twirls ! Oh, look at that clever angle ! Wow, a jump cut !"))))
 
-run()
+# run()
+
+
+def run2(something):
+    print(something[0])
