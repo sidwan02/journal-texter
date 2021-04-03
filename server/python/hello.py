@@ -100,7 +100,7 @@ def lemma(sentence):
     return ' '.join(lemma_sentence)
 
 
-# print(lemma(filter(clean("The camera twirls ! Oh, look at that clever angle ! Wow, a jump cut !"))))
+print(lemma(filter(clean("The camera twirls ! Oh, look at that clever angle ! Wow, a jump cut !"))))
 
 # run()
 

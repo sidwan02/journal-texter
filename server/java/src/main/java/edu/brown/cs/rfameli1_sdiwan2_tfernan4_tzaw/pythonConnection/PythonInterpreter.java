@@ -32,7 +32,7 @@ public class PythonInterpreter
   {
     PythonInterpreter ie = new PythonInterpreter();
 
-    ie.execfile("hello.py");
+    System.out.println("hi");
 
 //    PyInstance hello = ie.createClass("Hello", "None");
 
@@ -40,6 +40,19 @@ public class PythonInterpreter
 
     HashMap<Integer, String> map = new HashMap<>();
     map.put(0, "hi");
+
+//    ie.interpreter.exec("import en_core_web_sm");
+//    ie.interpreter.exec("import numpy as np");
+//    ie.interpreter.exec("import spacy");
+//    ie.interpreter.exec("import itertools");
+//    ie.interpreter.exec("import emoji");
+//    ie.interpreter.exec("from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer");
+//    ie.interpreter.exec("from nltk.tokenize import word_tokenize");
+//    ie.interpreter.exec("from nltk.corpus import stopwords");
+//    ie.interpreter.exec("import string");
+//    ie.interpreter.exec("import re");
+
+    ie.execfile("server/python/hello.py");
 
     ie.interpreter.set("something", map);
 //    PyObject pyResult = ie.interpreter.get("hello");
