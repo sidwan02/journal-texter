@@ -32,44 +32,55 @@ def run():
         r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\stanfordSentimentTreebank\dictionary.txt",
         "r",
     ) as f:
-        reviews = f.read()
+        phrases = f.read()
     with open(
         r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\stanfordSentimentTreebank\sentiment_labels.txt",
         "r",
     ) as f:
         labels = f.read()
 
-    # convert into dict of phrase ID | phrase
-    phrases_dict = {}
+    print("running")
 
-    reviews_split = reviews.split("\n")
-    # print(reviews[:50])
-    # print(reviews_split[4])
-    for rev in reviews_split:
-        # print("review: ", review)
-        phrase_components = rev.split("|")
+    # convert into dict of phrase ID | phrase
+    index_to_phrase_dict = {}
+    phrase_to_index_dict = {}
+
+    phrases_split = phrases.split("\n")
+    # print(phrases[:50])
+    # print(phrases_split[4])
+    count = 0
+    total = len(phrases_split)
+    for phr in phrases_split:
+        # print(count / total)
+        # print("phriew: ", phriew)
+        phrase_components = phr.split("|")
         # print(phrase_components)
         try:
             index = phrase_components[1]
             phrase = phrase_components[0]
-            # processed_phrase = clean(filter(lemma(phrase)))
-            processed_phrase = phrase
+
+            processed_phrase = clean_filter_lemma_mini(phrase)
+            # processed_phrase = lemma(phrase)
+            # processed_phrase = phrase
+
             # print("phrase: ", phrase)
             # print("processed_phrase: ", processed_phrase)
-            phrases_dict[index] = processed_phrase
+            index_to_phrase_dict[index] = processed_phrase
+            phrase_to_index_dict[processed_phrase] = index
         except IndexError:
             # this is the newline at the end of the txt
             break
 
-    # print(phrases_dict[10])
+    # print(index_to_phrase_dict[10])
+    print("done splitting phrases !!!!!!!!!!!!!!!!!")
 
     sentiment_dict = {}
 
     sentiment_split = labels.split("\n")
-    # print(reviews[:50])
-    # print(reviews_split[4])
+    # print(phrases[:50])
+    # print(phrases_split[4])
     for lab in sentiment_split:
-        # print("review: ", review)
+        # print("phriew: ", phriew)
         sentiment_components = lab.split("|")
         # print(phrase_components)
         try:
@@ -81,12 +92,72 @@ def run():
             break
     # print(sentiment_dict[10])
 
-    sentiment_map = {}
+    # sentiment_map = {}
 
-    for key in phrases_dict.keys():
-        sentiment_map[phrases_dict[key]] = sentiment_dict[key]
+    # for key in index_to_phrase_dict.keys():
+    #     sentiment_map[index_to_phrase_dict[key]] = sentiment_dict[key]
 
-    print(sentiment_map["the"])
+    # print(sentiment_map["the"])
+
+    with open(
+        r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\stanfordSentimentTreebank\original_rt_snippets.txt",
+        "r",
+    ) as f:
+        reviews = f.read()
+
+    reviews_split = reviews.split("\n")
+
+    print("reviews_split: ", reviews_split[1])
+    reviews_split_cleaned = []
+
+    for rev in reviews_split:
+        reviews_split_cleaned += filter(clean(rev))
+        # reviews_split_cleaned.append(rev)
+
+    # print(reviews_split_cleaned[1])
+    print("done splitting reviews !!!!!!!!!!!!!!!!!")
+
+    def try_tokenize(word):
+        # print("trying")
+        try:
+            return phrase_to_index_dict[word]
+        except:
+            return -1
+
+    reviews_tokenized = []
+
+    for rev in reviews_split_cleaned:
+        # print(rev)
+        token_so_far = []
+        index = 0
+        words = rev.split(" ")
+        word = words[index]
+        # print("rev: ", rev)
+        print("words: ", words)
+        print("len: ", len(words))
+        while index < len(words):  # until done for all words
+            try:
+                while (
+                    try_tokenize(word) == -1
+                ):  # until find a valid prase which has a phrase id
+
+                    index += 1
+                    word = word + " " + words[index]
+            except IndexError:
+                print(word)
+            # phrase with phrase id has been found
+            token_so_far.append(try_tokenize(word))
+            print(word)
+            print(index)
+            # print(try_tokenize(word))
+            index += 1
+            try:
+                word = words[index]
+            except IndexError:
+                # reached the end of the rev
+                print(word)
+                break
+        break
 
 
 def clean(sentence):
@@ -104,6 +175,57 @@ def clean(sentence):
     sentence = "".join("".join(s)[:2] for _, s in itertools.groupby(sentence))
     # emojis conversion
     sentence = emoji.demojize(sentence)
+    sentence = " ".join(sentence.split())
+    return sentence
+
+
+def clean_filter_lemma_mini(sentence):
+    # sentence = re.sub(r"’", "'", sentence)
+    # # words = sentence.split()
+    # sentence = re.sub(r":", " ", sentence)
+    sentence = re.sub(r"n't", "n not", sentence)
+
+    # stop_words = set(stopwords.words("english"))
+    # stray_tokens = [
+    #     "amp",
+    #     "`",
+    #     "``",
+    #     "'",
+    #     "''",
+    #     '"',
+    #     "n't",
+    #     "I",
+    #     "i",
+    #     ",00",
+    # ]  # stray words
+    punct = r"[{}]".format(string.punctuation)
+    sentence = re.sub(punct, " ", sentence)
+    sentence = re.sub(r"[0-9]", " ", sentence)
+    # # correct spelling mistakes
+    # sentence = re.sub(
+    #     r'privacy|privcy|privac|privasy|privasee|privarcy|priavcy|privsy', ' privacy ', sentence)
+    # sentence = re.sub(r'(^|\s)[a-z]($|\s)', ' ', sentence)
+    # sentence = re.sub(r"(^|\s)[a-z][a-z]($|\s)", " ", sentence)
+    # word_tokens = word_tokenize(sentence)
+    # filter using NLTK library append it to a string
+    # filtered_sentence = [w for w in word_tokens if not w in stop_words]
+    # filtered_sentence = []
+    # looping through conditions
+    # for w in word_tokens:
+    #     # check tokens against stopwords and punctuations
+    #     if (
+    #         w not in stop_words
+    #         and w not in string.punctuation
+    #         and w not in stray_tokens
+    #     ):
+    #         w = w.lower()
+    #         filtered_sentence.append(w)
+    sentence = sentence.lower()
+    # sentence = " ".join(filtered_sentence)
+    # re-removing single characters
+    # sentence = re.sub(r"(^|\s)[a-z]($|\s)", " ", sentence)
+    # sentence = re.sub(r"(^|\s)[a][a]($|\s)", " ", sentence)  # fixing for privacy
+    # reduce consecutive spaces into single space between words
     sentence = " ".join(sentence.split())
     return sentence
 
@@ -166,12 +288,8 @@ def lemma(sentence):
 
 
 # print(
-#     lemma(
-#         filter(
-#             clean(
-#                 "The camera twirls ! Oh, look at that clever angle ! Wow, a jump cut !"
-#             )
-#         )
+#     clean_filter_lemma_mini(
+#         "The camera twirls ! :: Oh, look at that clever angle you can't just hohohohoh! Wow, a jump cut !"
 #     )
 # )
 
