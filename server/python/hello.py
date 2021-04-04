@@ -111,10 +111,10 @@ def run():
     reviews_split_cleaned = []
 
     for rev in reviews_split:
-        reviews_split_cleaned += filter(clean(rev))
+        reviews_split_cleaned.append(clean_filter_lemma_mini(rev))
         # reviews_split_cleaned.append(rev)
 
-    # print(reviews_split_cleaned[1])
+    print(reviews_split_cleaned)
     print("done splitting reviews !!!!!!!!!!!!!!!!!")
 
     def try_tokenize(word):
@@ -133,8 +133,8 @@ def run():
         words = rev.split(" ")
         word = words[index]
         # print("rev: ", rev)
-        print("words: ", words)
-        print("len: ", len(words))
+        # print("words: ", words)
+        # print("len: ", len(words))
         while index < len(words):  # until done for all words
             try:
                 while (
@@ -144,20 +144,42 @@ def run():
                     index += 1
                     word = word + " " + words[index]
             except IndexError:
-                print(word)
+                # print(word)
+                ha = 0
             # phrase with phrase id has been found
             token_so_far.append(try_tokenize(word))
-            print(word)
-            print(index)
+            # print(word)
+            # print(index)
             # print(try_tokenize(word))
             index += 1
             try:
                 word = words[index]
             except IndexError:
                 # reached the end of the rev
-                print(word)
+                # print(word)
                 break
-        break
+        try:
+            token_so_far.remove(-1)
+            reviews_tokenized.append(token_so_far)
+        except:
+            reviews_tokenized.append(token_so_far)
+        # print(token_so_far)
+        # reviews_tokenized.append(token_so_far)
+        # break
+
+    print("ALL DONE WOOWOWO")
+
+
+def normalize_length(target_length, twod_arr):
+    normalized_arr = []
+
+    for arr in twod_arr:
+        if len(arr) > target_length:
+            truncated_arr = arr[0:target_length]
+        elif len(arr) < target_length:
+            padded_arr = arr.append([0] * target_length - len(arr))
+        else:
+            normalized_arr.append(arr)
 
 
 def clean(sentence):
@@ -180,10 +202,12 @@ def clean(sentence):
 
 
 def clean_filter_lemma_mini(sentence):
-    # sentence = re.sub(r"’", "'", sentence)
+    sentence = re.sub(r"’", "'", sentence)
     # # words = sentence.split()
     # sentence = re.sub(r":", " ", sentence)
     sentence = re.sub(r"n't", "n not", sentence)
+    sentence = re.sub(r"'s", " is", sentence)
+    sentence = re.sub(r"'ve", " have", sentence)
 
     # stop_words = set(stopwords.words("english"))
     # stray_tokens = [
@@ -289,7 +313,7 @@ def lemma(sentence):
 
 # print(
 #     clean_filter_lemma_mini(
-#         "The camera twirls ! :: Oh, look at that clever angle you can't just hohohohoh! Wow, a jump cut !"
+#         "We’ve seen the hippie-turned-yuppie plot before, but there’s an enthusiastic charm in Fire that makes the formula fresh again."
 #     )
 # )
 
