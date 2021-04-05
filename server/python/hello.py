@@ -26,6 +26,7 @@ import torch
 
 spice = en_core_web_sm.load()
 
+# https://towardsdatascience.com/sentiment-analysis-for-text-with-deep-learning-2f0a0c6472b5
 # https://towardsdatascience.com/sentiment-analysis-using-lstm-step-by-step-50d074f09948
 
 
@@ -205,7 +206,7 @@ def run():
     print(count_reach)
     print(len(reviews_tokenized))
 
-    features = normalize_length(10, reviews_tokenized)
+    features = normalize_length(200, reviews_tokenized)
     print(len(features))
     # print(features)
 
@@ -311,7 +312,7 @@ def run():
     # obtain one batch of training data
     dataiter = iter(train_loader)
     sample_x, sample_y = dataiter.next()
-    print('Sample input size: ', sample_x.size())  # batch_size, seq_length
+    print('Sample input size: ', sample_x.size())  # batch_size, target_length
     print('Sample input: \n', sample_x)
     print()
     print('Sample label size: ', sample_y.size())  # batch_size
