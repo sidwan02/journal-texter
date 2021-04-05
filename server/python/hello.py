@@ -183,9 +183,73 @@ def run():
     print(count_reach)
     print(len(reviews_tokenized))
 
-    reviews_tokenized_normalized = normalize_length(10, reviews_tokenized)
-    print(len(reviews_tokenized_normalized))
-    print(reviews_tokenized_normalized)
+    features = normalize_length(10, reviews_tokenized)
+    print(len(features))
+    # print(features)
+
+    with open(
+        r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\stanfordSentimentTreebank\datasetSplit.txt",
+        "r",
+    ) as f:
+        data_split = f.read()
+
+    index_to_spilt_state_dict = {}
+    splitset_tuples = data_split.split("\n")
+
+    for tup in splitset_tuples:
+        # print(tup)
+        split = tup.split(",")
+        try:
+            index_to_spilt_state_dict[int(split[0])] = int(split[1])
+        except IndexError:
+            # reached the end of the splitset
+            # print(word)
+            break
+        except ValueError:
+            hahahaha = 10
+    print(index_to_spilt_state_dict[100])
+
+    # split_frac = 0.8
+    # len_feat = len(features)
+
+    # train_x = features[0 : int(split_frac * len_feat)]
+    # train_y = encoded_labels[0 : int(split_frac * len_feat)]
+    # remaining_x = features[int(split_frac * len_feat) :]
+    # remaining_y = encoded_labels[int(split_frac * len_feat) :]
+    # valid_x = remaining_x[0 : int(len(remaining_x) * 0.5)]
+    # valid_y = remaining_y[0 : int(len(remaining_y) * 0.5)]
+    # test_x = remaining_x[int(len(remaining_x) * 0.5) :]
+    # test_y = remaining_y[int(len(remaining_y) * 0.5) :]
+
+    train_x = []
+    train_y = []
+
+    dev_x = []
+    dev_y = []
+
+    test_x = []
+    test_y = []
+
+    i = 1
+    while i <= len(features):
+        # print(type(index_to_spilt_state_dict[i]))
+        if index_to_spilt_state_dict[i] == 0:
+            train_x.append(features[i])
+            test_x.append(sentiment_dict[phrase_to_index_dict[features[i]]])
+        elif index_to_spilt_state_dict[i] == 1:
+            # print(features[i])
+            print(phrase_to_index_dict[reviews_split_cleaned[i]])
+            test_x.append(features[i])
+            test_y.append(sentiment_dict[phrase_to_index_dict[features[i]]])
+        elif index_to_spilt_state_dict[i] == 2:
+            dev_x.append(features[i])
+            dev_y.append(sentiment_dict[phrase_to_index_dict[features[i]]])
+        # else:
+        # print("yo wut")
+        # print(i)
+        i = i + 1
+
+    print(dev_x)
 
     print("ALL DONE WOOWOWO")
 
