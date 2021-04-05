@@ -71,7 +71,16 @@ def run():
             # this is the newline at the end of the txt
             break
 
-    # print(index_to_phrase_dict[10])
+    count = 0
+    for i in index_to_phrase_dict.values():
+        # if "gorgeously elaborate continuation of" in i:
+        if ("if you love reading and or poetry then by all "
+            in i
+            ):
+            print(i)
+        # break
+        count = count + 1
+    # print(index_to_phrase_dict)
     print("done splitting phrases !!!!!!!!!!!!!!!!!")
 
     sentiment_dict = {}
@@ -235,15 +244,15 @@ def run():
         # print(type(index_to_spilt_state_dict[i]))
         if index_to_spilt_state_dict[i] == 0:
             train_x.append(features[i])
-            test_x.append(sentiment_dict[phrase_to_index_dict[features[i]]])
+            test_x.append(phrase_to_index_dict[reviews_split_cleaned[i]])
         elif index_to_spilt_state_dict[i] == 1:
             # print(features[i])
-            print(phrase_to_index_dict[reviews_split_cleaned[i]])
+            # print(phrase_to_index_dict[reviews_split_cleaned[i]])
             test_x.append(features[i])
-            test_y.append(sentiment_dict[phrase_to_index_dict[features[i]]])
+            test_y.append(phrase_to_index_dict[reviews_split_cleaned[i]])
         elif index_to_spilt_state_dict[i] == 2:
             dev_x.append(features[i])
-            dev_y.append(sentiment_dict[phrase_to_index_dict[features[i]]])
+            dev_y.append(phrase_to_index_dict[reviews_split_cleaned[i]])
         # else:
         # print("yo wut")
         # print(i)
@@ -295,10 +304,17 @@ def clean_filter_lemma_mini(sentence):
     # # words = sentence.split()
     # sentence = re.sub(r":", " ", sentence)
     sentence = re.sub(r"can't", "cannot", sentence)
+    sentence = re.sub(r"can not", "cannot", sentence)
+    sentence = re.sub(r"ca n't", "cannot", sentence)
     sentence = re.sub(r"n't", " not", sentence)
     sentence = re.sub(r"'s", " is", sentence)
     sentence = re.sub(r"'ve", " have", sentence)
+    sentence = re.sub(r"'ll", " will", sentence)
+    sentence = re.sub(r"'d", " would", sentence)
 
+    # weird characters
+    sentence = re.sub(r"â", "a", sentence)
+    # sentence = re.sub(r"––", " ", sentence)
     # stop_words = set(stopwords.words("english"))
     # stray_tokens = [
     #     "amp",
@@ -312,7 +328,8 @@ def clean_filter_lemma_mini(sentence):
     #     "i",
     #     ",00",
     # ]  # stray words
-    punct = r"[{}]".format(string.punctuation)
+    # punct = r"[{}]".format(string.punctuation)
+    punct = r"[^\w\s]".format(string.punctuation)
     sentence = re.sub(punct, " ", sentence)
     sentence = re.sub(r"[0-9]", " ", sentence)
     # # correct spelling mistakes
@@ -341,6 +358,12 @@ def clean_filter_lemma_mini(sentence):
     # sentence = re.sub(r"(^|\s)[a][a]($|\s)", " ", sentence)  # fixing for privacy
     # reduce consecutive spaces into single space between words
     sentence = " ".join(sentence.split())
+
+    # hotfixes
+    sentence = re.sub(r"heck a few", "heck few", sentence)
+    # if "heck a few" in sentence:
+    #     print("what")
+
     return sentence
 
 
@@ -383,7 +406,8 @@ def filter(sentence):
     sentence = " ".join(filtered_sentence)
     # re-removing single characters
     sentence = re.sub(r"(^|\s)[a-z]($|\s)", " ", sentence)
-    sentence = re.sub(r"(^|\s)[a][a]($|\s)", " ", sentence)  # fixing for privacy
+    sentence = re.sub(r"(^|\s)[a][a]($|\s)", " ",
+                      sentence)  # fixing for privacy
     return sentence
 
 
