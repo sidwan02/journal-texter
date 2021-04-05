@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Entry<T extends JournalText<Map<Integer, String>>> {
+public class Entry<T extends JournalText<TreeMap<String, Integer>>> {
   private Date date;
   private String entryString;
   private List<T> questionsAndResponses;
@@ -15,7 +15,7 @@ public class Entry<T extends JournalText<Map<Integer, String>>> {
     this.date = date;
     this.questionsAndResponses = questionsAndResponses;
     String stringRepresentation = "";
-    Map<String, Integer> singleResponseTags;
+    TreeMap<String, Integer> singleResponseTags;
     Map<String, Integer> entryTagMap = new TreeMap<>();
     for (T questionOrResponse : questionsAndResponses) {
       if (questionOrResponse.getType() == JournalTextType.RESPONSE) {

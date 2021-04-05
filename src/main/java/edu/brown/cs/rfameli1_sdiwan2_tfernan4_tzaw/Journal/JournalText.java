@@ -6,5 +6,5 @@ public interface JournalText<M extends Map> {
   JournalTextType getType();
   String getText();
   String stringRepresentation();
-  Map<String, Integer> getTags();
+  M getTags();
 }

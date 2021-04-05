@@ -1,8 +1,5 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
-import com.sun.source.tree.Tree;
-
-import java.util.Map;
 import java.util.TreeMap;
 
 public class Response implements JournalText<TreeMap<String, Integer>> {

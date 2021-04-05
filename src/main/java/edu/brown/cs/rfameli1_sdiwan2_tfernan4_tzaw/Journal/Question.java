@@ -1,11 +1,9 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-public class Question implements JournalText<HashMap<Integer, String>> {
+public class Question implements JournalText<HashMap<String, Integer>> {
   private final String text;
   private final Set<String> tags;
 
