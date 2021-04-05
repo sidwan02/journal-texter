@@ -6,6 +6,7 @@
 #         # self.__gui = gui
 #
 
+from torch.utils.data import DataLoader, TensorDataset
 import en_core_web_sm
 import numpy as np
 import spacy
@@ -17,6 +18,7 @@ from nltk.corpus import stopwords
 import string
 import re
 import os
+import torch
 
 # my_path = os.path.join(os.path.dirname(__file__), "..")
 # print(my_path)
@@ -66,10 +68,14 @@ def run():
             # print("phrase: ", phrase)
             # print("processed_phrase: ", processed_phrase)
             index_to_phrase_dict[index] = processed_phrase
-            phrase_to_index_dict[processed_phrase] = index
+            # print(index)
+            phrase_to_index_dict[processed_phrase] = int(index)
         except IndexError:
             # this is the newline at the end of the txt
             break
+        except ValueError:
+            print(" WHU WHWUH WUN UN W")
+            print(phrase_components[1])
 
     count = 0
     for i in index_to_phrase_dict.values():
@@ -95,9 +101,16 @@ def run():
         try:
             index = sentiment_components[0]
             sentiment = sentiment_components[1]
-            sentiment_dict[index] = sentiment
+            if (sentiment == "sentiment values"):
+                print('skip header')
+            else:
+                sentiment_dict[int(index)] = float(sentiment)
         except IndexError:
             # this is the newline at the end of the txt
+            break
+        except ValueError:
+            print('should not be here')
+            # print(sentiment_components[1])
             break
     # print(sentiment_dict[10])
 
@@ -244,22 +257,22 @@ def run():
     while i < len(features):
         # print(type(index_to_spilt_state_dict[i]))
         try:
-            if index_to_spilt_state_dict[i] == 0:
-                train_x.append(features[i])
-                test_x.append(
+            if index_to_spilt_state_dict[i] == 1:
+                train_y.append(
                     sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
-            elif index_to_spilt_state_dict[i] == 1:
+                train_x.append(features[i])
+            elif index_to_spilt_state_dict[i] == 2:
                 # print(features[i])
                 # print(phrase_to_index_dict[reviews_split_cleaned[i]])
-                test_x.append(features[i])
                 test_y.append(
                     sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
-            elif index_to_spilt_state_dict[i] == 2:
-                dev_x.append(features[i])
+                test_x.append(features[i])
+            elif index_to_spilt_state_dict[i] == 3:
                 dev_y.append(
                     sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
-            # else:
-            # print("yo wut")
+                dev_x.append(features[i])
+            else:
+                print("yo wut")
             # print(i)
             i = i + 1
             valid_count = valid_count + 1
@@ -268,10 +281,44 @@ def run():
             hilo = 1
             i = i + 1
 
-    print(dev_y)
+    # print(dev_y)
     # print(dev_y)
     print("portion considered: ", valid_count / len(features))
-    print("ALL DONE WOOWOWO")
+
+    print("train", len(train_x))
+    print("train", len(train_y))
+
+    print("dev", len(dev_x))
+    print("dev", len(dev_y))
+
+    print("test", len(test_x))
+    print("test", len(test_y))
+
+    # create Tensor datasets
+    train_data = TensorDataset(torch.from_numpy(
+        np.array(train_x)), torch.from_numpy(np.array(train_y)))
+    dev_data = TensorDataset(torch.from_numpy(
+        np.array(dev_x)), torch.from_numpy(np.array(dev_y)))
+    test_data = TensorDataset(torch.from_numpy(
+        np.array(test_x)), torch.from_numpy(np.array(test_y)))
+    # dataloaders
+    batch_size = 50
+    # make sure to SHUFFLE your data
+    train_loader = DataLoader(train_data, shuffle=True, batch_size=batch_size)
+    dev_loader = DataLoader(dev_data, shuffle=True, batch_size=batch_size)
+    test_loader = DataLoader(test_data, shuffle=True, batch_size=batch_size)
+
+    # obtain one batch of training data
+    dataiter = iter(train_loader)
+    sample_x, sample_y = dataiter.next()
+    print('Sample input size: ', sample_x.size())  # batch_size, seq_length
+    print('Sample input: \n', sample_x)
+    print()
+    print('Sample label size: ', sample_y.size())  # batch_size
+    print('Sample label: \n', sample_y)
+
+
+print("ALL DONE WOOWOWO")
 
 
 def normalize_length(target_length, twod_arr):
