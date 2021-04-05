@@ -1,5 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.HeaderException;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetData;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetReader;
