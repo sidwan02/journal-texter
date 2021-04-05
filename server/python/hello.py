@@ -74,10 +74,10 @@ def run():
     count = 0
     for i in index_to_phrase_dict.values():
         # if "gorgeously elaborate continuation of" in i:
-        if ("if you love reading and or poetry then by all "
-            in i
-            ):
-            print(i)
+        # if ("the sundance film festival has become so buzz obsessed that fans and producers descend upon utah each january to ferret out the next great thing"
+        #     in i
+        #     ):
+        #     print(i)
         # break
         count = count + 1
     # print(index_to_phrase_dict)
@@ -240,26 +240,37 @@ def run():
     test_y = []
 
     i = 1
-    while i <= len(features):
+    valid_count = 0
+    while i < len(features):
         # print(type(index_to_spilt_state_dict[i]))
-        if index_to_spilt_state_dict[i] == 0:
-            train_x.append(features[i])
-            test_x.append(phrase_to_index_dict[reviews_split_cleaned[i]])
-        elif index_to_spilt_state_dict[i] == 1:
-            # print(features[i])
-            # print(phrase_to_index_dict[reviews_split_cleaned[i]])
-            test_x.append(features[i])
-            test_y.append(phrase_to_index_dict[reviews_split_cleaned[i]])
-        elif index_to_spilt_state_dict[i] == 2:
-            dev_x.append(features[i])
-            dev_y.append(phrase_to_index_dict[reviews_split_cleaned[i]])
-        # else:
-        # print("yo wut")
-        # print(i)
-        i = i + 1
+        try:
+            if index_to_spilt_state_dict[i] == 0:
+                train_x.append(features[i])
+                test_x.append(
+                    sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
+            elif index_to_spilt_state_dict[i] == 1:
+                # print(features[i])
+                # print(phrase_to_index_dict[reviews_split_cleaned[i]])
+                test_x.append(features[i])
+                test_y.append(
+                    sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
+            elif index_to_spilt_state_dict[i] == 2:
+                dev_x.append(features[i])
+                dev_y.append(
+                    sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
+            # else:
+            # print("yo wut")
+            # print(i)
+            i = i + 1
+            valid_count = valid_count + 1
+        except KeyError:
+            # print("yo")
+            hilo = 1
+            i = i + 1
 
-    print(dev_x)
-
+    print(dev_y)
+    # print(dev_y)
+    print("portion considered: ", valid_count / len(features))
     print("ALL DONE WOOWOWO")
 
 
