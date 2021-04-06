@@ -259,19 +259,17 @@ def run():
     while i < len(features):
         # print(type(index_to_spilt_state_dict[i]))
         try:
+            sentiment = sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]]
             if index_to_spilt_state_dict[i] == 1:
-                train_y.append(
-                    sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
+                train_y.append(0 if sentiment < 0.5 else 1)
                 train_x.append(features[i])
             elif index_to_spilt_state_dict[i] == 2:
                 # print(features[i])
                 # print(phrase_to_index_dict[reviews_split_cleaned[i]])
-                test_y.append(
-                    sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
+                test_y.append(0 if sentiment < 0.5 else 1)
                 test_x.append(features[i])
             elif index_to_spilt_state_dict[i] == 3:
-                dev_y.append(
-                    sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]])
+                dev_y.append(0 if sentiment < 0.5 else 1)
                 dev_x.append(features[i])
             else:
                 print("yo wut")

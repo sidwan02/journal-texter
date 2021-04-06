@@ -134,8 +134,10 @@ class Train(nn.Module):
             print(
                 f'train_accuracy : {epoch_train_acc*100} dev_accuracy : {epoch_dev_acc*100}')
             if epoch_val_loss <= valid_loss_min:
-                torch.save(model.state_dict(), '../working/state_dict.pt')
-                print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
+                # torch.save(model.state_dict(), '../working/state_dict.pt')
+                # print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
+                #     valid_loss_min, epoch_val_loss))
+                print('Validation loss decreased ({:.6f} --> {:.6f}).'.format(
                     valid_loss_min, epoch_val_loss))
                 valid_loss_min = epoch_val_loss
             print(25*'==')
