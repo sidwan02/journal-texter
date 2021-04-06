@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import torch
 
+from model import SentimentRNN
+
+import numpy as np
+
 # Preliminaries
 
 # from torchtext.data import Field, TabularDataset, BucketIterator
@@ -15,162 +19,123 @@ from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 
 # Training
 
-import torch.optim as optim
+is_cuda = torch.cuda.is_available()
+
+
+# If we have a GPU available, we'll set our device to GPU. We'll use this device variable later in our code.
+if is_cuda:
+    device = torch.device("cuda")
+    print("GPU is available")
+else:
+    device = torch.device("cpu")
+    print("GPU not available, CPU used")
 
 
 class Train(nn.Module):
-    def __init__(self, embedding_dim, train_loader, test_loader, dev_loader):
+    # def __init__(self, embedding_dim, train_loader, test_loader, dev_loader):
+    def __init__(self, vocab_size, train_loader, dev_loader, batch_size):
         super(Train, self).__init__()
 
-        model = SentimentLSTM(embedding_dim=vocab_size).to(device)
+        # Instantiate the model w/ hyperparams
+        num_layers = 2
 
-        optimizer = optim.Adam(model.parameters(), lr=0.001)
+        vocab_size = vocab_size + 1  # extra 1 for padding
+        embedding_dim = 64
+        output_dim = 1
+        hidden_dim = 256
 
-        train(model=model, optimizer=optimizer, num_epochs=10)
+        model = SentimentRNN(num_layers, vocab_size, hidden_dim,
+                             embedding_dim, drop_prob=0.5)
 
-        self.train_loader = train_loader
-        self.test_loader = test_loader
-        self.dev_loader = dev_loader
+        # moving to gpu
+        model.to(device)
 
+        print(model)
 
-# Save and Load Functions
-def save_checkpoint(save_path, model, optimizer, valid_loss):
+        # model = SentimentalLSTM(vocab_size=vocab_size).to(device)
 
-    if save_path == None:
-        return
+        # optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    state_dict = {'model_state_dict': model.state_dict(),
-                  'optimizer_state_dict': optimizer.state_dict(),
-                  'valid_loss': valid_loss}
+        # loss and optimization functions
+        lr = 0.001
 
-    torch.save(state_dict, save_path)
-    print(f'Model saved to ==> {save_path}')
+        criterion = nn.BCELoss()
 
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-def load_checkpoint(load_path, model, optimizer):
+        # function to predict accuracy
 
-    if load_path == None:
-        return
+        def acc(pred, label):
+            pred = torch.round(pred.squeeze())
+            return torch.sum(pred == label.squeeze()).item()
 
-    state_dict = torch.load(load_path, map_location=device)
-    print(f'Model loaded from <== {load_path}')
+        clip = 5
+        epochs = 5
+        valid_loss_min = np.Inf
+        # train for some number of epochs
+        epoch_tr_loss, epoch_vl_loss = [], []
+        epoch_tr_acc, epoch_vl_acc = [], []
 
-    model.load_state_dict(state_dict['model_state_dict'])
-    optimizer.load_state_dict(state_dict['optimizer_state_dict'])
+        for epoch in range(epochs):
+            train_losses = []
+            train_acc = 0.0
+            model.train()
+            # initialize hidden state
+            h = model.init_hidden(batch_size)
+            for inputs, labels in train_loader:
 
-    return state_dict['valid_loss']
+                inputs, labels = inputs.to(device), labels.to(device)
+                # Creating new variables for the hidden state, otherwise
+                # we'd backprop through the entire training history
+                h = tuple([each.data for each in h])
 
+                model.zero_grad()
+                output, h = model(inputs, h)
 
-def save_metrics(save_path, train_loss_list, valid_loss_list, global_steps_list):
+                # calculate the loss and perform backprop
+                loss = criterion(output.squeeze(), labels.float())
+                loss.backward()
+                train_losses.append(loss.item())
+                # calculating accuracy
+                accuracy = acc(output, labels)
+                train_acc += accuracy
+                # `clip_grad_norm` helps prevent the exploding gradient problem in RNNs / LSTMs.
+                nn.utils.clip_grad_norm_(model.parameters(), clip)
+                optimizer.step()
 
-    if save_path == None:
-        return
+            val_h = model.init_hidden(batch_size)
+            val_losses = []
+            val_acc = 0.0
+            model.eval()
+            for inputs, labels in valid_loader:
+                val_h = tuple([each.data for each in val_h])
 
-    state_dict = {'train_loss_list': train_loss_list,
-                  'valid_loss_list': valid_loss_list,
-                  'global_steps_list': global_steps_list}
+                inputs, labels = inputs.to(device), labels.to(device)
 
-    torch.save(state_dict, save_path)
-    print(f'Model saved to ==> {save_path}')
+                output, val_h = model(inputs, val_h)
+                val_loss = criterion(output.squeeze(), labels.float())
 
+                val_losses.append(val_loss.item())
 
-def load_metrics(load_path):
+                accuracy = acc(output, labels)
+                val_acc += accuracy
 
-    if load_path == None:
-        return
-
-    state_dict = torch.load(load_path, map_location=device)
-    print(f'Model loaded from <== {load_path}')
-
-    return state_dict['train_loss_list'], state_dict['valid_loss_list'], state_dict['global_steps_list']
-
-
-# Training Function
-
-def train(model,
-          optimizer,
-          train_loader,
-          valid_loader,
-          criterion=nn.BCELoss(),
-          num_epochs=5,
-          eval_every=10,
-          file_path='target',
-          best_valid_loss=float("Inf")):
-    # def train(model,
-    #           optimizer,
-    #           criterion=nn.BCELoss(),
-    #           train_loader=train_iter,
-    #           valid_loader=valid_iter,
-    #           num_epochs=5,
-    #           eval_every=len(train_iter) // 2,
-    #           file_path=destination_folder,
-    #           best_valid_loss=float("Inf")):
-
-    # initialize running values
-    running_loss = 0.0
-    valid_running_loss = 0.0
-    global_step = 0
-    train_loss_list = []
-    valid_loss_list = []
-    global_steps_list = []
-
-    # training loop
-    model.train()
-    for epoch in range(num_epochs):
-        for (labels, (title, title_len), (text, text_len), (titletext, titletext_len)), _ in train_loader:
-            labels = labels.to(device)
-            titletext = titletext.to(device)
-            titletext_len = titletext_len.to(device)
-            output = model(titletext, titletext_len)
-
-            loss = criterion(output, labels)
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-
-            # update running values
-            running_loss += loss.item()
-            global_step += 1
-
-            # evaluation step
-            if global_step % eval_every == 0:
-                model.eval()
-                with torch.no_grad():
-                    # validation loop
-                    for (labels, (title, title_len), (text, text_len), (titletext, titletext_len)), _ in valid_loader:
-                        labels = labels.to(device)
-                        titletext = titletext.to(device)
-                        titletext_len = titletext_len.to(device)
-                        output = model(titletext, titletext_len)
-
-                        loss = criterion(output, labels)
-                        valid_running_loss += loss.item()
-
-                # evaluation
-                average_train_loss = running_loss / eval_every
-                average_valid_loss = valid_running_loss / len(valid_loader)
-                train_loss_list.append(average_train_loss)
-                valid_loss_list.append(average_valid_loss)
-                global_steps_list.append(global_step)
-
-                # resetting running values
-                running_loss = 0.0
-                valid_running_loss = 0.0
-                model.train()
-
-                # print progress
-                print('Epoch [{}/{}], Step [{}/{}], Train Loss: {:.4f}, Valid Loss: {:.4f}'
-                      .format(epoch+1, num_epochs, global_step, num_epochs*len(train_loader),
-                              average_train_loss, average_valid_loss))
-
-                # checkpoint
-                if best_valid_loss > average_valid_loss:
-                    best_valid_loss = average_valid_loss
-                    save_checkpoint(file_path + '/model.pt',
-                                    model, optimizer, best_valid_loss)
-                    save_metrics(file_path + '/metrics.pt', train_loss_list,
-                                 valid_loss_list, global_steps_list)
-
-    save_metrics(file_path + '/metrics.pt', train_loss_list,
-                 valid_loss_list, global_steps_list)
-    print('Finished Training!')
+            epoch_train_loss = np.mean(train_losses)
+            epoch_val_loss = np.mean(val_losses)
+            epoch_train_acc = train_acc/len(train_loader.dataset)
+            epoch_val_acc = val_acc/len(valid_loader.dataset)
+            epoch_tr_loss.append(epoch_train_loss)
+            epoch_vl_loss.append(epoch_val_loss)
+            epoch_tr_acc.append(epoch_train_acc)
+            epoch_vl_acc.append(epoch_val_acc)
+            print(f'Epoch {epoch+1}')
+            print(
+                f'train_loss : {epoch_train_loss} val_loss : {epoch_val_loss}')
+            print(
+                f'train_accuracy : {epoch_train_acc*100} val_accuracy : {epoch_val_acc*100}')
+            if epoch_val_loss <= valid_loss_min:
+                torch.save(model.state_dict(), '../working/state_dict.pt')
+                print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
+                    valid_loss_min, epoch_val_loss))
+                valid_loss_min = epoch_val_loss
+            print(25*'==')

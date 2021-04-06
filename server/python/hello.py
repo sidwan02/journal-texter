@@ -19,7 +19,6 @@ import string
 import re
 import os
 import torch
-from model import SentimentLSTM
 from train import Train
 
 # my_path = os.path.join(os.path.dirname(__file__), "..")
@@ -208,7 +207,7 @@ def run():
     print(count_reach)
     print(len(reviews_tokenized))
 
-    features = normalize_length(200, reviews_tokenized)
+    features = normalize_length(250, reviews_tokenized)
     print(len(features))
     # print(features)
 
@@ -333,7 +332,8 @@ def run():
     #                     embedding_dim, hidden_dim, n_layers)
     # print(net)
 
-    Train(net, batch_size, train_loader, dev_loader, 200)
+    Train(vocab_size=vocab_size,
+          train_loader=train_loader, dev_loader=dev_loader, batch_size=batch_size)
 
 
 print("ALL DONE WOOWOWO")

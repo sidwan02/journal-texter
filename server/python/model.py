@@ -1,61 +1,72 @@
-# Libraries
-
-import matplotlib.pyplot as plt
-import pandas as pd
+import torch.nn as nn
 import torch
 
-# Preliminaries
 
-# from torchtext.data import Field, TabularDataset, BucketIterator
+class SentimentRNN(nn.Module):
+    def __init__(self, no_layers, vocab_size, hidden_dim, embedding_dim, output_dim=1, drop_prob=0.5):
+        super(SentimentRNN, self).__init__()
 
-# Models
+        self.output_dim = output_dim
+        self.hidden_dim = hidden_dim
 
-import torch.nn as nn
-from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+        self.no_layers = no_layers
+        self.vocab_size = vocab_size
 
-# Training
+        # embedding and LSTM layers
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
 
-import torch.optim as optim
+        # lstm
+        self.lstm = nn.LSTM(input_size=embedding_dim, hidden_size=self.hidden_dim,
+                            num_layers=no_layers, batch_first=True)
 
-# Evaluation
+        # dropout layer
+        self.dropout = nn.Dropout(0.3)
 
-# from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-# import seaborn as sns
+        # linear and sigmoid layer
+        self.fc = nn.Linear(self.hidden_dim, output_dim)
+        self.sig = nn.Sigmoid()
 
+    def forward(self, x, hidden):
+        batch_size = x.size(0)
+        # embeddings and lstm_out
+        # shape: B x S x Feature   since batch = True
+        embeds = self.embedding(x)
+        # print(embeds.shape)  #[50, 500, 1000]
+        lstm_out, hidden = self.lstm(embeds, hidden)
 
-class SentimentLSTM(nn.Module):
+        lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)
 
-    def __init__(self, vocab_size, dimension=128):
-        super(SentimentLSTM, self).__init__()
+        # dropout and fully connected layer
+        out = self.dropout(lstm_out)
+        out = self.fc(out)
 
-        self.embedding = nn.Embedding(
-            num_embeddings=vocab_size, embedding_dim=300)
-        self.dimension = dimension
-        self.lstm = nn.LSTM(input_size=300,
-                            hidden_size=dimension,
-                            num_layers=1,
-                            batch_first=True,
-                            bidirectional=True)
-        self.drop = nn.Dropout(p=0.5)
+        # sigmoid function
+        sig_out = self.sig(out)
 
-        self.fc = nn.Linear(2*dimension, 1)
+        # reshape to be batch_size first
+        sig_out = sig_out.view(batch_size, -1)
 
-    def forward(self, text, text_len):
+        sig_out = sig_out[:, -1]  # get last batch of labels
 
-        text_emb = self.embedding(text)
+        # return last sigmoid output and hidden state
+        return sig_out, hidden
 
-        packed_input = pack_padded_sequence(
-            text_emb, text_len, batch_first=True, enforce_sorted=False)
-        packed_output, _ = self.lstm(packed_input)
-        output, _ = pad_packed_sequence(packed_output, batch_first=True)
+    def init_hidden(self, batch_size):
+        is_cuda = torch.cuda.is_available()
+        # If we have a GPU available, we'll set our device to GPU. We'll use this device variable later in our code.
+        if is_cuda:
+            device = torch.device("cuda")
+            print("GPU is available")
+        else:
+            device = torch.device("cpu")
+            print("GPU not available, CPU used")
 
-        out_forward = output[range(len(output)), text_len - 1, :self.dimension]
-        out_reverse = output[:, 0, self.dimension:]
-        out_reduced = torch.cat((out_forward, out_reverse), 1)
-        text_fea = self.drop(out_reduced)
-
-        text_fea = self.fc(text_fea)
-        text_fea = torch.squeeze(text_fea, 1)
-        text_out = torch.sigmoid(text_fea)
-
-        return text_out
+        ''' Initializes hidden state '''
+        # Create two new tensors with sizes n_layers x batch_size x hidden_dim,
+        # initialized to zero, for hidden state and cell state of LSTM
+        h0 = torch.zeros((self.no_layers, batch_size,
+                         self.hidden_dim)).to(device)
+        c0 = torch.zeros((self.no_layers, batch_size,
+                         self.hidden_dim)).to(device)
+        hidden = (h0, c0)
+        return hidden
