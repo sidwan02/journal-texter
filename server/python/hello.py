@@ -20,7 +20,7 @@ import re
 import os
 import torch
 from model import SentimentLSTM
-from train import TrainModel
+from train import Train
 
 # my_path = os.path.join(os.path.dirname(__file__), "..")
 # print(my_path)
@@ -321,16 +321,19 @@ def run():
     print('Sample label: \n', sample_y)
 
     # Instantiate the model w/ hyperparams
-    vocab_size = len(index_to_phrase_dict.keys())+1  # +1 for the 0 padding
+    # vocab_size = len(index_to_phrase_dict.keys())+1  # +1 for the 0 padding
+    vocab_size = len(index_to_phrase_dict.keys())
     output_size = 1
-    embedding_dim = 400
-    hidden_dim = 256
+    # embedding_dim = 400
+    embedding_dim = 256
+    # hidden_dim = 256
+    hidden_dim = 2
     n_layers = 2
-    net = SentimentLSTM(vocab_size, output_size,
-                        embedding_dim, hidden_dim, n_layers)
-    print(net)
+    # net = SentimentLSTM(vocab_size, output_size,
+    #                     embedding_dim, hidden_dim, n_layers)
+    # print(net)
 
-    TrainModel(net, batch_size, train_loader, dev_loader, 200)
+    Train(net, batch_size, train_loader, dev_loader, 200)
 
 
 print("ALL DONE WOOWOWO")

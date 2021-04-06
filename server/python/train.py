@@ -1,107 +1,176 @@
+# Libraries
+
+import matplotlib.pyplot as plt
+import pandas as pd
 import torch
+
+# Preliminaries
+
+# from torchtext.data import Field, TabularDataset, BucketIterator
+
+# Models
+
 import torch.nn as nn
-import numpy as np
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+# Training
+
+import torch.optim as optim
 
 
-class TrainModel():
-    def __init__(self, model, batch_size, train_loader, dev_loader, target_length):
-        super().__init__()
-        self.model = model
-        self.batch_size = batch_size
+class Train(nn.Module):
+    def __init__(self, embedding_dim, train_loader, test_loader, dev_loader):
+        super(Train, self).__init__()
+
+        model = SentimentLSTM(embedding_dim=vocab_size).to(device)
+
+        optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+        train(model=model, optimizer=optimizer, num_epochs=10)
+
         self.train_loader = train_loader
+        self.test_loader = test_loader
         self.dev_loader = dev_loader
-        self.target_length = target_length
 
-        train_on_gpu = torch.cuda.is_available()
 
-        # loss and optimization functions
-        lr = 0.001
+# Save and Load Functions
+def save_checkpoint(save_path, model, optimizer, valid_loss):
 
-        criterion = nn.BCELoss()
-        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-        # optimizer = torch.optim.SGD(model.parameters(), lr=lr)
+    if save_path == None:
+        return
 
-        # training params
+    state_dict = {'model_state_dict': model.state_dict(),
+                  'optimizer_state_dict': optimizer.state_dict(),
+                  'valid_loss': valid_loss}
 
-        epochs = 4  # 3-4 is approx where I noticed the validation loss stop decreasing
+    torch.save(state_dict, save_path)
+    print(f'Model saved to ==> {save_path}')
 
-        counter = 0
-        print_every = 1
-        clip = 5  # gradient clipping
 
-        # move model to GPU, if available
-        # if(train_on_gpu):
-        #     model.cuda()
+def load_checkpoint(load_path, model, optimizer):
 
-        model.train()
-        # train for some number of epochs
-        for e in range(epochs):
-            # initialize hidden state
-            h = model.init_hidden(batch_size)
+    if load_path == None:
+        return
 
-            # batch loop
-            for inputs, labels in train_loader:
-                counter += 1
+    state_dict = torch.load(load_path, map_location=device)
+    print(f'Model loaded from <== {load_path}')
 
-                print(counter)
+    model.load_state_dict(state_dict['model_state_dict'])
+    optimizer.load_state_dict(state_dict['optimizer_state_dict'])
 
-                # if(train_on_gpu):
-                #     inputs, labels = inputs.cuda(), labels.cuda()
+    return state_dict['valid_loss']
 
-                # Creating new variables for the hidden state, otherwise
-                # we'd backprop through the entire training history
-                h = tuple([each.data for each in h])
 
-                # zero accumulated gradients
-                # model.zero_grad()
-                optimizer.zero_grad()
+def save_metrics(save_path, train_loss_list, valid_loss_list, global_steps_list):
 
-                # get the output from the model
-                inputs = inputs.type(torch.LongTensor)
-                output, h = model(inputs, h)
+    if save_path == None:
+        return
 
-                # calculate the loss and perform backprop
-                # print(output.squeeze().shape)
-                # print(labels.shape)
-                loss = criterion(output.squeeze(), labels.float())
+    state_dict = {'train_loss_list': train_loss_list,
+                  'valid_loss_list': valid_loss_list,
+                  'global_steps_list': global_steps_list}
 
-                # loss = criterion(torch.sigmoid(
-                #     output.squeeze()), labels.float())
+    torch.save(state_dict, save_path)
+    print(f'Model saved to ==> {save_path}')
 
-                loss.backward()
-                # `clip_grad_norm` helps prevent the exploding gradient problem in RNNs / LSTMs.
-                nn.utils.clip_grad_norm_(model.parameters(), clip)
-                optimizer.step()
 
-                # loss stats
-                if counter % print_every == 0:
-                    # Get validation loss
-                    val_h = model.init_hidden(batch_size)
-                    val_losses = []
-                    model.eval()
-                    for inputs, labels in dev_loader:
+def load_metrics(load_path):
 
-                        # Creating new variables for the hidden state, otherwise
-                        # we'd backprop through the entire training history
-                        val_h = tuple([each.data for each in val_h])
+    if load_path == None:
+        return
 
-                        # if(train_on_gpu):
-                        #     inputs, labels = inputs.cuda(), labels.cuda()
+    state_dict = torch.load(load_path, map_location=device)
+    print(f'Model loaded from <== {load_path}')
 
-                        inputs = inputs.type(torch.LongTensor)
+    return state_dict['train_loss_list'], state_dict['valid_loss_list'], state_dict['global_steps_list']
 
-                        if((inputs.shape[0], inputs.shape[1]) != (batch_size, target_length)):
-                            print('Validation - Input Shape Issue: ', inputs.shape)
-                            continue
 
-                        output, val_h = model(inputs, val_h)
-                        val_loss = criterion(output.squeeze(), labels.float())
+# Training Function
 
-                        val_losses.append(val_loss.item())
+def train(model,
+          optimizer,
+          train_loader,
+          valid_loader,
+          criterion=nn.BCELoss(),
+          num_epochs=5,
+          eval_every=10,
+          file_path='target',
+          best_valid_loss=float("Inf")):
+    # def train(model,
+    #           optimizer,
+    #           criterion=nn.BCELoss(),
+    #           train_loader=train_iter,
+    #           valid_loader=valid_iter,
+    #           num_epochs=5,
+    #           eval_every=len(train_iter) // 2,
+    #           file_path=destination_folder,
+    #           best_valid_loss=float("Inf")):
 
-                    model.train()
-                    print("Epoch: {}/{}...".format(e+1, epochs),
-                          "Step: {}...".format(counter),
-                          "Loss: {:.6f}...".format(loss.item()),
-                          "Val Loss: {:.6f}".format(np.mean(val_losses))
-                          )
+    # initialize running values
+    running_loss = 0.0
+    valid_running_loss = 0.0
+    global_step = 0
+    train_loss_list = []
+    valid_loss_list = []
+    global_steps_list = []
+
+    # training loop
+    model.train()
+    for epoch in range(num_epochs):
+        for (labels, (title, title_len), (text, text_len), (titletext, titletext_len)), _ in train_loader:
+            labels = labels.to(device)
+            titletext = titletext.to(device)
+            titletext_len = titletext_len.to(device)
+            output = model(titletext, titletext_len)
+
+            loss = criterion(output, labels)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            # update running values
+            running_loss += loss.item()
+            global_step += 1
+
+            # evaluation step
+            if global_step % eval_every == 0:
+                model.eval()
+                with torch.no_grad():
+                    # validation loop
+                    for (labels, (title, title_len), (text, text_len), (titletext, titletext_len)), _ in valid_loader:
+                        labels = labels.to(device)
+                        titletext = titletext.to(device)
+                        titletext_len = titletext_len.to(device)
+                        output = model(titletext, titletext_len)
+
+                        loss = criterion(output, labels)
+                        valid_running_loss += loss.item()
+
+                # evaluation
+                average_train_loss = running_loss / eval_every
+                average_valid_loss = valid_running_loss / len(valid_loader)
+                train_loss_list.append(average_train_loss)
+                valid_loss_list.append(average_valid_loss)
+                global_steps_list.append(global_step)
+
+                # resetting running values
+                running_loss = 0.0
+                valid_running_loss = 0.0
+                model.train()
+
+                # print progress
+                print('Epoch [{}/{}], Step [{}/{}], Train Loss: {:.4f}, Valid Loss: {:.4f}'
+                      .format(epoch+1, num_epochs, global_step, num_epochs*len(train_loader),
+                              average_train_loss, average_valid_loss))
+
+                # checkpoint
+                if best_valid_loss > average_valid_loss:
+                    best_valid_loss = average_valid_loss
+                    save_checkpoint(file_path + '/model.pt',
+                                    model, optimizer, best_valid_loss)
+                    save_metrics(file_path + '/metrics.pt', train_loss_list,
+                                 valid_loss_list, global_steps_list)
+
+    save_metrics(file_path + '/metrics.pt', train_loss_list,
+                 valid_loss_list, global_steps_list)
+    print('Finished Training!')
