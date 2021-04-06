@@ -17,7 +17,10 @@ public class Entry<T extends JournalText<TreeMap<String, Integer>>> {
     String stringRepresentation = "";
     TreeMap<String, Integer> singleResponseTags;
     Map<String, Integer> entryTagMap = new TreeMap<>();
+
+    // Iterate through every question/response
     for (T questionOrResponse : questionsAndResponses) {
+      // If it is a RESPONSE, add the tags to this entry's tags
       if (questionOrResponse.getType() == JournalTextType.RESPONSE) {
         singleResponseTags = questionOrResponse.getTags();
         for (String tag : singleResponseTags.keySet()) {
@@ -29,6 +32,7 @@ public class Entry<T extends JournalText<TreeMap<String, Integer>>> {
           }
         }
       }
+      // Concatenate the questionOrResponse's stringRepresentation
       stringRepresentation += questionOrResponse.stringRepresentation();
     }
     this.entryString = stringRepresentation;
@@ -49,21 +53,5 @@ public class Entry<T extends JournalText<TreeMap<String, Integer>>> {
   public Map<String, Integer> getTagMap() {
     return this.tags;
   }
-//  /**
-//   * Constructor using QuestionResponses.
-//   * @param date
-//   * @param questionResponses
-//   */
-//  public Entry(Date date, List<QuestionResponse> questionResponses) {
-//    this.date = date;
-//    this.questionResponses = new ArrayList<>(questionResponses);
-//    String stringRepresentation = "";
-//    for (QuestionResponse qr : questionResponses) {
-//      stringRepresentation += qr.toString();
-//    }
-//    this.entryString = stringRepresentation;
-//  }
-
-  // may create a separate constructor from the string representation of entries
 
 }

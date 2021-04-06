@@ -1,11 +1,16 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import static edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.ArgTypes.DOUBLE;
+import static edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.ArgTypes.STRING;
+import static edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.ArgTypes.INT;
+
+
 /**
- * Validates arguments passed into a command.
+ * Validates arguments passed into a REPL command.
  */
 public final class ArgValidator {
 
@@ -15,17 +20,12 @@ public final class ArgValidator {
    * Checks through every argFormat in argFormats to see if args is valid.
    *
    * @param command    The command on which the arguments will be called
-   * @param argFormats A List of Strings that specify what format the args must be in. Each string
-   *                   should be separated by spaces e.g. "s d i i i"
-   *                   s - string
-   *                   d - double
-   *                   i - int
-   *                   nni - non-negative int
-   *                   nnd - non-negative double
+   * @param argFormats A List of ArgTypes that specify what format the command's arguments must be
+   *                   in
    * @param args       The arguments that will be checked
    * @return an ArgHolder with all the arguments in their proper type
    */
-  public static ArgHolder parseInputByFormats(String command, List<String> argFormats,
+  public static ArgHolder parseInputByFormats(String command, List<List<ArgTypes>> argFormats,
                                               List<String> args)
       throws IllegalArgumentException {
     if (argFormats == null) {
@@ -34,13 +34,11 @@ public final class ArgValidator {
 
     // Check through every argFormat to see if args matches the specified inputs
     ArgHolder argHolder;
-    for (String argFormat : argFormats) {
+    for (List<ArgTypes> argFormat : argFormats) {
       try {
         argHolder = parseInput(command, argFormat, args);
-        if (argHolder != null) {
-          return argHolder;
-        }
-      } catch (IllegalArgumentException e) {
+        return argHolder;
+      } catch (IllegalArgumentException ignored) {
       }
     }
     // If no inputFormat was found to match the args, throw an exception
@@ -51,60 +49,34 @@ public final class ArgValidator {
    * Checks if input arguments are valid according to the inputFormat.
    *
    * @param command     The command for which parseInput is validating arguments for
-   * @param inputFormat A string that specifies what format the args must be in. Should be
-   *                    separated by spaces e.g. "s d i i i"
-   *                    s - string
-   *                    d - double
-   *                    i - int
-   *                    nni - non-negative int
-   *                    nnd - non-negative double
+   * @param inputFormat A List of ArgTypes that specifies what format the args must be in.
    * @param args        a List<String> of arguments to be checked for validity
    * @return an ArgHolder with all the arguments in their proper type
    */
-  private static ArgHolder parseInput(String command, String inputFormat, List<String> args)
+  private static ArgHolder parseInput(String command, List<ArgTypes> inputFormat, List<String> args)
       throws IllegalArgumentException {
     ArgHolder outArgHolder = new ArgHolder();
-    List<String> argFormatTypes = new ArrayList<>(Arrays.asList(inputFormat.split(" ")));
 
-    if (argFormatTypes.size() != args.size()) {
+    if (inputFormat.size() != args.size()) {
       throw new IllegalArgumentException(createArgTypeErrorString(command,
-          new ArrayList<>(Arrays.asList(new String[] {inputFormat}))));
+          Collections.singletonList(inputFormat)));
     }
 
     // Check through every String in argFormatTypes and store the types in outArgHolder
-    for (int i = 0; i < argFormatTypes.size(); i++) {
-      switch (argFormatTypes.get(i)) {
-        case ("s"):
+    for (int i = 0; i < inputFormat.size(); i++) {
+      switch (inputFormat.get(i)) {
+        case STRING:
           outArgHolder.addString(args.get(i));
           break;
-        case ("d"):
+        case DOUBLE:
           outArgHolder.addDouble(Double.parseDouble(args.get(i)));
           break;
-        case ("i"):
+        case INT:
           outArgHolder.addInt(Integer.parseInt(args.get(i)));
           break;
-        case ("nni"):
-          int nonNegInt = Integer.parseInt(args.get(i));
-          // Throw an Exception with an argTypeErrorString if negative
-          if (nonNegInt < 0) {
-            throw new IllegalArgumentException(createArgTypeErrorString(command,
-                Arrays.asList(inputFormat)));
-          } else {
-            outArgHolder.addInt(Integer.parseInt(args.get(i)));
-            break;
-          }
-        case ("nnd"):
-          double nonNegDouble = Double.parseDouble(args.get(i));
-          // Throw an Exception with an argTypeErrorString if negative
-          if (nonNegDouble < 0) {
-            throw new IllegalArgumentException(createArgTypeErrorString(command,
-                Arrays.asList(inputFormat)));
-          } else {
-            outArgHolder.addDouble(Double.parseDouble(args.get(i)));
-            break;
-          }
         default:
-          break;
+          throw new IllegalArgumentException(createArgTypeErrorString(command,
+              Collections.singletonList(inputFormat)));
       }
     }
     return outArgHolder;
@@ -114,59 +86,50 @@ public final class ArgValidator {
    * Prints an error that shows what arguments the command must take in.
    *
    * @param command    The command that is in use
-   * @param argFormats A string of space-separated characters that describe what types each argument
-   *                   should have
+   * @param argFormats A List of possible arrangements of ArgTypes that describe what the
+   *                   command can take as arguments
    * @return a String that represents the required arguments for a command.
    */
-  public static String createArgTypeErrorString(String command, List<String> argFormats) {
-    String outputErrorString = String.format(command + " requires arguments ");
+  public static String createArgTypeErrorString(String command, List<List<ArgTypes>> argFormats) {
+    StringBuilder outputErrorString = new StringBuilder(command + " requires arguments ");
     for (int i = 0; i < argFormats.size(); i++) {
       String stringRep = argFormatToString(argFormats.get(i));
       if (i == argFormats.size() - 1) {
-        outputErrorString = String.format(outputErrorString + stringRep);
+        outputErrorString.append(stringRep);
       } else {
-        outputErrorString = String.format(outputErrorString + stringRep + "or ");
+        outputErrorString.append(stringRep).append("or ");
       }
     }
-    return String.format("ERROR: " + outputErrorString);
+    return "ERROR: " + outputErrorString;
   }
 
 
   /**
-   * Changes an argFormat String into it's written out form
-   * e.g. "s i i d nni" becomes "String, int, int, double, non-negative int"
-   *
-   * @param argFormat A string of space-separated characters that describe what types each argument
-   *                  should have
+   * Changes an argFormat String into its String form.
+   * @param argFormat the argument types to be parsed into strings
    * @return a String representation of the argFormat
    */
-  public static String argFormatToString(String argFormat) {
-    ArrayList<String> argFormatList = new ArrayList<String>(Arrays.asList(argFormat.split(" ")));
+  public static String argFormatToString(List<ArgTypes> argFormat) {
     ArrayList<String> argStringsList = new ArrayList<String>();
-    for (String argString : argFormatList) {
-      switch (argString) {
-        case ("s"):
+    for (ArgTypes argType : argFormat) {
+      switch (argType) {
+        case STRING:
           argStringsList.add("String");
           break;
-        case ("d"):
+        case DOUBLE:
           argStringsList.add("double");
           break;
-        case ("i"):
+        case INT:
           argStringsList.add("integer");
           break;
-        case ("nni"):
-          argStringsList.add("nonnegative-integer");
-          break;
-        case ("nnd"):
-          argStringsList.add("nonnegative-double");
         default:
           break;
       }
     }
-    String stringRep = "";
+    StringBuilder stringRep = new StringBuilder();
     for (String str : argStringsList) {
-      stringRep = String.format(stringRep + str + " ");
+      stringRep.append(str).append(" ");
     }
-    return stringRep;
+    return stringRep.toString();
   }
 }

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalTextType;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -54,7 +56,7 @@ public final class Main {
     }
 
     System.out.println("started");
-    // THIS IS WERE WE WERE CALLING THE REPL AND STUFF
+    // Write set up stuff here
   }
 
   private static FreeMarkerEngine createEngine() {
@@ -69,21 +71,6 @@ public final class Main {
     }
     return new FreeMarkerEngine(config);
   }
-
-//  private void runSparkServer(int port) {
-//    Spark.port(port);
-//    Spark.externalStaticFileLocation("src/main/resources/static");
-//    Spark.exception(Exception.class, new ExceptionPrinter());
-//
-//    FreeMarkerEngine freeMarker = createEngine();
-//
-//    // Setup Spark Routes
-//    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
-//    // get user input
-//    Spark.post("/csvLoaded", new StarsGuiHandler.SubmitHandlerCsv(), freeMarker);
-//    Spark.post("/results", new StarsGuiHandler.SubmitHandlerCommand(), freeMarker);
-//    Spark.post("/stars", new StarsGuiHandler.SubmitHandlerStars(), freeMarker);
-//  }
 
   private void runSparkServer(int port) {
 
