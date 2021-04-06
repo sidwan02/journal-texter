@@ -265,7 +265,8 @@ def run():
     i = 1
     valid_count = 0
 
-    print("hiyo: ", sentiment_dict[197732])
+    print("features length: ", len(features))
+    print("index_to_phrase_dict length: ", len(index_to_phrase_dict.keys()))
 
     # while i < len(features):
     for phrase_index in index_to_phrase_dict.keys():
@@ -300,11 +301,11 @@ def run():
             sentiment = sentiment_dict[phrase_index]
             # print("sentiment: ", sentiment)
             if phrase_index < 0.8 * len(index_to_phrase_dict):
-                train_y.append(0 if sentiment < 0.5 else 1)
                 train_x.append(features[i])
+                train_y.append(0 if sentiment < 0.5 else 1)
             else:
-                test_y.append(0 if sentiment < 0.5 else 1)
                 test_x.append(features[i])
+                test_y.append(0 if sentiment < 0.5 else 1)
             # print(i)
 
             i = i + 1
@@ -315,6 +316,7 @@ def run():
             # i = i + 1
             break
         except IndexError:
+            print("this is a problem why is it happening tho")
             print("index: ", i)
             break
 
