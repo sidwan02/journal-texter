@@ -103,36 +103,36 @@ class Train(nn.Module):
                 nn.utils.clip_grad_norm_(model.parameters(), clip)
                 optimizer.step()
 
-            val_h = model.init_hidden(batch_size)
-            val_losses = []
-            val_acc = 0.0
+            dev_h = model.init_hidden(batch_size)
+            dev_losses = []
+            dev_acc = 0.0
             model.eval()
-            for inputs, labels in valid_loader:
-                val_h = tuple([each.data for each in val_h])
+            for inputs, labels in dev_loader:
+                dev_h = tuple([each.data for each in dev_h])
 
                 inputs, labels = inputs.to(device), labels.to(device)
 
-                output, val_h = model(inputs, val_h)
+                output, dev_h = model(inputs, dev_h)
                 val_loss = criterion(output.squeeze(), labels.float())
 
-                val_losses.append(val_loss.item())
+                dev_losses.append(val_loss.item())
 
                 accuracy = acc(output, labels)
-                val_acc += accuracy
+                dev_acc += accuracy
 
             epoch_train_loss = np.mean(train_losses)
-            epoch_val_loss = np.mean(val_losses)
+            epoch_val_loss = np.mean(dev_losses)
             epoch_train_acc = train_acc/len(train_loader.dataset)
-            epoch_val_acc = val_acc/len(valid_loader.dataset)
+            epoch_dev_acc = dev_acc/len(dev_loader.dataset)
             epoch_tr_loss.append(epoch_train_loss)
             epoch_vl_loss.append(epoch_val_loss)
             epoch_tr_acc.append(epoch_train_acc)
-            epoch_vl_acc.append(epoch_val_acc)
+            epoch_vl_acc.append(epoch_dev_acc)
             print(f'Epoch {epoch+1}')
             print(
                 f'train_loss : {epoch_train_loss} val_loss : {epoch_val_loss}')
             print(
-                f'train_accuracy : {epoch_train_acc*100} val_accuracy : {epoch_val_acc*100}')
+                f'train_accuracy : {epoch_train_acc*100} dev_accuracy : {epoch_dev_acc*100}')
             if epoch_val_loss <= valid_loss_min:
                 torch.save(model.state_dict(), '../working/state_dict.pt')
                 print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(

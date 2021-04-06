@@ -306,9 +306,13 @@ def run():
     # dataloaders
     batch_size = 50
     # make sure to SHUFFLE your data
-    train_loader = DataLoader(train_data, shuffle=True, batch_size=batch_size)
-    dev_loader = DataLoader(dev_data, shuffle=True, batch_size=batch_size)
-    test_loader = DataLoader(test_data, shuffle=True, batch_size=batch_size)
+    # https://discuss.pytorch.org/t/runtimeerror-expected-hidden-0-size-2-20-256-got-2-50-256/38288/11
+    train_loader = DataLoader(train_data, shuffle=True,
+                              batch_size=batch_size, drop_last=True)
+    dev_loader = DataLoader(dev_data, shuffle=True,
+                            batch_size=batch_size, drop_last=True)
+    test_loader = DataLoader(test_data, shuffle=True,
+                             batch_size=batch_size, drop_last=True)
 
     # obtain one batch of training data
     dataiter = iter(train_loader)

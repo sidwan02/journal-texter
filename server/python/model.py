@@ -1,6 +1,8 @@
 import torch.nn as nn
 import torch
 
+# https://www.kaggle.com/arunmohan003/sentiment-analysis-using-lstm-pytorch
+
 
 class SentimentRNN(nn.Module):
     def __init__(self, no_layers, vocab_size, hidden_dim, embedding_dim, output_dim=1, drop_prob=0.5):
