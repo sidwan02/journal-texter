@@ -32,8 +32,8 @@ else:
 
 
 class Train(nn.Module):
-    # def __init__(self, embedding_dim, train_loader, test_loader, dev_loader):
-    def __init__(self, vocab_size, train_loader, dev_loader, batch_size):
+    # def __init__(self, embedding_dim, train_loader, test_loader, test_loader):
+    def __init__(self, vocab_size, train_loader, test_loader, batch_size):
         super(Train, self).__init__()
 
         # Instantiate the model w/ hyperparams
@@ -57,7 +57,7 @@ class Train(nn.Module):
         # optimizer = optim.Adam(model.parameters(), lr=0.001)
 
         # loss and optimization functions
-        lr = 0.001
+        lr = 0.0001
 
         criterion = nn.BCELoss()
 
@@ -67,6 +67,8 @@ class Train(nn.Module):
 
         def acc(pred, label):
             pred = torch.round(pred.squeeze())
+            # print(pred)
+            # print(label)
             return torch.sum(pred == label.squeeze()).item()
 
         clip = 5
@@ -103,36 +105,36 @@ class Train(nn.Module):
                 nn.utils.clip_grad_norm_(model.parameters(), clip)
                 optimizer.step()
 
-            dev_h = model.init_hidden(batch_size)
-            dev_losses = []
-            dev_acc = 0.0
+            test_h = model.init_hidden(batch_size)
+            test_losses = []
+            test_acc = 0.0
             model.eval()
-            for inputs, labels in dev_loader:
-                dev_h = tuple([each.data for each in dev_h])
+            for inputs, labels in test_loader:
+                test_h = tuple([each.data for each in test_h])
 
                 inputs, labels = inputs.to(device), labels.to(device)
 
-                output, dev_h = model(inputs, dev_h)
+                output, test_h = model(inputs, test_h)
                 val_loss = criterion(output.squeeze(), labels.float())
 
-                dev_losses.append(val_loss.item())
+                test_losses.append(val_loss.item())
 
                 accuracy = acc(output, labels)
-                dev_acc += accuracy
+                test_acc += accuracy
 
             epoch_train_loss = np.mean(train_losses)
-            epoch_val_loss = np.mean(dev_losses)
+            epoch_val_loss = np.mean(test_losses)
             epoch_train_acc = train_acc/len(train_loader.dataset)
-            epoch_dev_acc = dev_acc/len(dev_loader.dataset)
+            epoch_test_acc = test_acc/len(test_loader.dataset)
             epoch_tr_loss.append(epoch_train_loss)
             epoch_vl_loss.append(epoch_val_loss)
             epoch_tr_acc.append(epoch_train_acc)
-            epoch_vl_acc.append(epoch_dev_acc)
+            epoch_vl_acc.append(epoch_test_acc)
             print(f'Epoch {epoch+1}')
             print(
                 f'train_loss : {epoch_train_loss} val_loss : {epoch_val_loss}')
             print(
-                f'train_accuracy : {epoch_train_acc*100} dev_accuracy : {epoch_dev_acc*100}')
+                f'train_accuracy : {epoch_train_acc*100} test_accuracy : {epoch_test_acc*100}')
             if epoch_val_loss <= valid_loss_min:
                 # torch.save(model.state_dict(), '../working/state_dict.pt')
                 # print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(

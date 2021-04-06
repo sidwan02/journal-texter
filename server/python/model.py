@@ -5,13 +5,13 @@ import torch
 
 
 class SentimentRNN(nn.Module):
-    def __init__(self, no_layers, vocab_size, hidden_dim, embedding_dim, output_dim=1, drop_prob=0.5):
+    def __init__(self, num_layers, vocab_size, hidden_dim, embedding_dim, output_dim=1, drop_prob=0.5):
         super(SentimentRNN, self).__init__()
 
         self.output_dim = output_dim
         self.hidden_dim = hidden_dim
 
-        self.no_layers = no_layers
+        self.num_layers = num_layers
         self.vocab_size = vocab_size
 
         # embedding and LSTM layers
@@ -19,7 +19,7 @@ class SentimentRNN(nn.Module):
 
         # lstm
         self.lstm = nn.LSTM(input_size=embedding_dim, hidden_size=self.hidden_dim,
-                            num_layers=no_layers, batch_first=True)
+                            num_layers=num_layers, batch_first=True)
 
         # dropout layer
         self.dropout = nn.Dropout(0.3)
@@ -39,7 +39,8 @@ class SentimentRNN(nn.Module):
         lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)
 
         # dropout and fully connected layer
-        out = self.dropout(lstm_out)
+        # out = self.dropout(lstm_out)
+        out = lstm_out
         out = self.fc(out)
 
         # sigmoid function
@@ -66,9 +67,9 @@ class SentimentRNN(nn.Module):
         ''' Initializes hidden state '''
         # Create two new tensors with sizes n_layers x batch_size x hidden_dim,
         # initialized to zero, for hidden state and cell state of LSTM
-        h0 = torch.zeros((self.no_layers, batch_size,
+        h0 = torch.zeros((self.num_layers, batch_size,
                          self.hidden_dim)).to(device)
-        c0 = torch.zeros((self.no_layers, batch_size,
+        c0 = torch.zeros((self.num_layers, batch_size,
                          self.hidden_dim)).to(device)
         hidden = (h0, c0)
         return hidden

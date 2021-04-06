@@ -1,70 +1,21 @@
-from string import punctuation
+import numpy as np
+import preprocess_string
 
 
-def tokenize_review(test_review):
-    test_review = test_review.lower()  # lowercase
-    # get rid of punctuation
-    test_text = ''.join([c for c in test_review if c not in punctuation])
-
-    # splitting by spaces
-    test_words = test_text.split()
-
-    # tokens
-    test_ints = []
-    test_ints.append([vocab_to_int[word] for word in test_words])
-
-    return test_ints
+def predict_text(text):
+    word_seq = np.array([vocab[preprocess_string(word)] for word in text.split()
+                         if preprocess_string(word) in vocab.keys()])
+    word_seq = np.expand_dims(word_seq, axis=0)
+    pad = torch.from_numpy(padding_(word_seq, 500))
+    inputs = pad.to(device)
+    batch_size = 1
+    h = model.init_hidden(batch_size)
+    h = tuple([each.data for each in h])
+    output, h = model(inputs, h)
+    return(output.item())
 
 
-# test code and generate tokenized review
-test_ints = tokenize_review(test_review_neg)
-print(test_ints)
-
-
-# test sequence padding
-seq_length = 200
-features = pad_features(test_ints, seq_length)
-
-print(features)
-
-
-# test conversion to tensor and pass into your model
-feature_tensor = torch.from_numpy(features)
-print(feature_tensor.size())
-
-
-def predict(net, test_review, sequence_length=200):
-
-    net.eval()
-
-    # tokenize review
-    test_ints = tokenize_review(test_review)
-
-    # pad tokenized sequence
-    seq_length = sequence_length
-    features = pad_features(test_ints, seq_length)
-
-    # convert to tensor to pass into your model
-    feature_tensor = torch.from_numpy(features)
-
-    batch_size = feature_tensor.size(0)
-
-    # initialize hidden state
-    h = net.init_hidden(batch_size)
-
-    if(train_on_gpu):
-        feature_tensor = feature_tensor.cuda()
-
-    # get the output from the model
-    output, h = net(feature_tensor, h)
-
-    # convert output probabilities to predicted class (0 or 1)
-    pred = torch.round(output.squeeze())
-    # printing output value, before rounding
-    print('Prediction value, pre-rounding: {:.6f}'.format(output.item()))
-
-    # print custom response
-    if(pred.item() == 1):
-        print("Positive review detected!")
-    else:
-        print("Negative review detected.")
+pro = predict_text("Wow it is so warm today!")
+status = "positive" if pro > 0.5 else "negative"
+pro = (1 - pro) if status == "negative" else pro
+print(f'Predicted sentiment is {status} with a probability of {pro}')

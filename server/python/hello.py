@@ -69,7 +69,7 @@ def run():
 
             # print("phrase: ", phrase)
             # print("processed_phrase: ", processed_phrase)
-            index_to_phrase_dict[index] = processed_phrase
+            index_to_phrase_dict[int(index)] = processed_phrase
             # print(index)
             phrase_to_index_dict[processed_phrase] = int(index)
         except IndexError:
@@ -89,7 +89,7 @@ def run():
         # break
         count = count + 1
     # print(index_to_phrase_dict)
-    print("done splitting phrases !!!!!!!!!!!!!!!!!")
+    print("done splitting phrases !!!!!!!!!!!!!!!!!: ", len(index_to_phrase_dict))
 
     sentiment_dict = {}
 
@@ -148,12 +148,17 @@ def run():
         try:
             return phrase_to_index_dict[word]
         except:
-            return -1
+            # return -1
+            return 0
 
     reviews_tokenized = []
 
     count_reach = 0
-    for rev in reviews_split_cleaned:
+    total_count = 0
+    # for rev in reviews_split_cleaned:
+    print("hoho", len(phrase_to_index_dict))
+    for rev in index_to_phrase_dict.values():
+        total_count += 1
 
         # print(rev)
         token_so_far = []
@@ -180,19 +185,21 @@ def run():
             # print(index)
             # print(try_tokenize(word))
             index += 1
+
             try:
                 word = words[index]
             except IndexError:
                 # reached the end of the rev
                 # print(word)
-                break
+                # break
+                hi = 0
 
         if token_so_far == [-1]:
             print("oh no")
             print(words)
             # break
         try:
-            token_so_far.remove(-1)
+            # token_so_far.remove(-1)
 
             reviews_tokenized.append(token_so_far)
             count_reach += 1
@@ -204,11 +211,12 @@ def run():
         # reviews_tokenized.append(token_so_far)
         # break
 
-    print(count_reach)
+    print("count reach: ", count_reach)
+    print("total: ", total_count)
     print(len(reviews_tokenized))
 
-    features = normalize_length(250, reviews_tokenized)
-    print(len(features))
+    features = normalize_length(50, reviews_tokenized)
+    print("features length: ", len(features))
     # print(features)
 
     with open(
@@ -256,30 +264,59 @@ def run():
 
     i = 1
     valid_count = 0
-    while i < len(features):
-        # print(type(index_to_spilt_state_dict[i]))
+
+    print("hiyo: ", sentiment_dict[197732])
+
+    # while i < len(features):
+    for phrase_index in index_to_phrase_dict.keys():
+        # print('in here')
+        # print(phrase_index)
+        # phrase_index = int(phrase_index)
+       # print(type(index_to_spilt_state_dict[i]))
+        #    try:
+        #         sentiment = sentiment_dict[phrase_to_index_dict[review]]
+        #         if index_to_spilt_state_dict[i] == 1:
+        #             train_y.append(0 if sentiment < 0.5 else 1)
+        #             train_x.append(features[i])
+        #         elif index_to_spilt_state_dict[i] == 2:
+        #             # test_y.append(0 if sentiment < 0.5 else 1)
+        #             # test_x.append(features[i])
+
+        #             train_y.append(0 if sentiment < 0.5 else 1)
+        #             train_x.append(features[i])
+        #         elif index_to_spilt_state_dict[i] == 3:
+        #             dev_y.append(0 if sentiment < 0.5 else 1)
+        #             dev_x.append(features[i])
+        #         else:
+        #             print("yo wut")
+        #         # print(i)
+        #         i = i + 1
+        #         valid_count = valid_count + 1
+        #     except KeyError:
+        #         # print("yo")
+        #         hilo = 1
+        #         i = i + 1
         try:
-            sentiment = sentiment_dict[phrase_to_index_dict[reviews_split_cleaned[i]]]
-            if index_to_spilt_state_dict[i] == 1:
+            sentiment = sentiment_dict[phrase_index]
+            # print("sentiment: ", sentiment)
+            if phrase_index < 0.8 * len(index_to_phrase_dict):
                 train_y.append(0 if sentiment < 0.5 else 1)
                 train_x.append(features[i])
-            elif index_to_spilt_state_dict[i] == 2:
-                # print(features[i])
-                # print(phrase_to_index_dict[reviews_split_cleaned[i]])
+            else:
                 test_y.append(0 if sentiment < 0.5 else 1)
                 test_x.append(features[i])
-            elif index_to_spilt_state_dict[i] == 3:
-                dev_y.append(0 if sentiment < 0.5 else 1)
-                dev_x.append(features[i])
-            else:
-                print("yo wut")
             # print(i)
+
             i = i + 1
             valid_count = valid_count + 1
         except KeyError:
-            # print("yo")
+            print(phrase_index)
             hilo = 1
-            i = i + 1
+            # i = i + 1
+            break
+        except IndexError:
+            print("index: ", i)
+            break
 
     # print(dev_y)
     # print(dev_y)
@@ -307,8 +344,8 @@ def run():
     # https://discuss.pytorch.org/t/runtimeerror-expected-hidden-0-size-2-20-256-got-2-50-256/38288/11
     train_loader = DataLoader(train_data, shuffle=True,
                               batch_size=batch_size, drop_last=True)
-    dev_loader = DataLoader(dev_data, shuffle=True,
-                            batch_size=batch_size, drop_last=True)
+    # dev_loader = DataLoader(dev_data, shuffle=True,
+    #                         batch_size=batch_size, drop_last=True)
     test_loader = DataLoader(test_data, shuffle=True,
                              batch_size=batch_size, drop_last=True)
 
@@ -335,7 +372,7 @@ def run():
     # print(net)
 
     Train(vocab_size=vocab_size,
-          train_loader=train_loader, dev_loader=dev_loader, batch_size=batch_size)
+          train_loader=train_loader, test_loader=test_loader, batch_size=batch_size)
 
 
 print("ALL DONE WOOWOWO")
