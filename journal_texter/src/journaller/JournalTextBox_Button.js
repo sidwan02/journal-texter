@@ -47,17 +47,6 @@ function JournalTextBox_Button(props) {
         fontSize: 20,
     }
 
-
-    /*
-    let textBox = document.getElementById("journalTextBox")
-    textBox.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            document.getElementById("sendButton").click();
-        }
-    })
-    */
-
     return (
         <div style={overallStyle}>
             <input id="journalTextBox" type={props.type} placeholder={props.text} style={TextBoxStyle}

@@ -12,6 +12,23 @@
 In order to run a temporary login server
 Then, in the journal_texter folder, run `node server.js`.
 
+Installing the stuff for toggle buttons:
+So this is kinda annoying:
+Try:
+
+`npm install @material-ui/core`
+
+If that doesn't work:
+
+`npm install --global yarn`
+
+`yarn add @material-ui/core`
+
+And then if the part past "from" in is underlined by IntelliJ
+
+`import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';`
+
+just choose do the keyboard shortcut that installs it for you
 
 **Team Members:**
 Riki Fameli,

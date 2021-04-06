@@ -1,9 +1,12 @@
 import React, {useState} from "react";
 import JournalTextBox_Button from "./JournalTextBox_Button";
 import {useHistory} from "react-router-dom";
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 function JournallerPage() {
     const [currentLine, setCurrentLine] = useState("");
+    const [tags, setTags] = useState(() => ['weather']);
     const history = useHistory();
 
     function handleClick() {
@@ -46,6 +49,16 @@ function JournallerPage() {
             + "<div style=\"float: left; height: 1px; width: 1000px; \"/>"
     }
 
+    const handleTags = (event, newTags) => {
+        setTags(newTags);
+        /**
+         * Filler code on what we'll do with the tags, if we do anything here
+         */
+        for (let selectedTag of newTags) {
+            console.log(selectedTag);
+        }
+    }
+
     const historyStyle = {
         height: 400,
         width: 1000,
@@ -72,6 +85,28 @@ function JournallerPage() {
             <div id="journalHistory" className="journalHistory" style={historyStyle}/>
             <JournalTextBox_Button id="inputBox" typeText={setCurrentLine} sendClick={userInput}
                                    promptClick={journallerPrompt} type="text"/>
+            <br/>
+            <br/>
+            <ToggleButtonGroup value={tags} onChange={handleTags}>
+                <ToggleButton value="work">
+                    work
+                </ToggleButton>
+                <ToggleButton value="school">
+                    school
+                </ToggleButton>
+                <ToggleButton value="pet">
+                    pets
+                </ToggleButton>
+                <ToggleButton value="relationship">
+                    relationships
+                </ToggleButton>
+                <ToggleButton value="fitness">
+                    fitness
+                </ToggleButton>
+                <ToggleButton value="weather">
+                    weather
+                </ToggleButton>
+            </ToggleButtonGroup>
         </div>
     );
 }
