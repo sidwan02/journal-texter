@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch
 
 
 class SentimentLSTM(nn.Module):
@@ -18,6 +19,9 @@ class SentimentLSTM(nn.Module):
 
         # embedding and LSTM layers
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        print(embedding_dim)
+        print(hidden_dim)
+        print(n_layers)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, n_layers,
                             dropout=drop_prob, batch_first=True)
 
@@ -26,13 +30,19 @@ class SentimentLSTM(nn.Module):
 
         # linear and sigmoid layers
         self.fc = nn.Linear(hidden_dim, output_size)
+        # self.sig = nn.Softmax(dim=5)
         self.sig = nn.Sigmoid()
 
     def forward(self, x, hidden):
         """
         Perform a forward pass of our model on some input and hidden state.
         """
+        # torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
         batch_size = x.size(0)
+        # batch_size.to(device)
+
+        # print(batch_size)
 
         # embeddings and lstm_out
         embeds = self.embedding(x)
@@ -60,11 +70,16 @@ class SentimentLSTM(nn.Module):
         # initialized to zero, for hidden state and cell state of LSTM
         weight = next(self.parameters()).data
 
-        if (train_on_gpu):
-            hidden = (weight.new(self.n_layers, batch_size, self.hidden_dim).zero_().cuda(),
-                      weight.new(self.n_layers, batch_size, self.hidden_dim).zero_().cuda())
-        else:
-            hidden = (weight.new(self.n_layers, batch_size, self.hidden_dim).zero_(),
-                      weight.new(self.n_layers, batch_size, self.hidden_dim).zero_())
+        train_on_gpu = torch.cuda.is_available()
+
+        # if (train_on_gpu):
+        #     hidden = (weight.new(self.n_layers, batch_size, self.hidden_dim).zero_().cuda(),
+        #               weight.new(self.n_layers, batch_size, self.hidden_dim).zero_().cuda())
+        # else:
+        #     hidden = (weight.new(self.n_layers, batch_size, self.hidden_dim).zero_(),
+        #               weight.new(self.n_layers, batch_size, self.hidden_dim).zero_())
+
+        hidden = (weight.new(self.n_layers, batch_size, self.hidden_dim).zero_(),
+                  weight.new(self.n_layers, batch_size, self.hidden_dim).zero_())
 
         return hidden
