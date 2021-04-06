@@ -31,7 +31,12 @@ public final class SpreadsheetReader {
   public static SpreadsheetData parseSpreadsheet(String filename, String separator,
                                                  List<String> headers)
       throws HeaderException, IOException {
-    BufferedReader br = new BufferedReader(new FileReader(filename));
+    BufferedReader br;
+    try {
+      br = new BufferedReader(new FileReader(filename));
+    } catch (IOException e) {
+      throw new IOException("File " + filename + " not found or could not be read");
+    }
 
     String line;
     line = br.readLine();

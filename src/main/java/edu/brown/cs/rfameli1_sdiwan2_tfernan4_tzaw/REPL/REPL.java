@@ -38,16 +38,26 @@ public class REPL {
         command = parsedUserInput.get(0);
         parsedUserInput.remove(0);
         args = parsedUserInput;
-        ArgHolder argHolder = new ArgHolder();
+        ArgHolder argHolder;
+        boolean foundCommand = false;
         // Run through every command and check if the input is valid for each
         for (REPLCommand aCommand : registeredCommands) {
           if (aCommand.getCallWord().equals(command)) {
             // Use the ArgValidator to ensure that the arguments matches one of the commands
             // possible argument formats (e.g. string, string, double)
-            argHolder = ArgValidator.parseInputByFormats(command, aCommand.getArgFormats(), args);
-            aCommand.run(argHolder);
+            foundCommand = true;
+            try {
+              argHolder = ArgValidator.parseInputByFormats(command, aCommand.getArgFormats(), args);
+              aCommand.run(argHolder);
+            } catch (IllegalArgumentException e) {
+              System.out.println(e.getMessage());
+            }
           }
         }
+        if (!foundCommand) {
+          System.out.println("ERROR: Command " + command + " not found");
+        }
+
       } else {
         System.out.println("ERROR: Invalid command entered");
       }

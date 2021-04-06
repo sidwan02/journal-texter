@@ -8,6 +8,8 @@ import java.io.StringWriter;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalTextType;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL.JournalTexterREPL;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -54,8 +56,8 @@ public final class Main {
     if (options.has("gui")) {
       runSparkServer((int) options.valueOf("port"));
     }
-
-    System.out.println("started");
+    // Start the REPL
+    new JournalTexterREPL(new REPL()).start();
     // Write set up stuff here
   }
 
