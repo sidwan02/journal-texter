@@ -21,59 +21,61 @@ import os
 import torch
 from train import Train
 from clean_review import clean_filter_lemma_mini
+from data_processing import *
 
 
 # https://towardsdatascience.com/sentiment-analysis-for-text-with-deep-learning-2f0a0c6472b5
 # https://towardsdatascience.com/sentiment-analysis-using-lstm-step-by-step-50d074f09948
 
+def try_tokenize(word, phrase_to_index_dict):
+    # print("trying")
+    try:
+        return phrase_to_index_dict[word]
+    except:
+        # return -1
+        return 0
+
+
+def tokenize_sentence(rev, phrase_to_index_dict):
+    # print(rev)
+    token_so_far = []
+    index = 0
+    words = rev.split(" ")
+    word = words[index]
+    # print("rev: ", rev)
+    # print("words: ", words)
+    # print("len: ", len(words))
+    while index < len(words):  # until done for all words
+        try:
+            while (
+                try_tokenize(word, phrase_to_index_dict) == -1
+            ):  # until find a valid prase which has a phrase id
+
+                index += 1
+                word = word + " " + words[index]
+        except IndexError:
+            # print(word)
+            something = 0
+        # phrase with phrase id has been found
+        token_so_far.append(try_tokenize(word, phrase_to_index_dict))
+        # print(word)
+        # print(index)
+        # print(try_tokenize(word))
+        index += 1
+
+        try:
+            word = words[index]
+        except IndexError:
+            # reached the end of the rev
+            # print(word)
+            # break
+            hi = 0
+    return token_so_far
+
 
 def run():
-    with open(
-        r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\stanfordSentimentTreebank\dictionary.txt",
-        "r",
-    ) as f:
-        phrases = f.read()
-    with open(
-        r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\stanfordSentimentTreebank\sentiment_labels.txt",
-        "r",
-    ) as f:
-        labels = f.read()
 
-    print("running")
-
-    # convert into dict of phrase ID | phrase
-    index_to_phrase_dict = {}
-    phrase_to_index_dict = {}
-
-    phrases_split = phrases.split("\n")
-    # print(phrases[:50])
-    # print(phrases_split[4])
-    count = 0
-    total = len(phrases_split)
-    for phr in phrases_split:
-        # print(count / total)
-        # print("phriew: ", phriew)
-        phrase_components = phr.split("|")
-        # print(phrase_components)
-        try:
-            index = phrase_components[1]
-            phrase = phrase_components[0]
-
-            processed_phrase = clean_filter_lemma_mini(phrase)
-            # processed_phrase = lemma(phrase)
-            # processed_phrase = phrase
-
-            # print("phrase: ", phrase)
-            # print("processed_phrase: ", processed_phrase)
-            index_to_phrase_dict[int(index)] = processed_phrase
-            # print(index)
-            phrase_to_index_dict[processed_phrase] = int(index)
-        except IndexError:
-            # this is the newline at the end of the txt
-            break
-        except ValueError:
-            print(" WHU WHWUH WUN UN W")
-            print(phrase_components[1])
+    index_to_phrase_dict, phrase_to_index_dict = get_phrase_id_dicts()
 
     count = 0
     for i in index_to_phrase_dict.values():
@@ -85,33 +87,8 @@ def run():
         # break
         count = count + 1
     # print(index_to_phrase_dict)
-    print("done splitting phrases !!!!!!!!!!!!!!!!!: ", len(index_to_phrase_dict))
 
-    sentiment_dict = {}
-
-    sentiment_split = labels.split("\n")
-    # print(phrases[:50])
-    # print(phrases_split[4])
-    for lab in sentiment_split:
-        # print("phriew: ", phriew)
-        sentiment_components = lab.split("|")
-        # print(phrase_components)
-        try:
-            index = sentiment_components[0]
-            sentiment = sentiment_components[1]
-            if (sentiment == "sentiment values"):
-                print('skip header')
-            else:
-                sentiment_dict[int(index)] = float(sentiment)
-        except IndexError:
-            # this is the newline at the end of the txt
-            break
-        except ValueError:
-            print('should not be here')
-            # print(sentiment_components[1])
-            break
-    # print(sentiment_dict[10])
-
+    sentiment_dict = get_sentiment_dict()
     # sentiment_map = {}
 
     # for key in index_to_phrase_dict.keys():
@@ -119,33 +96,7 @@ def run():
 
     # print(sentiment_map["the"])
 
-    with open(
-        r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\stanfordSentimentTreebank\original_rt_snippets.txt",
-        "r",
-    ) as f:
-        reviews = f.read()
-
-    reviews_split = reviews.split("\n")
-
-    print("reviews_split: ", reviews_split[1])
-    reviews_split_cleaned = []
-
-    for rev in reviews_split:
-        reviews_split_cleaned.append(clean_filter_lemma_mini(rev))
-        # reviews_split_cleaned.append(rev)
-
-    print(len(reviews_split_cleaned))
-
-    # print(reviews_split_cleaned)
-    print("done splitting reviews !!!!!!!!!!!!!!!!!")
-
-    def try_tokenize(word):
-        # print("trying")
-        try:
-            return phrase_to_index_dict[word]
-        except:
-            # return -1
-            return 0
+    reviews_split_cleaned = get_reviews()
 
     reviews_tokenized = []
 
@@ -156,59 +107,27 @@ def run():
     for rev in index_to_phrase_dict.values():
         total_count += 1
 
-        # print(rev)
-        token_so_far = []
-        index = 0
-        words = rev.split(" ")
-        word = words[index]
-        # print("rev: ", rev)
-        # print("words: ", words)
-        # print("len: ", len(words))
-        while index < len(words):  # until done for all words
-            try:
-                while (
-                    try_tokenize(word) == -1
-                ):  # until find a valid prase which has a phrase id
+        token = tokenize_sentence(rev, phrase_to_index_dict)
 
-                    index += 1
-                    word = word + " " + words[index]
-            except IndexError:
-                # print(word)
-                something = 0
-            # phrase with phrase id has been found
-            token_so_far.append(try_tokenize(word))
-            # print(word)
-            # print(index)
-            # print(try_tokenize(word))
-            index += 1
-
-            try:
-                word = words[index]
-            except IndexError:
-                # reached the end of the rev
-                # print(word)
-                # break
-                hi = 0
-
-        if token_so_far == [-1]:
+        if token == [-1]:
             print("oh no")
             print(words)
             # break
         try:
             # token_so_far.remove(-1)
 
-            reviews_tokenized.append(token_so_far)
-            count_reach += 1
+            reviews_tokenized.append(token)
+            # count_reach += 1
         except:
-            count_reach += 1
-            reviews_tokenized.append(token_so_far)
+            # count_reach += 1
+            reviews_tokenized.append(token)
 
-        # print(token_so_far)
-        # reviews_tokenized.append(token_so_far)
-        # break
+    # print(token_so_far)
+    # reviews_tokenized.append(token_so_far)
+    # break
 
-    print("count reach: ", count_reach)
-    print("total: ", total_count)
+    # print("count reach: ", count_reach)
+    # print("total: ", total_count)
     print(len(reviews_tokenized))
 
     features = normalize_length(50, reviews_tokenized)
