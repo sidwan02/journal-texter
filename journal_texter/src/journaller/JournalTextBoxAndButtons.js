@@ -3,7 +3,7 @@ import {AwesomeButton} from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
 
 
-function JournalTextBox_Button(props) {
+function JournalTextBoxAndButtons(props) {
 
     const typeTextEvent = (event) => {
         {
@@ -60,4 +60,4 @@ function JournalTextBox_Button(props) {
     );
 }
 
-export default JournalTextBox_Button;
+export default JournalTextBoxAndButtons;

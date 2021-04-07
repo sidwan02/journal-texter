@@ -1,8 +1,9 @@
 import React, {useState} from "react";
-import JournalTextBox_Button from "./JournalTextBox_Button";
+import JournalTextBoxAndButtons from "./JournalTextBoxAndButtons";
 import {useHistory} from "react-router-dom";
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import {AwesomeButton} from "react-awesome-button";
 
 function JournallerPage() {
     const [currentLine, setCurrentLine] = useState("");
@@ -59,6 +60,16 @@ function JournallerPage() {
         }
     }
 
+    const saveEntry = () => {
+        // Have a post request here that will send journalHistory div HTML to the backend
+        let historyHTML = document.getElementById("journalHistory").innerHTML;
+
+        /**
+         * Filler code, must replace later
+         */
+        console.log(historyHTML)
+    }
+
     const historyStyle = {
         height: 400,
         width: 1000,
@@ -83,8 +94,8 @@ function JournallerPage() {
 
             <br/>
             <div id="journalHistory" className="journalHistory" style={historyStyle}/>
-            <JournalTextBox_Button id="inputBox" typeText={setCurrentLine} sendClick={userInput}
-                                   promptClick={journallerPrompt} type="text"/>
+            <JournalTextBoxAndButtons id="inputBox" typeText={setCurrentLine} sendClick={userInput}
+                                      promptClick={journallerPrompt} type="text"/>
             <br/>
             <br/>
             <ToggleButtonGroup value={tags} onChange={handleTags}>
@@ -107,6 +118,11 @@ function JournallerPage() {
                     weather
                 </ToggleButton>
             </ToggleButtonGroup>
+
+            <div style={{width: 1000, padding: 10, margin: 'auto',}}>
+            <AwesomeButton id="saveButton" type="secondary" onPress={saveEntry}
+                           style={{float: 'left'}}>Save Entry</AwesomeButton>
+            </div>
         </div>
     );
 }
