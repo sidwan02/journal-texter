@@ -3,3 +3,6 @@ target/
 .classpath
 .idea/
 **.DS_Store**
+config.properties
+/data/stanfordSentimentTreebank/
+/server/model/
