@@ -57,7 +57,7 @@ class Train(nn.Module):
         # optimizer = optim.Adam(model.parameters(), lr=0.001)
 
         # loss and optimization functions
-        lr = 0.0001
+        lr = 0.001
 
         criterion = nn.BCELoss()
 
@@ -143,3 +143,6 @@ class Train(nn.Module):
                     valid_loss_min, epoch_val_loss))
                 valid_loss_min = epoch_val_loss
             print(25*'==')
+
+        print("traning complete!")
+        torch.save(model.state_dict(), r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\server\model" + "\sentiment_model.pth")

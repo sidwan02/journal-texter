@@ -300,7 +300,7 @@ def run():
         try:
             sentiment = sentiment_dict[phrase_index]
             # print("sentiment: ", sentiment)
-            if phrase_index < 0.8 * len(index_to_phrase_dict):
+            if phrase_index < 0.99 * len(index_to_phrase_dict):
                 train_x.append(features[i])
                 train_y.append(0 if sentiment < 0.5 else 1)
             else:
@@ -374,7 +374,7 @@ def run():
     # print(net)
 
     Train(vocab_size=vocab_size,
-          train_loader=train_loader, test_loader=test_loader, batch_size=batch_size)
+          train_loader=test_loader, test_loader=test_loader, batch_size=batch_size)
 
 
 print("ALL DONE WOOWOWO")
