@@ -61,7 +61,7 @@ def predict_text(text):
 
     # word_seq = np.expand_dims(word_seq, axis=0)
     pad = torch.from_numpy(
-        np.array(normalize_length(50, reviews_tokenized)))
+        np.array(normalize_length(200, reviews_tokenized)))
     inputs = pad.to(device)
     print(inputs)
     batch_size = 2
@@ -73,6 +73,7 @@ def predict_text(text):
     return(output.data[0].item())
 
 
-pro = predict_text("")
+pro = predict_text(
+    "I am a gummy bear")
 status = "positive" if pro > 0.5 else "negative"
 print(f'Predicted sentiment is {status} with value {pro}')

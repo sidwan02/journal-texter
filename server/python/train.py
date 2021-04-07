@@ -8,6 +8,10 @@ from model import SentimentRNN
 
 import numpy as np
 
+
+from clean_review import clean_filter_lemma_mini
+from data_processing import *
+
 # Preliminaries
 
 # from torchtext.data import Field, TabularDataset, BucketIterator
@@ -57,7 +61,7 @@ class Train(nn.Module):
         # optimizer = optim.Adam(model.parameters(), lr=0.001)
 
         # loss and optimization functions
-        lr = 0.001
+        lr = 0.0001
 
         criterion = nn.BCELoss()
 
@@ -66,13 +70,13 @@ class Train(nn.Module):
         # function to predict accuracy
 
         def acc(pred, label):
-            pred = torch.round(pred.squeeze())
             # print(pred)
+            pred = torch.round(pred.squeeze())
             # print(label)
             return torch.sum(pred == label.squeeze()).item()
 
         clip = 5
-        epochs = 5
+        epochs = 50
         valid_loss_min = np.Inf
         # train for some number of epochs
         epoch_tr_loss, epoch_vl_loss = [], []
@@ -175,6 +179,7 @@ class Train(nn.Module):
 
             return(output.data[0].item())
 
-        pro = predict_text("")
+        pro = predict_text(
+            "horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible ")
         status = "positive" if pro > 0.5 else "negative"
         print(f'Predicted sentiment is {status} with value {pro}')

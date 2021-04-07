@@ -22,7 +22,7 @@ class SentimentRNN(nn.Module):
                             num_layers=num_layers, batch_first=True)
 
         # dropout layer
-        self.dropout = nn.Dropout(0.3)
+        self.dropout = nn.Dropout(0)
 
         # linear and sigmoid layer
         self.fc = nn.Linear(self.hidden_dim, output_dim)
@@ -39,8 +39,8 @@ class SentimentRNN(nn.Module):
         lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)
 
         # dropout and fully connected layer
-        # out = self.dropout(lstm_out)
-        out = lstm_out
+        # without dropout all predictions are same for some reason
+        out = self.dropout(lstm_out)
         out = self.fc(out)
 
         # sigmoid function

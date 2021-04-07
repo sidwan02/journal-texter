@@ -85,7 +85,7 @@ def run():
     # print("total: ", total_count)
     print(len(reviews_tokenized))
 
-    features = normalize_length(50, reviews_tokenized)
+    features = normalize_length(200, reviews_tokenized)
     print("features length: ", len(features))
     # print(features)
 
@@ -124,7 +124,7 @@ def run():
     # test_y = remaining_y[int(len(remaining_y) * 0.5) :]
 
     train_x, train_y, test_x, test_y = split_data(
-        features, index_to_phrase_dict, sentiment_dict, 0.99)
+        features, index_to_phrase_dict, sentiment_dict, 0.999)
 
     # create Tensor datasets
     train_data = TensorDataset(torch.from_numpy(
