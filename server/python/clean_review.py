@@ -11,7 +11,6 @@ import string
 import re
 import os
 import torch
-from train import Train
 
 spice = en_core_web_sm.load()
 
