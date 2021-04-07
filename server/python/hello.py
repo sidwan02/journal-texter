@@ -20,12 +20,8 @@ import re
 import os
 import torch
 from train import Train
+from clean_review import clean_filter_lemma_mini
 
-# my_path = os.path.join(os.path.dirname(__file__), "..")
-# print(my_path)
-
-
-spice = en_core_web_sm.load()
 
 # https://towardsdatascience.com/sentiment-analysis-for-text-with-deep-learning-2f0a0c6472b5
 # https://towardsdatascience.com/sentiment-analysis-using-lstm-step-by-step-50d074f09948
@@ -253,91 +249,14 @@ def run():
     # test_x = remaining_x[int(len(remaining_x) * 0.5) :]
     # test_y = remaining_y[int(len(remaining_y) * 0.5) :]
 
-    train_x = []
-    train_y = []
-
-    dev_x = []
-    dev_y = []
-
-    test_x = []
-    test_y = []
-
-    i = 1
-    valid_count = 0
-
-    print("features length: ", len(features))
-    print("index_to_phrase_dict length: ", len(index_to_phrase_dict.keys()))
-
-    # while i < len(features):
-    for phrase_index in index_to_phrase_dict.keys():
-        # print('in here')
-        # print(phrase_index)
-        # phrase_index = int(phrase_index)
-       # print(type(index_to_spilt_state_dict[i]))
-        #    try:
-        #         sentiment = sentiment_dict[phrase_to_index_dict[review]]
-        #         if index_to_spilt_state_dict[i] == 1:
-        #             train_y.append(0 if sentiment < 0.5 else 1)
-        #             train_x.append(features[i])
-        #         elif index_to_spilt_state_dict[i] == 2:
-        #             # test_y.append(0 if sentiment < 0.5 else 1)
-        #             # test_x.append(features[i])
-
-        #             train_y.append(0 if sentiment < 0.5 else 1)
-        #             train_x.append(features[i])
-        #         elif index_to_spilt_state_dict[i] == 3:
-        #             dev_y.append(0 if sentiment < 0.5 else 1)
-        #             dev_x.append(features[i])
-        #         else:
-        #             print("yo wut")
-        #         # print(i)
-        #         i = i + 1
-        #         valid_count = valid_count + 1
-        #     except KeyError:
-        #         # print("yo")
-        #         hilo = 1
-        #         i = i + 1
-        try:
-            sentiment = sentiment_dict[phrase_index]
-            # print("sentiment: ", sentiment)
-            if phrase_index < 0.99 * len(index_to_phrase_dict):
-                train_x.append(features[i])
-                train_y.append(0 if sentiment < 0.5 else 1)
-            else:
-                test_x.append(features[i])
-                test_y.append(0 if sentiment < 0.5 else 1)
-            # print(i)
-
-            i = i + 1
-            valid_count = valid_count + 1
-        except KeyError:
-            print(phrase_index)
-            hilo = 1
-            # i = i + 1
-            break
-        except IndexError:
-            print("this is a problem why is it happening tho")
-            print("index: ", i)
-            break
-
-    # print(dev_y)
-    # print(dev_y)
-    print("portion considered: ", valid_count / len(features))
-
-    print("train", len(train_x))
-    print("train", len(train_y))
-
-    print("dev", len(dev_x))
-    print("dev", len(dev_y))
-
-    print("test", len(test_x))
-    print("test", len(test_y))
+    train_x, train_y, test_x, test_y = split_data(
+        features, index_to_phrase_dict, sentiment_dict, 0.99)
 
     # create Tensor datasets
     train_data = TensorDataset(torch.from_numpy(
         np.array(train_x)), torch.from_numpy(np.array(train_y)))
-    dev_data = TensorDataset(torch.from_numpy(
-        np.array(dev_x)), torch.from_numpy(np.array(dev_y)))
+    # dev_data = TensorDataset(torch.from_numpy(
+    #     np.array(dev_x)), torch.from_numpy(np.array(dev_y)))
     test_data = TensorDataset(torch.from_numpy(
         np.array(test_x)), torch.from_numpy(np.array(test_y)))
     # dataloaders
@@ -397,156 +316,62 @@ def normalize_length(target_length, twod_arr):
     return normalized_arr
 
 
-def clean(sentence):
-    # remove mentions and URLs
-    # p.set_options(p.OPT.URL, p.OPT.MENTION, p.OPT.HASHTAG, p.OPT.NUMBER)
-    # sentence = p.clean(sentence)
-    # replace consecutive non-ASCII characters with a space
-    sentence = re.sub(r"[^\x00-\x7F]+", " ", sentence)
-    # take care of contractions and stray quote marks
-    sentence = re.sub(r"’", "'", sentence)
-    # words = sentence.split()
-    sentence = re.sub(r":", " ", sentence)
-    sentence = re.sub(r"n't", " not", sentence)
-    # fix spellings
-    sentence = "".join("".join(s)[:2] for _, s in itertools.groupby(sentence))
-    # emojis conversion
-    sentence = emoji.demojize(sentence)
-    sentence = " ".join(sentence.split())
-    return sentence
+def split_data(features, index_to_phrase_dict, sentiment_dict, threshold):
+    train_x = []
+    train_y = []
 
+    dev_x = []
+    dev_y = []
 
-def clean_filter_lemma_mini(sentence):
-    sentence = re.sub(r"’", "'", sentence)
-    # # words = sentence.split()
-    # sentence = re.sub(r":", " ", sentence)
-    sentence = re.sub(r"can't", "cannot", sentence)
-    sentence = re.sub(r"can not", "cannot", sentence)
-    sentence = re.sub(r"ca n't", "cannot", sentence)
-    sentence = re.sub(r"n't", " not", sentence)
-    sentence = re.sub(r"'s", " is", sentence)
-    sentence = re.sub(r"'ve", " have", sentence)
-    sentence = re.sub(r"'ll", " will", sentence)
-    sentence = re.sub(r"'d", " would", sentence)
+    test_x = []
+    test_y = []
 
-    # weird characters
-    sentence = re.sub(r"â", "a", sentence)
-    # sentence = re.sub(r"––", " ", sentence)
-    # stop_words = set(stopwords.words("english"))
-    # stray_tokens = [
-    #     "amp",
-    #     "`",
-    #     "``",
-    #     "'",
-    #     "''",
-    #     '"',
-    #     "n't",
-    #     "I",
-    #     "i",
-    #     ",00",
-    # ]  # stray words
-    # punct = r"[{}]".format(string.punctuation)
-    punct = r"[^\w\s]".format(string.punctuation)
-    sentence = re.sub(punct, " ", sentence)
-    sentence = re.sub(r"[0-9]", " ", sentence)
-    # # correct spelling mistakes
-    # sentence = re.sub(
-    #     r'privacy|privcy|privac|privasy|privasee|privarcy|priavcy|privsy', ' privacy ', sentence)
-    # sentence = re.sub(r'(^|\s)[a-z]($|\s)', ' ', sentence)
-    # sentence = re.sub(r"(^|\s)[a-z][a-z]($|\s)", " ", sentence)
-    # word_tokens = word_tokenize(sentence)
-    # filter using NLTK library append it to a string
-    # filtered_sentence = [w for w in word_tokens if not w in stop_words]
-    # filtered_sentence = []
-    # looping through conditions
-    # for w in word_tokens:
-    #     # check tokens against stopwords and punctuations
-    #     if (
-    #         w not in stop_words
-    #         and w not in string.punctuation
-    #         and w not in stray_tokens
-    #     ):
-    #         w = w.lower()
-    #         filtered_sentence.append(w)
-    sentence = sentence.lower()
-    # sentence = " ".join(filtered_sentence)
-    # re-removing single characters
-    # sentence = re.sub(r"(^|\s)[a-z]($|\s)", " ", sentence)
-    # sentence = re.sub(r"(^|\s)[a][a]($|\s)", " ", sentence)  # fixing for privacy
-    # reduce consecutive spaces into single space between words
-    sentence = " ".join(sentence.split())
+    i = 1
+    valid_count = 0
 
-    # hotfixes
-    sentence = re.sub(r"heck a few", "heck few", sentence)
-    # if "heck a few" in sentence:
-    #     print("what")
+    print("features length: ", len(features))
+    print("index_to_phrase_dict length: ", len(index_to_phrase_dict.keys()))
 
-    return sentence
+    # while i < len(features):
+    for phrase_index in index_to_phrase_dict.keys():
+        try:
+            sentiment = sentiment_dict[phrase_index]
+            # print("sentiment: ", sentiment)
+            if phrase_index < threshold * len(index_to_phrase_dict):
+                train_x.append(features[i])
+                train_y.append(0 if sentiment < 0.5 else 1)
+            else:
+                test_x.append(features[i])
+                test_y.append(0 if sentiment < 0.5 else 1)
+            # print(i)
 
+            i = i + 1
+            valid_count = valid_count + 1
+        except KeyError:
+            print(phrase_index)
+            hilo = 1
+            # i = i + 1
+            break
+        except IndexError:
+            print("this is a problem why is it happening tho")
+            print("index: ", i)
+            break
 
-def filter(sentence):
-    stop_words = set(stopwords.words("english"))
-    stray_tokens = [
-        "amp",
-        "`",
-        "``",
-        "'",
-        "''",
-        '"',
-        "n't",
-        "I",
-        "i",
-        ",00",
-    ]  # stray words
-    punct = r"[{}]".format(string.punctuation)
-    sentence = re.sub(punct, " ", sentence)
-    sentence = re.sub(r"[0-9]", " ", sentence)
-    # # correct spelling mistakes
-    # sentence = re.sub(
-    #     r'privacy|privcy|privac|privasy|privasee|privarcy|priavcy|privsy', ' privacy ', sentence)
-    # sentence = re.sub(r'(^|\s)[a-z]($|\s)', ' ', sentence)
-    sentence = re.sub(r"(^|\s)[a-z][a-z]($|\s)", " ", sentence)
-    word_tokens = word_tokenize(sentence)
-    # filter using NLTK library append it to a string
-    filtered_sentence = [w for w in word_tokens if not w in stop_words]
-    filtered_sentence = []
-    # looping through conditions
-    for w in word_tokens:
-        # check tokens against stopwords and punctuations
-        if (
-            w not in stop_words
-            and w not in string.punctuation
-            and w not in stray_tokens
-        ):
-            w = w.lower()
-            filtered_sentence.append(w)
-    sentence = " ".join(filtered_sentence)
-    # re-removing single characters
-    sentence = re.sub(r"(^|\s)[a-z]($|\s)", " ", sentence)
-    sentence = re.sub(r"(^|\s)[a][a]($|\s)", " ",
-                      sentence)  # fixing for privacy
-    return sentence
+    # print(dev_y)
+    # print(dev_y)
+    print("portion considered: ", valid_count / len(features))
 
+    print("train", len(train_x))
+    print("train", len(train_y))
 
-def lemma(sentence):
-    doc = spice(sentence)
-    wrong_class = ["pending", "madras", "data", "media"]
-    wrong_words = " ".join(wrong_class)
-    wrong_doc = spice(wrong_words)
-    lemma_sentence = []
-    for token in doc:
-        if token not in wrong_doc:
-            token = token.lemma_
-            if token != "-PRON-":
-                lemma_sentence.append(token)
-    return " ".join(lemma_sentence)
+    print("dev", len(dev_x))
+    print("dev", len(dev_y))
 
+    print("test", len(test_x))
+    print("test", len(test_y))
 
-# print(
-#     clean_filter_lemma_mini(
-#         "We’ve seen the hippie-turned-yuppie plot before, but there’s an enthusiastic charm in Fire that makes the formula fresh again."
-#     )
-# )
+    return (train_x, train_y, test_x, test_y)
+
 
 run()
 
