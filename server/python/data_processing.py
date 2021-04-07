@@ -134,35 +134,48 @@ def tokenize_sentence(rev, phrase_to_index_dict):
     token_so_far = []
     index = 0
     words = rev.split(" ")
-    word = words[index]
+    # word = words[index]
     # print("rev: ", rev)
     # print("words: ", words)
     # print("len: ", len(words))
+    # while index < len(words):  # until done for all words
+    #     try:
+    #         while (
+    #             try_tokenize(word, phrase_to_index_dict) == -1
+    #         ):  # until find a valid prase which has a phrase id
+
+    #             index += 1
+    #             word = word + " " + words[index]
+    #     except IndexError:
+    #         # print(word)
+    #         something = 0
+    #     # phrase with phrase id has been found
+    #     token_so_far.append(try_tokenize(word, phrase_to_index_dict))
+    #     # print(word)
+    #     # print(index)
+    #     # print(try_tokenize(word))
+    #     index += 1
+
+    #     try:
+    #         word = words[index]
+    #     except IndexError:
+    #         # reached the end of the rev
+    #         # print(word)
+    #         # break
+    #         hi = 0
+
     while index < len(words):  # until done for all words
         try:
-            while (
-                try_tokenize(word, phrase_to_index_dict) == -1
-            ):  # until find a valid prase which has a phrase id
-
-                index += 1
-                word = word + " " + words[index]
+            word = words[index]
         except IndexError:
-            # print(word)
+            print(word)
             something = 0
-        # phrase with phrase id has been found
+            break
         token_so_far.append(try_tokenize(word, phrase_to_index_dict))
         # print(word)
         # print(index)
         # print(try_tokenize(word))
         index += 1
-
-        try:
-            word = words[index]
-        except IndexError:
-            # reached the end of the rev
-            # print(word)
-            # break
-            hi = 0
     return token_so_far
 
 
