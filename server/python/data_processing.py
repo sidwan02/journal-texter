@@ -14,6 +14,14 @@ import torch
 from clean_review import clean_filter_lemma_mini
 
 
+def tokenize_all(all_sentences, phrase_to_index_dict):
+    tokenized = []
+    for sentence in all_sentences:
+        tokenized.append(tokenize_sentence(sentence, phrase_to_index_dict))
+
+    return np.array(tokenized)
+
+
 def try_tokenize(word, phrase_to_index_dict):
     # print("trying")
     try:
@@ -94,7 +102,8 @@ def normalize_length(target_length, twod_arr):
             truncated_arr = arr[0:target_length]
             normalized_arr.append(truncated_arr)
         elif len(arr) < target_length:
-            padded_arr = arr + [0] * (target_length - len(arr))
+            # padded_arr = arr + [0] * (target_length - len(arr))
+            padded_arr = [0] * (target_length - len(arr)) + arr
             normalized_arr.append(padded_arr)
         else:
             normalized_arr.append(arr)

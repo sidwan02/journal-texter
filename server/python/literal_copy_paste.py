@@ -35,78 +35,25 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, stratify=y)
 print(f'shape of train data is {x_train.shape}')
 print(f'shape of test data is {x_test.shape}')
 
-
-def preprocess_string(s):
-    # # Remove all non-word characters (everything except numbers and letters)
-    # s = re.sub(r"[^\w\s]", '', s)
-    # # Replace all runs of whitespaces with no space
-    # s = re.sub(r"\s+", '', s)
-    # # replace digits with no space
-    # s = re.sub(r"\d", '', s)
-
-    # return s
-    return clean_filter_lemma_mini(s)
-
-
-def tokenize(x_train, y_train, x_val, y_val):
-    word_list = []
-
-    stop_words = set(stopwords.words('english'))
-    for sent in x_train:
-        for word in sent.lower().split():
-            word = preprocess_string(word)
-            if word not in stop_words and word != '':
-                word_list.append(word)
-
-    print("done preprocessing")
-    corpus = Counter(word_list)
-    # sorting on the basis of most common words
-    corpus_ = sorted(corpus, key=corpus.get, reverse=True)[:1000]
-    # creating a dict
-    onehot_dict = {w: i+1 for i, w in enumerate(corpus_)}
-
-    # tokenize
-    final_list_train, final_list_test = [], []
-    for sent in x_train:
-        final_list_train.append([onehot_dict[preprocess_string(word)] for word in sent.lower().split()
-                                 if preprocess_string(word) in onehot_dict.keys()])
-    for sent in x_val:
-        final_list_test.append([onehot_dict[preprocess_string(word)] for word in sent.lower().split()
-                                if preprocess_string(word) in onehot_dict.keys()])
-
-    encoded_train = [1 if label == 'positive' else 0 for label in y_train]
-    encoded_test = [1 if label == 'positive' else 0 for label in y_val]
-    return np.array(final_list_train), np.array(encoded_train), np.array(final_list_test), np.array(encoded_test), onehot_dict
-
-
 review_to_sentiment_dict = get_review_sentiment_dict()
 
 vocab = generate_vocabulary(review_to_sentiment_dict)
 
-
-def tokenize_all(all_sentences, phrase_to_index_dict):
-    tokenized = []
-    for sentence in all_sentences:
-        tokenized.append(tokenize_sentence(sentence, phrase_to_index_dict))
-
-    return np.array(tokenized)
-
-
 x_train = tokenize_all(x_train, vocab)
 x_test = tokenize_all(x_test, vocab)
 
-y_train = [1 if label == 'positive' else 0 for label in y_train]
-y_test = [1 if label == 'positive' else 0 for label in y_test]
+y_train = np.array([1 if label == 'positive' else 0 for label in y_train])
+y_test = np.array([1 if label == 'positive' else 0 for label in y_test])
 
 
 # x_train, y_train, x_test, y_test, vocab = tokenize(
 #     x_train, y_train, x_test, y_test)
 print(f'Length of vocabulary is {len(vocab)}')
 
-rev_len = [len(i) for i in x_train]
-pd.Series(rev_len).hist()
-plt.show()
-pd.Series(rev_len).describe()
+# rev_len = [len(i) for i in x_train]
+# pd.Series(rev_len).hist()
+# plt.show()
+# pd.Series(rev_len).describe()
 
 
 def padding_(sentences, seq_len):
@@ -119,8 +66,10 @@ def padding_(sentences, seq_len):
 
 # we have very less number of reviews with length > 500.
 # So we will consideronly those below it.
-x_train_pad = padding_(x_train, 500)
-x_test_pad = padding_(x_test, 500)
+# x_train_pad = padding_(x_train, 500)
+# x_test_pad = padding_(x_test, 500)
+x_train_pad = np.array(normalize_length(500, x_train))
+x_test_pad = np.array(normalize_length(500, x_test))
 
 # create Tensor datasets
 train_data = TensorDataset(torch.from_numpy(
