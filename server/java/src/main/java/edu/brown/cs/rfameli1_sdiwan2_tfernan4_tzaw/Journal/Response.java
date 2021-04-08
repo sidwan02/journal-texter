@@ -1,5 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
+
 import java.util.TreeMap;
 
 public class Response implements JournalText<TreeMap<String, Integer>> {
@@ -27,7 +29,8 @@ public class Response implements JournalText<TreeMap<String, Integer>> {
 
   @Override
   public TreeMap<String, Integer> getTags() {
-    // TODO add wordVecCounter stuff in here
+    WordCountVec vectorized = new WordCountVec();
+    this.tags = vectorized.getFrequenciesFromText(text, 1);
     return this.tags;
   }
 }

@@ -26,16 +26,20 @@ if is_cuda:
 else:
     device = torch.device("cpu")
     print("GPU not available, CPU used")
-base_csv = r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\IMDB DS\IMDB Dataset.csv"
-df = pd.read_csv(base_csv)
-df.head()
+# base_csv = r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\data\IMDB DS\IMDB Dataset.csv"
+# df = pd.read_csv(base_csv)
+# df.head()
 
-X, y = df['review'].values, df['sentiment'].values
-x_train, x_test, y_train, y_test = train_test_split(X, y, stratify=y)
+# X, y = df['review'].values, df['sentiment'].values
+
+reviews, sentiment, review_to_sentiment_dict = get_review_sentiment_dict()
+
+x_train, x_test, y_train, y_test = train_test_split(
+    reviews, sentiment, stratify=sentiment)
 print(f'shape of train data is {x_train.shape}')
 print(f'shape of test data is {x_test.shape}')
 
-review_to_sentiment_dict = get_review_sentiment_dict()
+# review_to_sentiment_dict = get_review_sentiment_dict()
 
 vocab = generate_vocabulary(review_to_sentiment_dict)
 
@@ -102,4 +106,4 @@ hidden_dim = 256
 #                      embedding_dim, drop_prob=0.5)
 
 Train(vocab_size=vocab_size,
-      train_loader=valid_loader, test_loader=valid_loader, batch_size=batch_size)
+      train_loader=train_loader, test_loader=valid_loader, batch_size=batch_size)

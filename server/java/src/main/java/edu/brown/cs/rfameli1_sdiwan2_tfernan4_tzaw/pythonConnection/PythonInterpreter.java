@@ -9,20 +9,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class PythonInterpreter {
-  public static void main(String[] args) {
-//    try(PythonInterpreter pyInterp = new PythonInterpreter()) {
-//      pyInterp.exec("print('Hello Python World!')");
-//    }
+  public String getStringOutput(String file) {
     try {
-      Process p = Runtime.getRuntime().exec("python server/python/predict.py");
+      // https://stackoverflow.com/questions/27267391/running-a-py-file-from-java
+      String command = "python " + file;
+      Process p = Runtime.getRuntime().exec(command);
+//      Process p = Runtime.getRuntime().exec("python " + file);
       BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
       String ret = null;
+      String finalOutput = null;
       while ((ret = in.readLine()) != null) {
         System.out.println(ret);
+        finalOutput = ret;
       }
+
+      return finalOutput.split(" ")[finalOutput.split(" ").length - 1];
 //      System.out.println("ret);
     } catch (IOException e) {
       e.printStackTrace();
     }
+    return "";
   }
 }

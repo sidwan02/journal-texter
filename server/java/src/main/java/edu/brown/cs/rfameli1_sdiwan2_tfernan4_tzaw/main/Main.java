@@ -7,6 +7,7 @@ import java.io.StringWriter;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.WordnikAPIHandler;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.pythonConnection.PythonInterpreter;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -56,6 +57,10 @@ public final class Main {
 
     WordnikAPIHandler hoho = new WordnikAPIHandler();
     hoho.getSynonyms("earth");
+
+    PythonInterpreter pyt = new PythonInterpreter();
+    String cool = pyt.getStringOutput("server/python/predict.py");
+    System.out.println("oh yeah wooo: " + cool);
   }
 
   private static FreeMarkerEngine createEngine() {
@@ -99,7 +104,11 @@ public final class Main {
     // Setup Spark Routes
 //    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
     // get user input
-    Spark.post("/tags", new GUIHandler.TagsHandler());
+    Spark.post("/handleUserResponse", new GUIHandler.HandleRequestQuestion());
+    Spark.post("/handleSaveUserEntry", new GUIHandler.HandleSaveUserEntry());
+    Spark.post("/handleUserHistoryRequest", new GUIHandler.HandleUserHistoryRequest());
+    Spark.post("/handleUserHistorySummary", new GUIHandler.HandleUserHistorySummary());
+    Spark.post("/handleSelectedQuestion", new GUIHandler.HandleSelectedQuestion());
   }
 
   /**

@@ -51,7 +51,7 @@ def predict_text(text):
 
     rev = clean_filter_lemma_mini(text)
 
-    review_to_sentiment_dict = get_review_sentiment_dict()
+    _, _, review_to_sentiment_dict = get_review_sentiment_dict()
 
     vocab = generate_vocabulary(review_to_sentiment_dict)
 

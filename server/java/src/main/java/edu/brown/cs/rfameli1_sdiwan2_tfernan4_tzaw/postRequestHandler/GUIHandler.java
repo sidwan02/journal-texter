@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class GUIHandler {
 
-  public static class TagsHandler implements Route {
+  public static class HandleRequestQuestion implements Route {
     private static final Gson GSON = new Gson();
 
     /**
@@ -33,7 +33,128 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
-      String textIdentifier = data.getString("textIdentifier");
+      String userNameOrUserID = data.getString("userID");
+      String text = data.getString("text");
+      String startState = data.getString("start"); // "true" -> on load / ""
+      // probably will not even need this, ideally from backend should be able to detect
+      // the most recently saved entry and get that from SQL using a query
+
+      WordCountVec vectorizor = new WordCountVec();
+      variables = vectorizor.parseToGui();
+
+      return GSON.toJson(variables);
+    }
+  }
+
+  public static class HandleSelectedQuestion implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles Axios requests from the javascript front-end and returns
+     * the appropriate JSON object to be used by the front-end.
+     *
+     * @param request - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+
+      JSONObject data = new JSONObject(request.body());
+      Map<String, Object> variables;
+
+      String userNameOrUserID = data.getString("userID");
+      String question = data.getString("question");
+      // probably will not even need this, ideally from backend should be able to detect
+      // the most recently saved entry and get that from SQL using a query
+
+      WordCountVec vectorizor = new WordCountVec();
+      variables = vectorizor.parseToGui();
+
+      return GSON.toJson(variables);
+    }
+  }
+
+  public static class HandleSaveUserEntry implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles Axios requests from the javascript front-end and returns
+     * the appropriate JSON object to be used by the front-end.
+     *
+     * @param request - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+
+      JSONObject data = new JSONObject(request.body());
+      Map<String, Object> variables;
+
+      String userNameOrUserID = data.getString("userID");
+      String text = data.getString("text");
+      // probably will not even need this, ideally from backend should be able to detect
+      // the most recently saved entry and get that from SQL using a query
+
+      WordCountVec vectorizor = new WordCountVec();
+      variables = vectorizor.parseToGui();
+
+      return GSON.toJson(variables);
+    }
+  }
+
+  public static class HandleUserHistorySummary implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles Axios requests from the javascript front-end and returns
+     * the appropriate JSON object to be used by the front-end.
+     *
+     * @param request - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+
+      JSONObject data = new JSONObject(request.body());
+      Map<String, Object> variables;
+
+      String userNameOrUserID = data.getString("userID");
+      // probably will not even need this, ideally from backend should be able to detect
+      // the most recently saved entry and get that from SQL using a query
+
+      WordCountVec vectorizor = new WordCountVec();
+      variables = vectorizor.parseToGui();
+
+      return GSON.toJson(variables);
+    }
+  }
+
+  public static class HandleUserHistoryRequest implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles Axios requests from the javascript front-end and returns
+     * the appropriate JSON object to be used by the front-end.
+     *
+     * @param request - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+
+      JSONObject data = new JSONObject(request.body());
+      Map<String, Object> variables;
+
+      String userNameOrUserID = data.getString("userID");
+      String date = data.getString("date");
       // probably will not even need this, ideally from backend should be able to detect
       // the most recently saved entry and get that from SQL using a query
 

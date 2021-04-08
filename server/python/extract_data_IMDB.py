@@ -23,11 +23,13 @@ def get_review_sentiment_dict():
     reviews = df['review'].values
     sentiments = df['sentiment'].values
 
+    reviews, sentiments = df['review'].values, df['sentiment'].values
+
     review_to_sentiment_dict = {}
 
     for phr, sent in zip(reviews, sentiments):
         review_to_sentiment_dict[phr] = sent
-    return review_to_sentiment_dict
+    return reviews, sentiments, review_to_sentiment_dict
 
 
 def generate_vocabulary(review_to_sentiment_dict):

@@ -70,7 +70,33 @@ public class WordCountVec {
     return nWordFrequencies;
   }
 
+  public TreeMap<String, Integer> getFrequenciesFromText(String text, int nDiff) {
+    List<String> splitText = splitText(text, " ");
+    return getFrequenciesFromSplitText(splitText, nDiff);
+  }
+
   public ImmutableMap<String, Object> parseToGui() {
     return ImmutableMap.of();
   }
+
+//  public ImmutableMap<String, Object> parseToGuiForQuestion() {
+//    return ImmutableMap.of("questions", List<String>,
+//      "tags", List<String>,
+//      "sentiment", Double);
+//  }
+//
+//  public ImmutableMap<String, Object> parseToGuiForHistoryWhenClicked() {
+//    return ImmutableMap.of("questions", List<String>,
+//      "responses", List<List<String>>,
+//      "tags", List<String>,
+//      "sentiment", Double,
+//      "date", String);
+//
+//    public ImmutableMap<String, Object> parseToGuiForUserHistorySummary() {
+//      return ImmutableMap.of("date", List<String>,
+//        "entryName", List<String>,
+//        "tags", List<List<String>>,
+//        "sentiment", List<Double>,
+//        "uniqueEntryID", List<String>);
+//    }
 }
