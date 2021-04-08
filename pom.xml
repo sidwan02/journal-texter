@@ -144,11 +144,11 @@
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.python/jython -->
-    <!-- https://mvnrepository.com/artifact/org.python/jython -->
     <dependency>
       <groupId>org.python</groupId>
-      <artifactId>jython-standalone</artifactId>
+      <artifactId>jython</artifactId>
       <version>2.7.2</version>
+<!--      <scope>provided</scope>-->
     </dependency>
 
 
