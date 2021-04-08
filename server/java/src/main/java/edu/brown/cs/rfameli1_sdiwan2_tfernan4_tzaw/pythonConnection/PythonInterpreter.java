@@ -6,27 +6,50 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class PythonInterpreter {
-  public String getStringOutput(String file) {
-    try {
-      // https://stackoverflow.com/questions/27267391/running-a-py-file-from-java
-      String command = "python " + file;
-      Process p = Runtime.getRuntime().exec(command);
-//      Process p = Runtime.getRuntime().exec("python " + file);
-      BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-      String ret = null;
-      String finalOutput = null;
-      while ((ret = in.readLine()) != null) {
-        System.out.println(ret);
-        finalOutput = ret;
-      }
+  Process mProcess;
 
-      return finalOutput.split(" ")[finalOutput.split(" ").length - 1];
-//      System.out.println("ret);
+  public String getStringOutput(String file) {
+//    try {
+//      // https://stackoverflow.com/questions/27267391/running-a-py-file-from-java
+//      String command = "python " + file;
+//      Process p = Runtime.getRuntime().exec(command + " " + "hello");
+////      Process p = Runtime.getRuntime().exec("python " + file);
+//      BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//      String ret = null;
+//      String finalOutput = null;
+//      while ((ret = in.readLine()) != null) {
+//        System.out.println(ret);
+//        finalOutput = ret;
+//      }
+//
+//      return finalOutput.split(" ")[finalOutput.split(" ").length - 1];
+////      System.out.println("ret);
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//    return "";
+//  }
+    Process process;
+    try {
+      process = Runtime.getRuntime().exec(new String[]{"python.exe", "server/python/script_python.py", "arg1", "arg2"});
+      mProcess = process;
+    } catch (Exception e) {
+      System.out.println("Exception Raised" + e.toString());
+    }
+    InputStream stdout = mProcess.getInputStream();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(stdout, StandardCharsets.UTF_8));
+    String line;
+    try {
+      while ((line = reader.readLine()) != null) {
+        System.out.println("stdout: " + line);
+      }
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("Exception in reading output" + e.toString());
     }
     return "";
   }
