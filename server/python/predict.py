@@ -14,12 +14,13 @@ import torch
 from train import Train
 from clean_review import clean_filter_lemma_mini
 from data_processing import *
+from extract_data_IMDB import *
 from model import SentimentRNN
 
 
 # https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch
 num_layers = 2
-vocab_size = 239232
+vocab_size = 1001
 vocab_size = vocab_size + 1  # extra 1 for padding
 embedding_dim = 64
 hidden_dim = 256
@@ -50,30 +51,32 @@ def predict_text(text):
 
     rev = clean_filter_lemma_mini(text)
 
-    _, phrase_to_index_dict = get_phrase_id_dicts()
+    review_to_sentiment_dict = get_review_sentiment_dict()
 
-    word_seq = tokenize_sentence(rev, phrase_to_index_dict)
+    vocab = generate_vocabulary(review_to_sentiment_dict)
+
+    word_seq = tokenize_sentence(rev, vocab)
 
     reviews_tokenized = []
     # batch size of 1 doesn't work for some reason because of that squeeze error thingy remember [] vs [1]
     reviews_tokenized.append(word_seq)
-    reviews_tokenized.append(word_seq)
+    # reviews_tokenized.append(word_seq)
 
     # word_seq = np.expand_dims(word_seq, axis=0)
     pad = torch.from_numpy(
-        np.array(normalize_length(200, reviews_tokenized)))
+        np.array(normalize_length(500, reviews_tokenized)))
     inputs = pad.to(device)
     print(inputs)
-    batch_size = 2
+    batch_size = 1
     h = model.init_hidden(batch_size)
     h = tuple([each.data for each in h])
     output, h = model(inputs, h)
     print(output)
 
-    return(output.data[0].item())
+    return(output.item())
 
 
 pro = predict_text(
-    "I am a gummy bear")
+    "horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible ")
 status = "positive" if pro > 0.5 else "negative"
 print(f'Predicted sentiment is {status} with value {pro}')
