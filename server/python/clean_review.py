@@ -74,16 +74,18 @@ def clean_filter_lemma_mini(sentence):
     # sentence = re.sub(r"(^|\s)[a][a]($|\s)", " ", sentence)  # fixing for privacy
 
     # reduce consecutive spaces into single space between words
-    # sentence = " ".join(sentence.split())
+    sentence = " ".join(sentence.split())
+    # Replace all runs of whitespaces with no space
+    # sentence = re.sub(r"\s+", '', sentence)
 
-    all_words = sentence.split()
-    final_words = []
-    stop_words = set(stopwords.words('english'))
-    for word in all_words:
-        if word not in stop_words:
-            final_words.append(word)
+    # all_words = sentence.split()
+    # final_words = []
+    # stop_words = set(stopwords.words('english'))
+    # for word in all_words:
+    #     if word not in stop_words:
+    #         final_words.append(word)
 
-    sentence = " ".join(final_words)
+    # sentence = " ".join(final_words)
 
     # hotfixes
     sentence = re.sub(r"heck a few", "heck few", sentence)
