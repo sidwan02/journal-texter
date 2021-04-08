@@ -89,6 +89,8 @@ def tokenize_all(all_sentences, phrase_to_index_dict):
     for sentence in all_sentences:
         tokenized.append(tokenize_sentence(sentence, phrase_to_index_dict))
 
+    return np.array(tokenized)
+
 
 x_train = tokenize_all(x_train, vocab)
 x_test = tokenize_all(x_test, vocab)
