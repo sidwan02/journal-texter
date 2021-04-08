@@ -4,5 +4,5 @@ target/
 .idea/
 **.DS_Store**
 config.properties
-/data/stanfordSentimentTreebank/
+/data/
 /server/model/

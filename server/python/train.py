@@ -61,7 +61,7 @@ class Train(nn.Module):
         # optimizer = optim.Adam(model.parameters(), lr=0.001)
 
         # loss and optimization functions
-        lr = 0.0001
+        lr = 0.001
 
         criterion = nn.BCELoss()
 
@@ -76,7 +76,7 @@ class Train(nn.Module):
             return torch.sum(pred == label.squeeze()).item()
 
         clip = 5
-        epochs = 50
+        epochs = 5
         valid_loss_min = np.Inf
         # train for some number of epochs
         epoch_tr_loss, epoch_vl_loss = [], []
