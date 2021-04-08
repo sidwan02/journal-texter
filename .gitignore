@@ -4,5 +4,6 @@ target/
 .idea/
 **.DS_Store**
 config.properties
-/data/
+/data/stanfordSentimentTreebank/
+/data/IMDB DS
 /server/model/
