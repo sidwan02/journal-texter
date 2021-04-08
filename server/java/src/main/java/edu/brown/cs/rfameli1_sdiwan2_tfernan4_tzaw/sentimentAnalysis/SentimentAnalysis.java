@@ -1,19 +1,17 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.pythonConnection;//package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.pythonConnection;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis;//package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis;
 //// https://stackoverflow.com/questions/16460468/can-we-call-a-python-method-from-java
 //    // https://stackoverflow.com/questions/9381906/how-to-call-a-python-method-from-a-java-class
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-public class PythonInterpreter {
+public class SentimentAnalysis {
   Process mProcess;
 
-  public String getStringOutput(String file) {
+  public String getStringOutput(String review) {
 //    try {
 //      // https://stackoverflow.com/questions/27267391/running-a-py-file-from-java
 //      String command = "python " + file;
@@ -40,7 +38,7 @@ public class PythonInterpreter {
       process = Runtime.getRuntime().exec(new String[]{
         "python.exe",
         "server/python/script_python.py",
-        "horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible "});
+        review});
       mProcess = process;
     } catch (Exception e) {
       System.out.println("Exception Raised" + e.toString());
@@ -48,13 +46,15 @@ public class PythonInterpreter {
     InputStream stdout = mProcess.getInputStream();
     BufferedReader reader = new BufferedReader(new InputStreamReader(stdout, StandardCharsets.UTF_8));
     String line;
+    String finalOutput = null;
     try {
       while ((line = reader.readLine()) != null) {
-        System.out.println("stdout: " + line);
+//        System.out.println("stdout: " + line);
+        finalOutput = line;
       }
     } catch (IOException e) {
       System.out.println("Exception in reading output" + e.toString());
     }
-    return "";
+    return finalOutput.split(" ")[finalOutput.split(" ").length - 1];
   }
 }

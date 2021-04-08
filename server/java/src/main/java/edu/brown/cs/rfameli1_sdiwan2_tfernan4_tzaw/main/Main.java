@@ -7,7 +7,7 @@ import java.io.StringWriter;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.WordnikAPIHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.pythonConnection.PythonInterpreter;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -58,8 +58,8 @@ public final class Main {
     WordnikAPIHandler hoho = new WordnikAPIHandler();
     hoho.getSynonyms("earth");
 
-    PythonInterpreter pyt = new PythonInterpreter();
-    String cool = pyt.getStringOutput("server/python/predict.py");
+    SentimentAnalysis pyt = new SentimentAnalysis();
+    String cool = pyt.getStringOutput("horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible ");
     System.out.println("oh yeah wooo: " + cool);
   }
 
