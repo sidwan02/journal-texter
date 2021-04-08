@@ -34,9 +34,13 @@ public class PythonInterpreter {
 //    }
 //    return "";
 //  }
+    // https://www.edureka.co/community/358/how-to-execute-a-python-file-with-few-arguments-in-java
     Process process;
     try {
-      process = Runtime.getRuntime().exec(new String[]{"python.exe", "server/python/script_python.py", "arg1", "arg2"});
+      process = Runtime.getRuntime().exec(new String[]{
+        "python.exe",
+        "server/python/script_python.py",
+        "horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible "});
       mProcess = process;
     } catch (Exception e) {
       System.out.println("Exception Raised" + e.toString());
