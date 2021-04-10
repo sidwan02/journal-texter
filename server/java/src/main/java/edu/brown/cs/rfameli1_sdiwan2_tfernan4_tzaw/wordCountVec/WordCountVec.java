@@ -23,18 +23,28 @@ public class WordCountVec {
     int maxIterations = splitText.size() - (nDiff - 1);
 
     int currentIteration = 0;
-
+    System.out.println("maxIterations: " + maxIterations);
+    if (currentIteration >= maxIterations) {
+      // suggests that there are fewer words than n-diff
+      nDiffSplitText.add(String.join(" ", splitText));
+    }
     while (currentIteration < maxIterations) {
+      System.out.println("currentIteration: " + currentIteration);
       int currentNCountIndex = 0;
-      StringBuilder currentNDiffJointWord = new StringBuilder();
-      while (currentNCountIndex < nDiff) {
-        currentNDiffJointWord
-          .append(" ")
-          .append(splitText.get(currentIteration + currentNCountIndex));
-        currentNCountIndex ++;
+      StringBuilder currentNDiffJointWord = new StringBuilder(splitText.get(currentIteration));
+      try {
+        while (currentNCountIndex < (nDiff - 1)) {
+          System.out.println("currentNCountIndex: " + currentNCountIndex);
+          currentNDiffJointWord
+            .append(" ")
+            .append(splitText.get(currentIteration + currentNCountIndex + 1));
+          currentNCountIndex ++;
+        }
+        nDiffSplitText.add(currentNDiffJointWord.toString());
+        currentIteration ++;
+      } catch (IndexOutOfBoundsException e) {
+        System.out.println("index out of bounds");
       }
-      nDiffSplitText.add(currentNDiffJointWord.toString());
-      currentIteration --;
     }
 
     return nDiffSplitText;

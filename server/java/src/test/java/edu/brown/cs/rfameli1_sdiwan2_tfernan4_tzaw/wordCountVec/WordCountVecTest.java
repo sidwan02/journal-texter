@@ -72,4 +72,80 @@ public class WordCountVecTest {
     WordCountVec vectorizer = new WordCountVec();
     assertEquals(vectorizer.splitText(text, " "), new ArrayList<>());
   }
+
+  @Test
+  public void testGetNDiffCombinations_1Diff_TextContainsSingleWord() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text = vectorizer.splitText("hello", " ");
+
+    List<String> expectedOutput = new ArrayList<>();
+    expectedOutput.add("hello");
+
+    assertEquals(vectorizer.getNDiffCombinations(text, 1), expectedOutput);
+  }
+
+  @Test
+  public void testGetNDiffCombinations_1Diff_TextContainsMultipleWords() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text = vectorizer.splitText("lorem ipsum dolor sit amet consectetur adipiscing elit", " ");
+
+    List<String> expectedOutput = new ArrayList<>();
+    expectedOutput.add("lorem");
+    expectedOutput.add("ipsum");
+    expectedOutput.add("dolor");
+    expectedOutput.add("sit");
+    expectedOutput.add("amet");
+    expectedOutput.add("consectetur");
+    expectedOutput.add("adipiscing");
+    expectedOutput.add("elit");
+
+    assertEquals(vectorizer.getNDiffCombinations(text, 1), expectedOutput);
+  }
+
+  @Test
+  public void testGetNDiffCombinations_2Diff_TextContainsSingleWord() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text = vectorizer.splitText("hello", " ");
+
+    List<String> expectedOutput = new ArrayList<>();
+    expectedOutput.add("hello");
+
+    assertEquals(vectorizer.getNDiffCombinations(text, 2), expectedOutput);
+  }
+
+  @Test
+  public void testGetNDiffCombinations_2Diff_TextContainsMultipleWords() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text = vectorizer.splitText("lorem ipsum dolor sit amet consectetur adipiscing elit", " ");
+
+    List<String> expectedOutput = new ArrayList<>();
+    expectedOutput.add("lorem ipsum");
+    expectedOutput.add("ipsum dolor");
+    expectedOutput.add("dolor sit");
+    expectedOutput.add("sit amet");
+    expectedOutput.add("amet consectetur");
+    expectedOutput.add("consectetur adipiscing");
+    expectedOutput.add("adipiscing elit");
+
+    assertEquals(vectorizer.getNDiffCombinations(text, 2), expectedOutput);
+  }
+
+  @Test
+  public void testGetNDiffCombinations_5Diff() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text = vectorizer.splitText("lorem ipsum dolor sit amet consectetur adipiscing elit", " ");
+
+    List<String> expectedOutput = new ArrayList<>();
+    expectedOutput.add("lorem ipsum dolor sit amet");
+    expectedOutput.add("ipsum dolor sit amet consectetur");
+    expectedOutput.add("dolor sit amet consectetur adipiscing");
+    expectedOutput.add("sit amet consectetur adipiscing elit");
+
+    assertEquals(vectorizer.getNDiffCombinations(text, 5), expectedOutput);
+  }
 }
