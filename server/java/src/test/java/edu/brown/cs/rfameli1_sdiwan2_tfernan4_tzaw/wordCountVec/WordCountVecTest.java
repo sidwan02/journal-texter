@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThrows;
 public class WordCountVecTest {
   @Test
   public void testCleanText_TextAlreadyClean() {
-    String text = "this text is already clean and is already split up wow pretty cool";
+    String text = "clean split wow pretty cool";
 
     WordCountVec vectorizer = new WordCountVec();
     assertEquals(vectorizer.cleanText(text), text);
@@ -28,7 +28,17 @@ public class WordCountVecTest {
   public void testCleanText_TextContainsNonAlphanumeric() {
     String text = "this text is definitely already clean and it's got some pun!ua|ons t00";
 
-    String textCleaned = "this text is definitely already clean and its got some punuaons t00";
+    String textCleaned = "clean punuaons t00";
+
+    WordCountVec vectorizer = new WordCountVec();
+    assertEquals(vectorizer.cleanText(text), textCleaned);
+  }
+
+  @Test
+  public void testCleanText_TextContainsStopwords() {
+    String text = "this text is definitely already clean";
+
+    String textCleaned = "clean";
 
     WordCountVec vectorizer = new WordCountVec();
     assertEquals(vectorizer.cleanText(text), textCleaned);
@@ -36,9 +46,9 @@ public class WordCountVecTest {
 
   @Test
   public void testCleanText_TextContainsCapital() {
-    String text = "this text is DEFINITELY NOT lowerCaSe";
+    String text = "lowerCaSe";
 
-    String textCleaned = "this text is definitely not lowercase";
+    String textCleaned = "lowercase";
 
     WordCountVec vectorizer = new WordCountVec();
     assertEquals(vectorizer.cleanText(text), textCleaned);
@@ -182,10 +192,15 @@ public class WordCountVecTest {
     WordCountVec vectorizer = new WordCountVec();
 
     List<String> text =
-      vectorizer.getNDiffCombinations(vectorizer.splitText("one of the most important things to understand is that one must try as hard as they can to do well and get what they want but even it that is not enough they must keep trying but try in a way that is smart so that they may succeed the keyword is may not necessarily will but if you try hard and feel good about yourself then you will know that nothing except yourself can stop you from doing well", " "), 1);
+      vectorizer.getNDiffCombinations(vectorizer.splitText(vectorizer.cleanText("one of the most important things to understand is that one must try as hard as they can to do well and get what they want but even it that is not enough they must keep trying but try in a way that is smart so that they may succeed the keyword is may not necessarily will but if you try hard and feel good about yourself then you will know that nothing except yourself can stop you from doing well"), " "), 1);
 
     Map<String, Integer> expectedFreq = new TreeMap();
-    expectedFreq.put("hello", 500);
+    expectedFreq.put("feel", 1);
+    expectedFreq.put("hard", 2);
+    expectedFreq.put("keyword", 1);
+    expectedFreq.put("smart", 1);
+    expectedFreq.put("succeed", 1);
+    expectedFreq.put("understand", 1);
 
     assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
   }

@@ -23,12 +23,12 @@ public class WordCountVec {
       System.out.println("Stopwords path is wrong");
     }
 
-    List<String> splitText = new LinkedList<>(Arrays.asList(text.split(" ")));
+    List<String> splitText = new LinkedList<>(Arrays.asList(text.toLowerCase().split(" ")));
     splitText.removeAll(stopwords);
 
     String cleanedText = String.join(" ", splitText);
 
-    return cleanedText.toLowerCase().replaceAll("[^a-zA-Z0-9 ]", "");
+    return cleanedText.replaceAll("[^a-zA-Z0-9 ]", "");
   }
 
   public List<String> splitText(String cleanedText, String delimiter) {
