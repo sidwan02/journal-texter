@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -147,5 +149,44 @@ public class WordCountVecTest {
     expectedOutput.add("sit amet consectetur adipiscing elit");
 
     assertEquals(vectorizer.getNDiffCombinations(text, 5), expectedOutput);
+  }
+
+  @Test
+  public void getFrequenciesFromSplitText_SingleFrequency_SingleWord() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text =
+      vectorizer.getNDiffCombinations(vectorizer.splitText("hello", " "), 1);
+
+    Map<String, Integer> expectedFreq = new TreeMap();
+    expectedFreq.put("hello", 1);
+
+    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
+  }
+
+  @Test
+  public void getFrequenciesFromSplitText_SingleFrequency_Duplicates() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text =
+      vectorizer.getNDiffCombinations(Collections.nCopies(500, "hello"), 1);
+
+    Map<String, Integer> expectedFreq = new TreeMap();
+    expectedFreq.put("hello", 500);
+
+    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
+  }
+
+  @Test
+  public void getFrequenciesFromSplitText_NoWordsAreSynonyms() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text =
+      vectorizer.getNDiffCombinations(vectorizer.splitText("one of the most important things to understand is that one must try as hard as they can to do well and get what they want but even it that is not enough they must keep trying but try in a way that is smart so that they may succeed the keyword is may not necessarily will but if you try hard and feel good about yourself then you will know that nothing except yourself can stop you from doing well", " "), 1);
+
+    Map<String, Integer> expectedFreq = new TreeMap();
+    expectedFreq.put("hello", 500);
+
+    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
   }
 }

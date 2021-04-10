@@ -5,9 +5,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,21 +21,26 @@ public class WordnikAPIHandler {
     RestTemplate rt = new RestTemplate();
 
     // https://docs.spring.io/spring-android/docs/current/reference/html/rest-template.html
-    ResponseEntity<String> response = rt.exchange("https://api.wordnik.com/v4/word.json/" + word + "/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=" + PropertiesReader.getProperty("WORDNIK_KEY"),
-      HttpMethod.GET, entity, String.class);
+    try {
+      ResponseEntity<String> response = rt.exchange("https://api.wordnik.com/v4/word.json/" + word + "/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=" + PropertiesReader.getProperty("WORDNIK_KEY"),
+        HttpMethod.GET, entity, String.class);
 
-    String eventBody = response.getBody();
+      String eventBody = response.getBody();
 //    System.out.println(eventBody);
 
-    String spliceToStart = eventBody.split("\\[", 3)[2];
-    String spliceUntilEnd = spliceToStart.split("\\]", 2)[0];
+      String spliceToStart = eventBody.split("\\[", 3)[2];
+      String spliceUntilEnd = spliceToStart.split("\\]", 2)[0];
 //    System.out.println(spliceUntilEnd);
 
-    Set<String> synonyms
-      = Arrays.stream(spliceUntilEnd.split(",")).collect(Collectors.toSet());
+      Set<String> synonyms
+        = Arrays.stream(spliceUntilEnd.split(",")).collect(Collectors.toSet());
 
-    System.out.println(synonyms);
+      System.out.println(synonyms);
 
-    return synonyms;
+      return synonyms;
+    } catch (HttpClientErrorException e) {
+      System.out.println("word not found");
+      return new HashSet<>();
+    }
   }
 }
