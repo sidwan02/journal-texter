@@ -35,6 +35,12 @@ function JournalTextBoxAndButtons(props) {
         }
     }
 
+    const confirmQuestionEvent = (event) => {
+        {
+            props.confirmClick(event)
+        }
+    }
+
     const overallStyle = {
         width: 1000,
         padding: 10,
@@ -55,7 +61,10 @@ function JournalTextBoxAndButtons(props) {
             <AwesomeButton id="sendButton" type="primary" onPress={sendClickEvent}
                            style={{float: 'right'}}>Send</AwesomeButton>
             <AwesomeButton type="secondary" onPress={promptQuestionEvent} style={{float: 'left'}}>
-                Request Question</AwesomeButton>
+                Request Questions</AwesomeButton>
+            <AwesomeButton type="secondary" onPress={confirmQuestionEvent} style={{float: 'left'}}>
+                Choose Question
+            </AwesomeButton>
         </div>
     );
 }
