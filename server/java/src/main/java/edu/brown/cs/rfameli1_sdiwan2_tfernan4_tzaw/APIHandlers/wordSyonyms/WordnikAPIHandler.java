@@ -33,7 +33,7 @@ public class WordnikAPIHandler {
 //    System.out.println(spliceUntilEnd);
 
       Set<String> synonyms
-        = Arrays.stream(spliceUntilEnd.split(",")).collect(Collectors.toSet());
+        = Arrays.stream(spliceUntilEnd.replaceAll("\"", "").split(",")).collect(Collectors.toSet());
 
       System.out.println(synonyms);
 

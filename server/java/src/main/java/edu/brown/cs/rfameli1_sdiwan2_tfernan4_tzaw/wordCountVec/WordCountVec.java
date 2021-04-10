@@ -76,15 +76,22 @@ public class WordCountVec {
     for (String nDiffWords : nDiffWordCombinations) {
       if (nWordFrequencies.containsKey(nDiffWords)) {
         // word in map
+        System.out.println("word in map");
         nWordFrequencies.put(nDiffWords, nWordFrequencies.get(nDiffWords) + 1);
       } else {
         // word not in map
+        System.out.println("word NOT in map");
 
         WordnikAPIHandler wordnikConnection = new WordnikAPIHandler();
         // check if any synonyms in map
         int synCount = 0;
         for (String synonym : wordnikConnection.getSynonyms(nDiffWords)) {
+//          System.out.println(synonym);
+//          System.out.println("ambient");
+//          System.out.println(nWordFrequencies.keySet());
+//          System.out.println(synonym.equals("ambient"));
           if (nWordFrequencies.containsKey(synonym)) {
+            System.out.println("synonym in map");
             nWordFrequencies.put(synonym, nWordFrequencies.get(synonym) + 1);
             synCount ++;
           }

@@ -204,4 +204,40 @@ public class WordCountVecTest {
 
     assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
   }
+
+  @Test
+  public void getFrequenciesFromSplitText_SomeWordsAreSynonyms() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text =
+      vectorizer.getNDiffCombinations(vectorizer.splitText(vectorizer.cleanText("appreciation is appear to abide by the heavy ambience in the air"), " "), 1);
+
+    Map<String, Integer> expectedFreq = new TreeMap();
+    expectedFreq.put("feel", 1);
+    expectedFreq.put("hard", 2);
+    expectedFreq.put("keyword", 1);
+    expectedFreq.put("smart", 1);
+    expectedFreq.put("succeed", 1);
+    expectedFreq.put("understand", 1);
+
+    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
+  }
+
+  @Test
+  public void getFrequenciesFromSplitText_AllWordsAreSynonyms() {
+    WordCountVec vectorizer = new WordCountVec();
+
+    List<String> text =
+      vectorizer.getNDiffCombinations(vectorizer.splitText(vectorizer.cleanText("ambient atmosphere"), " "), 1);
+
+    Map<String, Integer> expectedFreq = new TreeMap();
+    expectedFreq.put("feel", 1);
+    expectedFreq.put("hard", 2);
+    expectedFreq.put("keyword", 1);
+    expectedFreq.put("smart", 1);
+    expectedFreq.put("succeed", 1);
+    expectedFreq.put("understand", 1);
+
+    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
+  }
 }
