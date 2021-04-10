@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FunTranslationsAPIHandler {
+public class TranslationsAPIHandler {
   public HashMap<Integer, String> dialectURLs = new HashMap<>(){{
     put(0, "");
     put(1, "https://pirate.monkeyness.com/api/translate?english=");
