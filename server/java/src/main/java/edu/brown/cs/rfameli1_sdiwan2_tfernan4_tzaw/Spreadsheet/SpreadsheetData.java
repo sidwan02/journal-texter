@@ -17,7 +17,11 @@ public class SpreadsheetData {
   }
 
   public List<List<String>> getRows() {
-    // TODO make defensive copies of inner lists too
-    return new ArrayList<>(rows);
+    //
+    List<List<String>> outList = new ArrayList<>();
+    for (List<String> row : rows) {
+      outList.add(new ArrayList<>(row));
+    }
+    return outList;
   }
 }

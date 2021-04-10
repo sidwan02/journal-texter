@@ -1,13 +1,15 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
+/**
+ * Represents a Response in a JournalTexter Entry.
+ */
+public class Response implements JournalText {
+  private final String text;
 
-import java.util.TreeMap;
-
-public class Response implements JournalText<TreeMap<String, Integer>> {
-  private String text;
-  private TreeMap<String, Integer> tags = null;
-
+  /**
+   * Parameterized constructor.
+   * @param responseText the text inputted by the user as a response
+   */
   public Response(String responseText) {
     this.text = responseText;
   }
@@ -25,12 +27,5 @@ public class Response implements JournalText<TreeMap<String, Integer>> {
   @Override
   public String stringRepresentation() {
     return "{" + text + "}";
-  }
-
-  @Override
-  public TreeMap<String, Integer> getTags() {
-    WordCountVec vectorized = new WordCountVec();
-    this.tags = vectorized.getFrequenciesFromText(text, 1);
-    return this.tags;
   }
 }

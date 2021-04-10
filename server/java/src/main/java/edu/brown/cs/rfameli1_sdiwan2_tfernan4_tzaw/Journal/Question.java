@@ -1,25 +1,17 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
-import java.util.HashMap;
-import java.util.Set;
-
-public class Question implements JournalText<HashMap<String, Integer>> {
+/**
+ * Represents a question in a JournalTexter entry.
+ */
+public class Question implements JournalText {
   private final String text;
-  private final Set<String> tags;
 
-  public Question(String text, Set<String> tags) {
+  /**
+   * Parameterized constructor.
+   * @param text a String of the question's text
+   */
+  public Question(String text) {
     this.text = text;
-    this.tags = tags;
-  }
-
-  public HashMap<String, Integer> getTags() {
-    HashMap<String, Integer> tagMap = new HashMap<>(tags.size());
-    Integer counter = 1;
-    for (String tag: tags) {
-      tagMap.put(tag, counter);
-      counter++;
-    }
-    return tagMap;
   }
 
   @Override
