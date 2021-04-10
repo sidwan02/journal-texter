@@ -210,34 +210,31 @@ public class WordCountVecTest {
     WordCountVec vectorizer = new WordCountVec();
 
     List<String> text =
-      vectorizer.getNDiffCombinations(vectorizer.splitText(vectorizer.cleanText("appreciation is appear to abide by the heavy ambience in the air"), " "), 1);
+      vectorizer.getNDiffCombinations(vectorizer.splitText(vectorizer.cleanText("ambient atmosphere helps me study but it can also distract me from my work"), " "), 1);
 
     Map<String, Integer> expectedFreq = new TreeMap();
-    expectedFreq.put("feel", 1);
-    expectedFreq.put("hard", 2);
-    expectedFreq.put("keyword", 1);
-    expectedFreq.put("smart", 1);
-    expectedFreq.put("succeed", 1);
-    expectedFreq.put("understand", 1);
+    expectedFreq.put("ambient", 2);
+    expectedFreq.put("distract", 1);
+    expectedFreq.put("helps", 1);
+    expectedFreq.put("study", 1);
 
     assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
   }
 
   @Test
-  public void getFrequenciesFromSplitText_AllWordsAreSynonyms() {
+  public void getFrequenciesFromText() {
     WordCountVec vectorizer = new WordCountVec();
 
-    List<String> text =
-      vectorizer.getNDiffCombinations(vectorizer.splitText(vectorizer.cleanText("ambient atmosphere"), " "), 1);
+    TreeMap<String, Integer> frequencies =
+      vectorizer.getFrequenciesFromText("We have discovered the most terrible bomb in the history of the world.", 1);
 
     Map<String, Integer> expectedFreq = new TreeMap();
-    expectedFreq.put("feel", 1);
-    expectedFreq.put("hard", 2);
-    expectedFreq.put("keyword", 1);
-    expectedFreq.put("smart", 1);
-    expectedFreq.put("succeed", 1);
-    expectedFreq.put("understand", 1);
+    expectedFreq.put("bomb", 1);
+    expectedFreq.put("discovered", 1);
+    expectedFreq.put("history", 1);
+    expectedFreq.put("terrible", 1);
+    expectedFreq.put("world", 1);
 
-    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
+    assertEquals(frequencies, expectedFreq);
   }
 }

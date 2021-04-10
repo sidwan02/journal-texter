@@ -106,7 +106,7 @@ public class WordCountVec {
   }
 
   public TreeMap<String, Integer> getFrequenciesFromText(String text, int nDiff) {
-    List<String> splitText = splitText(text, " ");
+    List<String> splitText = splitText(cleanText(text), " ");
     return getFrequenciesFromSplitText(splitText, nDiff);
   }
 
