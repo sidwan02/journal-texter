@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -179,7 +180,7 @@ public class JournalTexterDB {
    */
   public Set<String> getAllTagsFromDB() throws SQLException {
     checkConnection();
-    PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT tag_text FROM tags");
+    PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT tag_text FROM tags;");
     ResultSet rs = ps.executeQuery();
     Set<String> allTags = new HashSet<>();
     while (rs.next()) {
@@ -188,15 +189,36 @@ public class JournalTexterDB {
     return allTags;
   }
 
-  public void updateUserEntry(String username, String entryText) {
-    // TODO
+  public void addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
+        + "(date, entry_text, author) VALUES (?, ?, ?);");
+    ps.setDate(1, java.sql.Date.valueOf(date));
+    ps.setString(2, entryText);
+    ps.setString(3, username);
+    ps.executeUpdate();
   }
 
-  public void registerUser() {
-    // TODO
+  public void registerUser(String username, String password) throws SQLException {
+    checkConnection();
+
+    if (usernameIsRegistered(username)) {
+      throw new SQLException("Username" + username + "already registered");
+    }
+    PreparedStatement ps = conn.prepareStatement("INSERT INTO users VALUES (?, ?);");
+    ps.setString(1, username);
+    ps.setString(2, password);
+    ps.executeUpdate();
   }
 
-  public void usernameIsRegistered(String username) {
-    // TODO
+  public boolean usernameIsRegistered(String username) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username=?;");
+    ps.setString(1, username);
+    ResultSet rs = ps.executeQuery();
+    if (rs.next()) {
+      return true;
+    }
+    return false;
   }
 }
