@@ -13,7 +13,7 @@ function SignUpPage() {
         console.log(username);
         console.log(password);
         console.log(passwordConfirmation);
-        history.push('/login');
+        history.push('/');
     }
 
     return (

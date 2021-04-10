@@ -29,19 +29,23 @@ export default function LoginPage({setToken}) {
             config
         )
             .then(response => response.data)
-            .catch(function (error) {
-                console.log(error);
+            .catch(error => {
+                console.log(error.response);
+                return null;
             });
     }
 
     const handleSubmit = async e => {
-        const token = await loginUser({
-            username,
-            password
-        });
+        const token = await loginUser();
 
+        if (token !== null) {
+            assignToken(token);
+        }
+    }
+
+    function assignToken(token) {
         setToken(token);
-        history.push('/dashboard');
+        history.push('/');
     }
 
     return (

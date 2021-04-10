@@ -49,10 +49,14 @@ function App() {
             <Router>
                 {/*All our Routes goes here!*/}
                 <Switch>
-                    <Route exact path="/" component={LandingPage}/>
-                    <Route exact path="/login" component={Dashboard}/>
-                    <Route exact path="/signup" component={Dashboard}/>
-                    <Route exact path="/dashboard" component={Dashboard}/>
+                    <Route exact path="/" component={Dashboard}/>
+                    <Route exact path="/login">
+                        <Redirect to="/"/>
+                    </Route>
+                    <Route exact path="/signup">
+                        <Redirect to="/"/>
+                    </Route>
+                    {/*<Route exact path="/dashboard" component={Dashboard}/>*/}
                     <Route exact path="/journaller" component={JournallerPage}/>
                     <Route exact path="/journalentry" component={OldJournalEntry}/>
                     <Route exact path="/404" component={NotFoundPage}/>

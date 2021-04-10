@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.common.collect.ImmutableMap;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.LoginHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import org.json.JSONObject;
@@ -30,7 +31,7 @@ import freemarker.template.Configuration;
 public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
-  private static final Gson GSON = new Gson();
+//  private static final Gson GSON = new Gson();
 
   /**
    * The initial method called when execution begins.
@@ -76,21 +77,6 @@ public final class Main {
     return new FreeMarkerEngine(config);
   }
 
-//  private void runSparkServer(int port) {
-//    Spark.port(port);
-//    Spark.externalStaticFileLocation("src/main/resources/static");
-//    Spark.exception(Exception.class, new ExceptionPrinter());
-//
-//    FreeMarkerEngine freeMarker = createEngine();
-//
-//    // Setup Spark Routes
-//    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
-//    // get user input
-//    Spark.post("/csvLoaded", new StarsGuiHandler.SubmitHandlerCsv(), freeMarker);
-//    Spark.post("/results", new StarsGuiHandler.SubmitHandlerCommand(), freeMarker);
-//    Spark.post("/login", new LoginHandler.SubmitHandlerStars(), freeMarker);
-//  }
-
   private void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
@@ -115,9 +101,6 @@ public final class Main {
 
     FreeMarkerEngine freeMarker = createEngine();
 
-    // Setup Spark Routes
-//    Spark.get("/stars", new FrontHandler(), freeMarker);
-
     Spark.post("/login", new LoginHandler());
   }
 
@@ -136,27 +119,6 @@ public final class Main {
         pw.println("</pre>");
       }
       res.body(stacktrace.toString());
-    }
-  }
-
-  /**
-   * Handles requests from the frontend to the user login server.  Takes in a request
-   * with a username and a password and checks to see if a user exists.  If they do, it returns
-   * the token, if not it returns an error.
-   */
-  private static class LoginHandler implements Route {
-    @Override
-    public Object handle(Request request, Response response) throws Exception {
-      JSONObject data = new JSONObject(request.body());
-      String username = data.getString("username");
-      String password = data.getString("password");
-
-      //TODO connect username and password to database
-
-      String output = username + ", " + password;
-
-      Map<String, Object> variables = ImmutableMap.of("token", output);
-      return GSON.toJson(variables);
     }
   }
 }
