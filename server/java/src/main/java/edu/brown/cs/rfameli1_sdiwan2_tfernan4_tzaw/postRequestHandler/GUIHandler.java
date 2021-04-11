@@ -1,8 +1,10 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,6 +12,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +52,12 @@ public class GUIHandler {
       String startState = data.getString("start"); // "true" -> on load / ""
 
       if (startState.equals("true")) {
+        List<String> questions = getRandomlyGeneratedQuestions(5);
 
+        variables = ImmutableMap.of(
+          "questions", questions,
+          "tags", new ArrayList<>(),
+          "sentiment", -1);
       } else {
         List<String> responses = new ArrayList<>();
         if (text != null) {
@@ -60,8 +68,11 @@ public class GUIHandler {
         }
 
         WordCountVec vectorizor = new WordCountVec();
+
+        String combinedResponses = String.join(" ", responses);
+
         Map<String, Integer> frequencies
-          = vectorizor.getFrequenciesFromText(String.join(" ", responses), 1);
+          = vectorizor.getFrequenciesFromText(combinedResponses, 1);
 
         SortedSet<Map.Entry<String, Integer>> sortedFrequencies
           = vectorizor.sortByValues(frequencies);
@@ -77,19 +88,28 @@ public class GUIHandler {
         }
 
         List<String> questions = new ArrayList<>();
-        for (String tag : tags) {
+        for (String tag : foundTags) {
           List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
           for (Question q : questionsFromTag) {
             questions.add(q.getText());
-          }
-          if (questions.size() >= 5) {
-            break;
+            if (questions.size() >= 5) {
+              break;
+            }
           }
         }
 
-        if (questions.size() < 5) {
-          
-        }
+        List<String> additionalQuestions
+          = getRandomlyGeneratedQuestions(5 - questions.size());
+
+        questions.addAll(additionalQuestions);
+
+        SentimentAnalysis senti = new SentimentAnalysis();
+        Double sentiment = senti.getSentimentFromText(combinedResponses);
+
+        variables = ImmutableMap.of(
+          "questions", questions,
+          "tags", foundTags,
+          "sentiment", sentiment);
       }
 
       /*-------*/
@@ -101,6 +121,30 @@ public class GUIHandler {
       /*-------*/
 
       return GSON.toJson(variables);
+    }
+
+    public List<String> getRandomlyGeneratedQuestions(int n) {
+      JournalTexterDB jtDB = new JournalTexterDB();
+      Set<String> tags = jtDB.getAllTagsFromDB();
+
+      List<String> randomlyChosenTags = new ArrayList<>();
+      for (String tag : tags) {
+        randomlyChosenTags.add(tag);
+        if (randomlyChosenTags.size() == n) {
+          break;
+        }
+      }
+
+      List<String> questions = new ArrayList<>();
+      for (String tag : randomlyChosenTags) {
+        List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
+        for (Question q : questionsFromTag) {
+          questions.add(q.getText());
+          if (questions.size() >= 5) {
+            break;
+          }
+        }
+      }
     }
   }
 
