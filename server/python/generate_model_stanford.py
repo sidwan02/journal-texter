@@ -1,26 +1,6 @@
-# -*- coding: utf-8 -*-
-# class Hello:
-# #     __gui = None
-# #
-#     def __init__(self):
-#         # self.__gui = gui
-#
-
 from torch.utils.data import DataLoader, TensorDataset
-import en_core_web_sm
-import numpy as np
-import spacy
-import itertools
-import emoji
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-import string
-import re
-import os
 import torch
 from train import Train
-from clean_review import clean_filter_lemma_mini
 from data_processing import *
 
 

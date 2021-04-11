@@ -47,9 +47,15 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
+      // id of the entry
       Integer entryId = Integer.parseInt(data.getString("entryID"));
-      String userNameOrUserID = data.getString("userID");
+      // username
+      String username = data.getString("userID");
+      // list of responses in the from of a JSON array
       JSONArray text = data.getJSONArray("text");
+      // either "start" or "requestQuestion"
+      // "start" -> when loading the first question of an entry
+      // "requestQuestion" -> when loading a question based on user responses to a previous question
       String state = data.getString("start");
 
       if (state.equals("start")) {
@@ -119,10 +125,17 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
+      // id of the entry
       Integer entryId = Integer.parseInt(data.getString("entryID"));
+      // question selected by user
       String question = data.getString("question");
-      String userNameOrUserID = data.getString("userID");
+      // username
+      String username = data.getString("userID");
+      // list of responses in the form of a JSON array
       JSONArray text = data.getJSONArray("text");
+      // either "saveQuestion" or "saveEntry"
+      // "saveQuestion" -> after the user clicks on a new question
+      // "saveEntry" -> after the user clicks on the save entry btn
       String state = data.getString("state");
 
       if (state.equals("saveQuestion")) {

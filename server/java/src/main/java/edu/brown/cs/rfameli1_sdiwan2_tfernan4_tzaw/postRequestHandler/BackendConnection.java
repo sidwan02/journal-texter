@@ -10,6 +10,7 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class BackendConnection {
     JournalTexterDB jtDB = new JournalTexterDB();
     Set<String> tags = jtDB.getAllTagsFromDB();
 
-    List<String> foundTags = new ArrayList<>();
+    Set<String> foundTags = new HashSet<>();
     for (Map.Entry<String, Integer> entry : sortedFrequencies) {
       if (tags.contains(entry.getKey())) {
         foundTags.add(entry.getKey());
