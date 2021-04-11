@@ -2,9 +2,7 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,13 +10,11 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeMap;
 
 /**
  * postRequestHandler class to manage all handlers to the stars page.
@@ -94,15 +90,6 @@ public class GUIHandler {
       You can get all the tags in the database using the jtDatabase getAllTagsFromDb method and
       find which ones apply using your vectorizor. Then you can find all questions that use those
       tags using findQuestionsFromTag (returns a List of Questions).
-       */
-      /*-------*/
-
-      /*-------*/
-      /*
-      When a user selects a question, that question should be added to the entry string. This would
-      essentially be updating the entry in the database, and would have similar functionality
-      to HandleSaveUserEntry. I can also easily create an appendToCurrentEntry method to add to
-      the entry. This would require the entry's id, the username, and the text to be appended.
        */
       /*-------*/
 
@@ -195,55 +182,69 @@ public class GUIHandler {
     }
   }
 
-  //public static class HandleCreateEntry implements Route {
-    // Request ==>
-    // Response ==> id of the entry that was created, store on the frontend and use it to request
-    // specific entries from the backend
-  //}
-
-  public static class HandleClickSaveButton implements Route {
-    private static final Gson GSON = new Gson();
-    // Saves the last response list, entry tags created here
-    /**
-     * Handles Axios requests from the javascript front-end and returns
-     * the appropriate JSON object to be used by the front-end.
-     *
-     * @param request - request object for Axios request
-     * @param response - response object for Axios request
-     * @return a JSON object representing information to be used by the front end
-     * @throws Exception if data cannot be accessed from given JSON object
-     */
+  public static class HandleCreateEntry implements Route {
+//     Request ==>
+//     Response ==> id of the entry that was created, store on the frontend and use it to request
+//     specific entries from the backend
     @Override
     public Object handle(Request request, Response response) throws Exception {
+      // If state requestQuestions Saves previous response list and new selected question, entry tags created here
+      // If state start just gives questions
 
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
-      Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
-      String text = data.getString("text");
-      // probably will not even need this, ideally from backend should be able to detect
-      // the most recently saved entry and get that from SQL using a query
-      WordCountVec vectorizor = new WordCountVec();
-      variables = vectorizor.parseToGui();
-      /*-------*/
-      /*
-      Currently there is only a method to create a new entry row in the entries table.
-      If we want to continually update a given entry, we would have to use its id to retrieve
-      the specific entry.
+      String state = data.getString("state");
 
-      One way we can do this is by having separate handlers/methods/etc. for starting an entry
-      and saving in an entry. For instance, on creation of an entry we would query the database
-      to find the new entry's id and pass that to the frontend. Then, whenever we save the entry,
-      we can pass the entry id as well so that Java knows which entry to update.
-
-      Alternatively, if we ensure that each entry has a unique date, we could
-      request and update a given entry that way.
-       */
-      /*-------*/
       return GSON.toJson(variables);
     }
+
   }
+//
+//  public static class HandleClickSaveButton implements Route {
+//    private static final Gson GSON = new Gson();
+//    // Saves the last response list, entry tags created here
+//    /**
+//     * Handles Axios requests from the javascript front-end and returns
+//     * the appropriate JSON object to be used by the front-end.
+//     *
+//     * @param request - request object for Axios request
+//     * @param response - response object for Axios request
+//     * @return a JSON object representing information to be used by the front end
+//     * @throws Exception if data cannot be accessed from given JSON object
+//     */
+//    @Override
+//    public Object handle(Request request, Response response) throws Exception {
+//
+//      JSONObject data = new JSONObject(request.body());
+//      Map<String, Object> variables;
+//
+//      Integer entryId = Integer.parseInt(data.getString("entryID"));
+//      String userNameOrUserID = data.getString("userID");
+//      String text = data.getString("text");
+//      // probably will not even need this, ideally from backend should be able to detect
+//      // the most recently saved entry and get that from SQL using a query
+//      WordCountVec vectorizor = new WordCountVec();
+//      variables = vectorizor.parseToGui();
+//      /*-------*/
+//      /*
+//      Currently there is only a method to create a new entry row in the entries table.
+//      If we want to continually update a given entry, we would have to use its id to retrieve
+//      the specific entry.
+//
+//      One way we can do this is by having separate handlers/methods/etc. for starting an entry
+//      and saving in an entry. For instance, on creation of an entry we would query the database
+//      to find the new entry's id and pass that to the frontend. Then, whenever we save the entry,
+//      we can pass the entry id as well so that Java knows which entry to update.
+//
+//      Alternatively, if we ensure that each entry has a unique date, we could
+//      request and update a given entry that way.
+//       */
+//      /*-------*/
+//      return GSON.toJson(variables);
+//    }
+//  }
 
   public static class HandleUserHistorySummary implements Route {
     private static final Gson GSON = new Gson();
@@ -263,12 +264,19 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
+      Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
+
       // probably will not even need this, ideally from backend should be able to detect
       // the most recently saved entry and get that from SQL using a query
 
-      WordCountVec vectorizor = new WordCountVec();
-      variables = vectorizor.parseToGui();
+
+      List<HashMap<String, Object>> entriesMaps
+        = BackendConnection.getEntriesSummaryFromUsername(userNameOrUserID);
+
+      variables = ImmutableMap.of(
+        "entries", entriesMaps);
+
       /*-------*/
       /*
       You can get all of the entries from a user using getUserEntriesByUsername in JournalTexterDB.
