@@ -2,6 +2,7 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.encryption.Encryptor;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -28,8 +29,10 @@ public class LoginHandler implements Route {
     boolean validUserNamePassword = username.equals("theo");
     String failedLoginMessage = "Unable to login";
 
+    String encodedToken = Encryptor.encodeMessage(username + password);
+
     if (validUserNamePassword) {
-      Map<String, Object> variables = ImmutableMap.of("token", username);
+      Map<String, Object> variables = ImmutableMap.of("token", encodedToken);
       return GSON.toJson(variables);
     } else {
       response.status(401);
