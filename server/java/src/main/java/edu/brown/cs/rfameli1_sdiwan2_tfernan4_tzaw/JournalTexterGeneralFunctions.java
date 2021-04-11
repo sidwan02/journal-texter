@@ -1,4 +1,5 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
-public class JournalTexterGeneralFunctions {
+public final class JournalTexterGeneralFunctions {
+  private JournalTexterGeneralFunctions() { }
 }

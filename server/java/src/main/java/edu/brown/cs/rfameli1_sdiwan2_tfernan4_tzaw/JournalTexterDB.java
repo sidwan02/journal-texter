@@ -9,13 +9,15 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetReader
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +25,25 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Handles all interactions with JournalTexter-related databases.
+ * Handles all interactions with JournalTexter-related databases. Implements the Singleton design
+ * pattern.
  */
 public class JournalTexterDB {
+  private static final JournalTexterDB INSTANCE = new JournalTexterDB();
   private Connection conn = null;
 
   /**
-   * Creates an instance of JournalTexterDB
+   * Creates an instance of JournalTexterDB.
    */
-  public JournalTexterDB() { }
+  private JournalTexterDB() { }
+
+  /**
+   * Retrieves the current instance of JournalTexterDB.
+   * @return
+   */
+  public static JournalTexterDB getInstance() {
+    return INSTANCE;
+  }
 
   /**
    * Sets the database connection to the specified connection.
@@ -161,15 +173,21 @@ public class JournalTexterDB {
     PreparedStatement ps = conn.prepareStatement("SELECT * FROM entries WHERE author=?");
     ps.setString(1, username);
     ResultSet rs = ps.executeQuery();
+    List<Entry<JournalText>> entries = new ArrayList<>();
     while (rs.next()) {
+      // May or may not need to use id / author in the future
       Integer id = rs.getInt(1);
       Date date = rs.getDate(2);
       String text = rs.getString(3);
       String author = rs.getString(4);
+      // Get date into the LocalDate format
+      LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())
+          .atZone(ZoneId.systemDefault())
+          .toLocalDate();
 
-      // TODO make this into Entrys
+      entries.add(new Entry<>(cleanedDate, text));
     }
-    return null;
+    return entries;
   }
 
   /**
@@ -189,7 +207,7 @@ public class JournalTexterDB {
     return allTags;
   }
 
-  public void addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
+  private void addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
     checkConnection();
     PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
         + "(date, entry_text, author) VALUES (?, ?, ?);");

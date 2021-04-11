@@ -9,9 +9,9 @@ public class JournalTexterREPL {
   private final REPL repl;
   private final JournalTexterDB jtDatabase;
 
-  public JournalTexterREPL(REPL repl) {
+  public JournalTexterREPL(REPL repl, JournalTexterDB jtDatabase) {
     this.repl = repl;
-    this.jtDatabase = new JournalTexterDB();
+    this.jtDatabase = jtDatabase;
   }
   public void registerCommands() {
     // Commands that take in jtDatabase are able to access/modify the database
