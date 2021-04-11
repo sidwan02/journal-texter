@@ -110,8 +110,8 @@ public final class Main {
     // get user input
     Spark.post("/handleUserResponse", new GUIHandler.HandleSaveResponses());
     Spark.post("/handleSaveUserEntry", new GUIHandler.HandleClickSaveButton());
-    Spark.post("/handleUserHistoryRequest", new GUIHandler.HandleUserHistoryRequest());
-    Spark.post("/handleUserHistorySummary", new GUIHandler.HandleUserHistorySummary());
+    Spark.post("/handleUserHistoryRequest", new GUIHandler.HandleRequestUserSpecificHistory());
+    Spark.post("/handleUserHistorySummary", new GUIHandler.HandleRequestUserHistorySummary());
     Spark.post("/handleSelectedQuestion", new GUIHandler.HandleSelectQuestion());
   }
 

@@ -2,6 +2,8 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import org.json.JSONArray;
@@ -197,9 +199,15 @@ public class GUIHandler {
       String userNameOrUserID = data.getString("userID");
       String state = data.getString("state");
 
+      JournalTexterDB jtDB = new JournalTexterDB();
+      jtDB.addUserEntry(date, text, userNameOrUserID);
+
+      variables = ImmutableMap.of(
+        "entryId",
+      );
+
       return GSON.toJson(variables);
     }
-
   }
 //
 //  public static class HandleClickSaveButton implements Route {
@@ -246,7 +254,7 @@ public class GUIHandler {
 //    }
 //  }
 
-  public static class HandleUserHistorySummary implements Route {
+  public static class HandleRequestUserHistorySummary implements Route {
     private static final Gson GSON = new Gson();
 
     /**
@@ -264,12 +272,7 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
-      Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
-
-      // probably will not even need this, ideally from backend should be able to detect
-      // the most recently saved entry and get that from SQL using a query
-
 
       List<HashMap<String, Object>> entriesMaps
         = BackendConnection.getEntriesSummaryFromUsername(userNameOrUserID);
@@ -292,7 +295,7 @@ public class GUIHandler {
     }
   }
 
-  public static class HandleUserHistoryRequest implements Route {
+  public static class HandleRequestUserSpecificHistory implements Route {
     private static final Gson GSON = new Gson();
 
     /**
@@ -309,14 +312,23 @@ public class GUIHandler {
 
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
+
       Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
-      String date = data.getString("date");
-      // probably will not even need this, ideally from backend should be able to detect
-      // the most recently saved entry and get that from SQL using a query
 
-      WordCountVec vectorizor = new WordCountVec();
-      variables = vectorizor.parseToGui();
+      JournalTexterDB jtDB = new JournalTexterDB();
+      Entry<JournalText> entry = jtDB.getEntryById(entryId);
+
+      for (JournalText thing : entry.getQuestionsAndResponses()) {
+        thing.stringRepresentation();
+      }
+
+      variables = ImmutableMap.of(
+        "questions", List<String>,
+        "responses", List<List<String>>,
+        "date", entry.getDate(),
+        "tags", entry.getTags(),
+        "sentiment", entry.getSentiment());
 
       /*-------*/
       /*

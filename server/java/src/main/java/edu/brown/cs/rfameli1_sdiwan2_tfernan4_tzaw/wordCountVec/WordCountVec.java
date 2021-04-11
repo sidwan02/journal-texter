@@ -126,25 +126,4 @@ public class WordCountVec {
     sortedEntries.addAll(map.entrySet());
     return sortedEntries;
   }
-
-//  public ImmutableMap<String, Object> parseToGuiForQuestion() {
-//    return ImmutableMap.of("questions", List<String>,
-//      "tags", List<String>,
-//      "sentiment", Double);
-//  }
-//
-//  public ImmutableMap<String, Object> parseToGuiForHistoryWhenClicked() {
-//    return ImmutableMap.of("questions", List<String>,
-//      "responses", List<List<String>>,
-//      "tags", List<String>,
-//      "sentiment", Double,
-//      "date", String);
-//
-//    public ImmutableMap<String, Object> parseToGuiForUserHistorySummary() {
-//      return ImmutableMap.of("date", List<String>,
-////        "entryName", List<String>,
-//        "tags", List<List<String>>,
-//        "sentiment", List<Double>,
-//        "uniqueEntryID", List<String>);
-//    }
 }
