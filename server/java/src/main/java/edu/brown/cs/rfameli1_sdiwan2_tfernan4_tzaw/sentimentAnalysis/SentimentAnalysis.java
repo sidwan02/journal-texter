@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 public class SentimentAnalysis {
   Process mProcess;
 
-  public String getStringOutput(String review) {
+  public double getSentimentFromText(String review) {
 //    try {
 //      // https://stackoverflow.com/questions/27267391/running-a-py-file-from-java
 //      String command = "python " + file;
@@ -55,6 +55,6 @@ public class SentimentAnalysis {
     } catch (IOException e) {
       System.out.println("Exception in reading output" + e.toString());
     }
-    return finalOutput.split(" ")[finalOutput.split(" ").length - 1];
+    return Double.parseDouble(finalOutput.split(" ")[finalOutput.split(" ").length - 1]);
   }
 }
