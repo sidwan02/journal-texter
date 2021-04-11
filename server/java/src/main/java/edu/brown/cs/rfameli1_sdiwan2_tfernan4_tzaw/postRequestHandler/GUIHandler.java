@@ -43,22 +43,26 @@ public class GUIHandler {
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
+      // If state requestQuestions Saves previous response list and new selected question, entry tags created here
+      // If state start just gives questions
 
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
+      Integer entryId = Integer.parseInt(data.getString("entryID"));
+      String question = data.getString("question");
       String userNameOrUserID = data.getString("userID");
       JSONArray text = data.getJSONArray("text");
-      String startState = data.getString("start"); // "true" -> on load / ""
+      String state = data.getString("start"); // "true" -> on load / ""
 
-      if (startState.equals("true")) {
+      if (state.equals("start")) {
         List<String> questions = getRandomlyGeneratedQuestions(5);
 
         variables = ImmutableMap.of(
           "questions", questions,
           "tags", new ArrayList<>(),
           "sentiment", -1);
-      } else {
+      } else if (state.equals("requestQuestion")) {
         List<String> responses = new ArrayList<>();
         if (text != null) {
           int len = text.length();
@@ -110,6 +114,8 @@ public class GUIHandler {
           "questions", questions,
           "tags", foundTags,
           "sentiment", sentiment);
+      } else if (state.equals("saveBtn")) {
+
       }
 
       /*-------*/
@@ -117,6 +123,15 @@ public class GUIHandler {
       You can get all the tags in the database using the jtDatabase getAllTagsFromDb method and
       find which ones apply using your vectorizor. Then you can find all questions that use those
       tags using findQuestionsFromTag (returns a List of Questions).
+       */
+      /*-------*/
+
+      /*-------*/
+      /*
+      When a user selects a question, that question should be added to the entry string. This would
+      essentially be updating the entry in the database, and would have similar functionality
+      to HandleSaveUserEntry. I can also easily create an appendToCurrentEntry method to add to
+      the entry. This would require the entry's id, the username, and the text to be appended.
        */
       /*-------*/
 
@@ -148,48 +163,40 @@ public class GUIHandler {
     }
   }
 
-  public static class HandleSelectQuestion implements Route {
-    private static final Gson GSON = new Gson();
-    // Saves previous response list and new selected question, entry tags created here
-    /**
-     * Handles Axios requests from the javascript front-end and returns
-     * the appropriate JSON object to be used by the front-end.
-     *
-     * @param request - request object for Axios request
-     * @param response - response object for Axios request
-     * @return a JSON object representing information to be used by the front end
-     * @throws Exception if data cannot be accessed from given JSON object
-     */
-    @Override
-    public Object handle(Request request, Response response) throws Exception {
-
-      JSONObject data = new JSONObject(request.body());
-      Map<String, Object> variables;
-
-      Integer entryId = Integer.parseInt(data.getString("entryID"));
-      String userNameOrUserID = data.getString("userID");
-      String question = data.getString("question");
-      // probably will not even need this, ideally from backend should be able to detect
-      // the most recently saved entry and get that from SQL using a query
-
-      /*-------*/
-      /*
-      When a user selects a question, that question should be added to the entry string. This would
-      essentially be updating the entry in the database, and would have similar functionality
-      to HandleSaveUserEntry. I can also easily create an appendToCurrentEntry method to add to
-      the entry. This would require the entry's id, the username, and the text to be appended.
-       */
-      /*-------*/
-      /*
-      Question Handler saves question and previous response
-       */
-
-      WordCountVec vectorizor = new WordCountVec();
-      variables = vectorizor.parseToGui();
-
-      return GSON.toJson(variables);
-    }
-  }
+//  public static class HandleSelectQuestion implements Route {
+//    private static final Gson GSON = new Gson();
+//    /**
+//     * Handles Axios requests from the javascript front-end and returns
+//     * the appropriate JSON object to be used by the front-end.
+//     *
+//     * @param request - request object for Axios request
+//     * @param response - response object for Axios request
+//     * @return a JSON object representing information to be used by the front end
+//     * @throws Exception if data cannot be accessed from given JSON object
+//     */
+//    @Override
+//    public Object handle(Request request, Response response) throws Exception {
+//
+//      JSONObject data = new JSONObject(request.body());
+//      Map<String, Object> variables;
+//
+//      Integer entryId = Integer.parseInt(data.getString("entryID"));
+//      String userNameOrUserID = data.getString("userID");
+//      String question = data.getString("question");
+//      // probably will not even need this, ideally from backend should be able to detect
+//      // the most recently saved entry and get that from SQL using a query
+//
+//
+//      /*
+//      Question Handler saves question and previous response
+//       */
+//
+//      WordCountVec vectorizor = new WordCountVec();
+//      variables = vectorizor.parseToGui();
+//
+//      return GSON.toJson(variables);
+//    }
+//  }
 
   //public static class HandleCreateEntry implements Route {
     // Request ==>
