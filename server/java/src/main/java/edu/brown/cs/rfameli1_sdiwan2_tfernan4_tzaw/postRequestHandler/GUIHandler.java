@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalTextType;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import org.json.JSONArray;
@@ -59,7 +61,13 @@ public class GUIHandler {
       String state = data.getString("start");
 
       if (state.equals("start")) {
-        List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(5);
+        List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(1);
+
+        List<JournalText> entryInfo = new ArrayList<>();
+        entryInfo.add(new Question(questions.get(0)));
+
+        JournalTexterDB jtDB = new JournalTexterDB();
+        jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
           "questions", questions,
@@ -91,6 +99,11 @@ public class GUIHandler {
           "questions", questions,
           "tags", foundTags,
           "sentiment", sentiment);
+      } else {
+        variables = ImmutableMap.of(
+          "questions", new ArrayList<>(),
+          "tags", new ArrayList<>(),
+          "sentiment", -1);
       }
 
       /*-------*/
@@ -171,9 +184,24 @@ public class GUIHandler {
 
         double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
+        List<JournalText> entryInfo = new ArrayList<>();
+        for (String res : responses) {
+          entryInfo.add(new edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response(res))
+        }
+
+        entryInfo.add(new Question(question));
+
+        JournalTexterDB jtDB = new JournalTexterDB();
+        jtDB.addToEntry(entryId, entryInfo);
+
         variables = ImmutableMap.of(
           "tags", foundTags,
           "sentiment", sentiment);
+      } else {
+        variables = ImmutableMap.of(
+          "questions", new ArrayList<>(),
+          "tags", new ArrayList<>(),
+          "sentiment", -1);
       }
 
       /*-------*/
@@ -214,10 +242,11 @@ public class GUIHandler {
       String state = data.getString("state");
 
       JournalTexterDB jtDB = new JournalTexterDB();
-      jtDB.addUserEntry(date, "", userNameOrUserID);
+
+      int entryId = jtDB.addUserEntry("", userNameOrUserID);
 
       variables = ImmutableMap.of(
-        "entryId",
+        "entryId", entryId
       );
 
       return GSON.toJson(variables);
@@ -333,8 +362,11 @@ public class GUIHandler {
       JournalTexterDB jtDB = new JournalTexterDB();
       Entry<JournalText> entry = jtDB.getEntryById(entryId);
 
-      for (JournalText thing : entry.getQuestionsAndResponses()) {
-        thing.stringRepresentation();
+      for (JournalText jt : entry.getQuestionsAndResponses()) {
+        if (jt.getType() == JournalTextType.RESPONSE) {
+        }
+        else {
+        }
       }
 
       variables = ImmutableMap.of(
