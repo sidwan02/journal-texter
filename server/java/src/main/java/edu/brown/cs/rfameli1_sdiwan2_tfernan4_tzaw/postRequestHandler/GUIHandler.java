@@ -362,16 +362,24 @@ public class GUIHandler {
       JournalTexterDB jtDB = new JournalTexterDB();
       Entry<JournalText> entry = jtDB.getEntryById(entryId);
 
+      List<String> questions = new ArrayList<>();
+      List<List<String>> accumulatedResponses = new ArrayList<>();
+      List<String> responsesForQuestion = new ArrayList<>();
+
       for (JournalText jt : entry.getQuestionsAndResponses()) {
-        if (jt.getType() == JournalTextType.RESPONSE) {
+        if (jt.getType() == JournalTextType.QUESTION) {
+          questions.add(jt.getText());
+          accumulatedResponses.add(responsesForQuestion);
+          responsesForQuestion = new ArrayList<>();
         }
         else {
+          responsesForQuestion.add(jt.getText());
         }
       }
 
       variables = ImmutableMap.of(
-        "questions", List<String>,
-        "responses", List<List<String>>,
+        "questions", questions,
+        "responses", accumulatedResponses,
         "date", entry.getDate(),
         "tags", entry.getTags(),
         "sentiment", entry.getSentiment());
