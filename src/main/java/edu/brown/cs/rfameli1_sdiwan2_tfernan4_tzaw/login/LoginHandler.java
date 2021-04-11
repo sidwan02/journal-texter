@@ -29,10 +29,8 @@ public class LoginHandler implements Route {
     boolean validUserNamePassword = username.equals("theo");
     String failedLoginMessage = "Unable to login";
 
-    String encodedToken = Encryptor.encodeMessage(username + password);
-
     if (validUserNamePassword) {
-      Map<String, Object> variables = ImmutableMap.of("token", encodedToken);
+      Map<String, Object> variables = ImmutableMap.of("token", username);
       return GSON.toJson(variables);
     } else {
       response.status(401);

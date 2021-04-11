@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyPairGenerator;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
