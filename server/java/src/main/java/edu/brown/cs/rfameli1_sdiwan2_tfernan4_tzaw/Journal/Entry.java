@@ -21,6 +21,7 @@ public class Entry<T extends JournalText> {
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
+  private final Integer sentiment = 0;
   private Set<String> tags = null;
 
   /**
@@ -30,7 +31,7 @@ public class Entry<T extends JournalText> {
    */
   public Entry(LocalDate date, String stringRepresentation) {
     // Responses will be represented as {response}
-    // Questions will be represented as {@response}
+    // Questions will be represented as {@question}
     this.date = date;
     Pattern regexParse = Pattern.compile("{([^{}]*)}");
     Matcher m = regexParse.matcher(stringRepresentation);
@@ -55,13 +56,13 @@ public class Entry<T extends JournalText> {
   public Entry(LocalDate date, List<T> questionsAndResponses) {
     this.date = date;
     this.questionsAndResponses = questionsAndResponses;
-    String stringRep = "";
+    StringBuilder stringRep = new StringBuilder();
     // Iterate through every question/response
     for (T questionOrResponse : questionsAndResponses) {
       // Concatenate the questionOrResponse's stringRepresentation
-      stringRep += questionOrResponse.stringRepresentation();
+      stringRep.append(questionOrResponse.stringRepresentation());
     }
-    this.stringRepresentation = stringRep;
+    this.stringRepresentation = stringRep.toString();
   }
 
   /**

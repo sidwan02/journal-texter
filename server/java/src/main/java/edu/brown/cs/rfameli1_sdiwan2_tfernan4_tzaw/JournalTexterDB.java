@@ -113,21 +113,41 @@ public class JournalTexterDB {
           ps.setString(1, question);
           ps.executeUpdate();
         }
+        // get the question's id
+        ps = conn.prepareStatement("SELECT id FROM questions WHERE text=?;");
+        rs = ps.executeQuery();
+        Integer questionId = rs.getInt(1);
+
         // Get the tags from the second column of the spreadsheet
         String[] tags = r.get(1).split(",");
         for (String tag : tags) {
-          // Check if the tag-question relation already exists in the table
-          ps = conn.prepareStatement("SELECT * FROM tags WHERE tag_text=? AND "
-              + "question_id=(SELECT id FROM questions WHERE question_text=?);");
+          // Check if the tag has been inserted in the tags table
+          ps = conn.prepareStatement("SELECT * FROM tags WHERE text=?;");
           ps.setString(1, tag);
-          ps.setString(2, question);
           rs = ps.executeQuery();
-          // insert tag if the tag-question relation does not already exist
+          // Insert the tag if it is not in the tag table
           if (!rs.next()) {
-            ps = conn.prepareStatement("INSERT INTO tags (tag_text, question_id) VALUES (?, "
-                + "(SELECT id FROM questions WHERE question_text=?));");
+            ps = conn.prepareStatement("INSERT INTO tags (text) VALUES (?);");
             ps.setString(1, tag);
-            ps.setString(2, question);
+            ps.executeUpdate();
+          }
+          // get the tag's id
+          ps = conn.prepareStatement("SELECT id FROM tags WHERE text=?;");
+          rs = ps.executeQuery();
+          Integer tagId = rs.getInt(1);
+
+          // Check if the tag-question relation already exists in the database
+          ps = conn.prepareStatement("SELECT * FROM tags_to_questions "
+              + "WHERE tag_id=? AND question_id=?");
+          ps.setInt(1, tagId);
+          ps.setInt(2, questionId);
+          rs = ps.executeQuery();
+
+          // insert tag-question relation if it does not exist already
+          if (!rs.next()) {
+            ps = conn.prepareStatement("INSERT INTO tags_to_questions VALUES (?, ?);");
+            ps.setInt(1, tagId);
+            ps.setInt(2, questionId);
             ps.executeUpdate();
           }
         }
@@ -150,8 +170,9 @@ public class JournalTexterDB {
     checkConnection();
     List<Question> questions = new ArrayList<>();
 
-    PreparedStatement ps = conn.prepareStatement("SELECT question_text FROM questions "
-        + "WHERE id=(SELECT question_id FROM tags WHERE tag_text=?)");
+    PreparedStatement ps = conn.prepareStatement("SELECT text FROM questions "
+        + "WHERE id=(SELECT question_id FROM tags_to_questions "
+        + "WHERE tag_id=(SELECT id FROM tags WHERE text=?))");
     ps.setString(1, tag);
     ResultSet questionsResults = ps.executeQuery();
     while (questionsResults.next()) {
@@ -210,7 +231,7 @@ public class JournalTexterDB {
    */
   public Set<String> getAllTagsFromDB() throws SQLException {
     checkConnection();
-    PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT tag_text FROM tags;");
+    PreparedStatement ps = conn.prepareStatement("SELECT text FROM tags;");
     ResultSet rs = ps.executeQuery();
     Set<String> allTags = new HashSet<>();
     while (rs.next()) {
