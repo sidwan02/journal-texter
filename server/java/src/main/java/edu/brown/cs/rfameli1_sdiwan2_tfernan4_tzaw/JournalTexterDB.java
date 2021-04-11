@@ -6,8 +6,11 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.HeaderException;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetData;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetReader;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.utils.DateConversion;
 
+import javax.security.auth.login.FailedLoginException;
 import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -20,15 +23,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * Handles all interactions with JournalTexter-related databases. Implements the Singleton design
  * pattern.
  */
-public class JournalTexterDB {
+public final class JournalTexterDB {
   private static final JournalTexterDB INSTANCE = new JournalTexterDB();
   private Connection conn = null;
 
@@ -39,7 +40,7 @@ public class JournalTexterDB {
 
   /**
    * Retrieves the current instance of JournalTexterDB.
-   * @return
+   * @return the current instance of JournalTexterDB
    */
   public static JournalTexterDB getInstance() {
     return INSTANCE;
@@ -205,15 +206,29 @@ public class JournalTexterDB {
       LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())
           .atZone(ZoneId.systemDefault())
           .toLocalDate();
-      entries.add(new Entry<>(cleanedDate, stringRepresentation));
+      entries.add(new Entry<>(id, cleanedDate, stringRepresentation));
     }
     return entries;
   }
 
-  public Entry<JournalText> getEntryById(Integer id) {
-    // TODO
-    return null;
+  /**
+   * Retrieves an entry from the database using its id.
+   * @param entryId the id of the entry
+   * @return an Entry object
+   * @throws SQLException if the database connection has not been established or if an error occurs
+   * with the
+   */
+  public Entry<JournalText> getEntryById(Integer entryId) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("SELECT * FROM entries WHERE id=?");
+    ps.setInt(1, entryId);
+    ResultSet rs = ps.executeQuery();
+    Integer id = rs.getInt(1);
+    LocalDate date = DateConversion.dateToLocalDate(rs.getDate(2));
+    String entryString = rs.getString(3);
+    return new Entry<>(id, date, entryString);
   }
+
 
   public void updateEntry(Integer entryId, String replacementText) {
     // TODO
@@ -221,6 +236,17 @@ public class JournalTexterDB {
 
   public void appendToEntry(Integer entryId, String formattedTextToAppend) {
     // TODO
+  }
+
+  /**
+   * Creates a row within the SQL table representing a new entry.
+   * @param username the author of the entry
+   * @param date the date the entry was created
+   * @param startText the initial text in the entry
+   * @return the id of the entry
+   */
+  public Integer createEntry(String username, LocalDate date, String startText) {
+    return 1;
   }
 
   /**
@@ -240,6 +266,7 @@ public class JournalTexterDB {
     return allTags;
   }
 
+
   private void addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
     checkConnection();
     PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
@@ -250,26 +277,67 @@ public class JournalTexterDB {
     ps.executeUpdate();
   }
 
-  public void registerUser(String username, String password) throws SQLException {
+  /**
+   * Checks if the input log in information correctly matches the database.
+   * @param username the input username
+   * @param inputPasswordBytes the input password as a byte array
+   * @return true if the login information was correct
+   * @throws SQLException if the database connection has not been set up or if a SQL-related error
+   * occurs
+   * @throws FailedLoginException if the login credentials do not match those stored in the database
+   */
+  public boolean authenticateUser(String username, byte[] inputPasswordBytes)
+      throws SQLException, FailedLoginException {
     checkConnection();
 
+    PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username=?;");
+    ps.setString(1, username);
+    ResultSet rs = ps.executeQuery();
+
+    if (!rs.next()) {
+      throw new FailedLoginException("No user found with username " + username);
+    }
+    Blob inputPasswordBlob = new javax.sql.rowset.serial.SerialBlob(inputPasswordBytes);
+    Blob registeredPasswordBlob = rs.getBlob(2);
+    if (!inputPasswordBlob.equals(registeredPasswordBlob)) {
+      throw new FailedLoginException("Incorrect password");
+    }
+    return true;
+  }
+
+  /**
+   * Registers a new user into the database.
+   * @param username the username to be registered
+   * @param passwordBytes a byte array representing the password of the user
+   * @throws SQLException if the database connection has not been established or if an error
+   * occurs inserting into the database
+   * @throws FailedLoginException if registering the user failed
+   */
+  public void registerUser(String username, byte[] passwordBytes)
+      throws SQLException, FailedLoginException {
+    checkConnection();
+    Blob passwordBlob = new javax.sql.rowset.serial.SerialBlob(passwordBytes);
+    // Check if the username has been registered already
     if (usernameIsRegistered(username)) {
-      throw new SQLException("Username" + username + "already registered");
+      throw new FailedLoginException("Username" + username + "already registered");
     }
     PreparedStatement ps = conn.prepareStatement("INSERT INTO users VALUES (?, ?);");
     ps.setString(1, username);
-    ps.setString(2, password);
+    ps.setBlob(2, passwordBlob);
     ps.executeUpdate();
   }
 
+  /**
+   * Checks if the given username is registered in the database already.
+   * @param username the username to check
+   * @return true if the username is registered, else false
+   * @throws SQLException if an error occurs with querying the SQL database
+   */
   public boolean usernameIsRegistered(String username) throws SQLException {
     checkConnection();
     PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username=?;");
     ps.setString(1, username);
     ResultSet rs = ps.executeQuery();
-    if (rs.next()) {
-      return true;
-    }
-    return false;
+    return rs.next();
   }
 }

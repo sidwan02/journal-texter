@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
  * @param <T> a class that implements the JournalText interface
  */
 public class Entry<T extends JournalText> {
+  private final Integer id;
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
@@ -29,9 +30,10 @@ public class Entry<T extends JournalText> {
    * @param date the date the entry was created
    * @param stringRepresentation a string representation representing the text of the entry
    */
-  public Entry(LocalDate date, String stringRepresentation) {
+  public Entry(Integer id, LocalDate date, String stringRepresentation) {
     // Responses will be represented as {response}
     // Questions will be represented as {@question}
+    this.id = id;
     this.date = date;
     Pattern regexParse = Pattern.compile("{([^{}]*)}");
     Matcher m = regexParse.matcher(stringRepresentation);
@@ -53,7 +55,8 @@ public class Entry<T extends JournalText> {
    * @param date the date the entry was created
    * @param questionsAndResponses a List of Questions and Responses
    */
-  public Entry(LocalDate date, List<T> questionsAndResponses) {
+  public Entry(Integer id, LocalDate date, List<T> questionsAndResponses) {
+    this.id = id;
     this.date = date;
     this.questionsAndResponses = questionsAndResponses;
     StringBuilder stringRep = new StringBuilder();
