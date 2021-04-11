@@ -3,6 +3,7 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.HeaderException;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetData;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetReader;
@@ -229,24 +230,52 @@ public final class JournalTexterDB {
     return new Entry<>(id, date, entryString);
   }
 
+  /**
+   * Creates a row within the entries table representing a new entry.
+   * @param date the date the entry was created
+   * @param entryText the formatted text to start the entry
+   * @param username the author of the entry
+   * @return the id of the created entry
+   * @throws SQLException if connection has not been established or if an error occurs interacting
+   * with the database
+   */
+  private Integer addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
+    checkConnection();
+    Date sqlDate = java.sql.Date.valueOf(date);
 
-  public void updateEntry(Integer entryId, String replacementText) {
-    // TODO
-  }
+    PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
+        + "(date, entry_text, author) VALUES (?, ?, ?);");
+    ps.setDate(1, sqlDate);
+    ps.setString(2, entryText);
+    ps.setString(3, username);
+    ps.executeUpdate();
 
-  public void appendToEntry(Integer entryId, String formattedTextToAppend) {
-    // TODO
+    // Retrieve the entry of the created id
+    ps = conn.prepareStatement("SELECT last_insert_rowid();");
+    ResultSet rs = ps.executeQuery();
+    return rs.getInt(1);
   }
 
   /**
-   * Creates a row within the SQL table representing a new entry.
-   * @param username the author of the entry
-   * @param date the date the entry was created
-   * @param startText the initial text in the entry
-   * @return the id of the entry
+   * Updates an entry by adding new Questions and Responses.
+   * @param entryId the id of the entry to update
+   * @param toAdd the Questions and Responses to add
+   * @throws SQLException if connection has not been established or if an error occurs interacting
+   * with the database
    */
-  public Integer createEntry(String username, LocalDate date, String startText) {
-    return 1;
+  public void addToEntry(Integer entryId, List<JournalText> toAdd) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
+    ps.setInt(1, entryId);
+    ResultSet rs = ps.executeQuery();
+    String entryText = rs.getString(1);
+    for (JournalText jt : toAdd) {
+      entryText += jt.stringRepresentation();
+    }
+    ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
+    ps.setString(1, entryText);
+    ps.setInt(2, entryId);
+    ps.executeUpdate();
   }
 
   /**
@@ -267,15 +296,6 @@ public final class JournalTexterDB {
   }
 
 
-  private void addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
-    checkConnection();
-    PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
-        + "(date, entry_text, author) VALUES (?, ?, ?);");
-    ps.setDate(1, java.sql.Date.valueOf(date));
-    ps.setString(2, entryText);
-    ps.setString(3, username);
-    ps.executeUpdate();
-  }
 
   /**
    * Checks if the input log in information correctly matches the database.
