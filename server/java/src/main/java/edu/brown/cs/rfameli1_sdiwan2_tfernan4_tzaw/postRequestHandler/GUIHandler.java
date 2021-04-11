@@ -57,9 +57,9 @@ public class GUIHandler {
     }
   }
 
-  public static class HandleSelectedQuestion implements Route {
+  public static class HandleSelectQuestion implements Route {
     private static final Gson GSON = new Gson();
-
+    // Saves previous response list and new selected question, entry tags created here
     /**
      * Handles Axios requests from the javascript front-end and returns
      * the appropriate JSON object to be used by the front-end.
@@ -75,6 +75,7 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
+      Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
       String question = data.getString("question");
       // probably will not even need this, ideally from backend should be able to detect
@@ -88,7 +89,9 @@ public class GUIHandler {
       the entry. This would require the entry's id, the username, and the text to be appended.
        */
       /*-------*/
-
+      /*
+      Question Handler saves question and previous response
+       */
 
       WordCountVec vectorizor = new WordCountVec();
       variables = vectorizor.parseToGui();
@@ -97,9 +100,15 @@ public class GUIHandler {
     }
   }
 
-  public static class HandleSaveUserEntry implements Route {
-    private static final Gson GSON = new Gson();
+  //public static class HandleCreateEntry implements Route {
+    // Request ==>
+    // Response ==> id of the entry that was created, store on the frontend and use it to request
+    // specific entries from the backend
+  //}
 
+  public static class HandleClickSaveButton implements Route {
+    private static final Gson GSON = new Gson();
+    // Saves the last response list, entry tags created here
     /**
      * Handles Axios requests from the javascript front-end and returns
      * the appropriate JSON object to be used by the front-end.
@@ -115,6 +124,7 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
+      Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
       String text = data.getString("text");
       // probably will not even need this, ideally from backend should be able to detect
@@ -196,7 +206,7 @@ public class GUIHandler {
 
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
-
+      Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
       String date = data.getString("date");
       // probably will not even need this, ideally from backend should be able to detect

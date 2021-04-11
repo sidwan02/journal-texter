@@ -178,16 +178,28 @@ public class JournalTexterDB {
       // May or may not need to use id / author in the future
       Integer id = rs.getInt(1);
       Date date = rs.getDate(2);
-      String text = rs.getString(3);
+      String stringRepresentation = rs.getString(3);
       String author = rs.getString(4);
       // Get date into the LocalDate format
       LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())
           .atZone(ZoneId.systemDefault())
           .toLocalDate();
-
-      entries.add(new Entry<>(cleanedDate, text));
+      entries.add(new Entry<>(cleanedDate, stringRepresentation));
     }
     return entries;
+  }
+
+  public Entry<JournalText> getEntryById(Integer id) {
+    // TODO
+    return null;
+  }
+
+  public void updateEntry(Integer entryId, String replacementText) {
+    // TODO
+  }
+
+  public void appendToEntry(Integer entryId, String formattedTextToAppend) {
+    // TODO
   }
 
   /**

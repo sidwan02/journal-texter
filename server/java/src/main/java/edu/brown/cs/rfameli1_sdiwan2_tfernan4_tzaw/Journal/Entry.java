@@ -21,7 +21,7 @@ public class Entry<T extends JournalText> {
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
-  private TreeMap<String, Integer> tags = null;
+  private Set<String> tags = null;
 
   /**
    * Constructs an entry using a string representation of the entry.
@@ -29,6 +29,8 @@ public class Entry<T extends JournalText> {
    * @param stringRepresentation a string representation representing the text of the entry
    */
   public Entry(LocalDate date, String stringRepresentation) {
+    // Responses will be represented as {response}
+    // Questions will be represented as {@response}
     this.date = date;
     Pattern regexParse = Pattern.compile("{([^{}]*)}");
     Matcher m = regexParse.matcher(stringRepresentation);
@@ -118,16 +120,15 @@ public class Entry<T extends JournalText> {
 
   /**
    * Gets the tags from jtDatabase based on the most common words found in all responses.
-   * @param jtDatabase the JournalTexterDB to base tags off of
    * @return a Map of tags and their frequencies in responses
    */
-  public Map<String, Integer> getTags(JournalTexterDB jtDatabase) throws SQLException {
-    Map<String, Integer> responseMostFrequentWords = getMostFrequentWords();
-    Set<String> allDatabaseTags = jtDatabase.getAllTagsFromDB();
-    // TODO
-    return null;
+  public Set<String> getTags() throws SQLException {
+    return this.tags; // <== instantiate this when retrieving from the database
   }
 
+  public Integer getSentiment() {
+    return this.sentiment;
+  }
 
   /**
    * Analysis will be done on a combination of all responses

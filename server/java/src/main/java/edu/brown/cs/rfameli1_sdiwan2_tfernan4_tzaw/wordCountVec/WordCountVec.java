@@ -92,11 +92,11 @@ public class WordCountVec {
 //      "sentiment", Double,
 //      "date", String);
 //
-//    public ImmutableMap<String, Object> parseToGuiForUserHistorySummary() {
-//      return ImmutableMap.of("date", List<String>,
+    public ImmutableMap<String, Object> parseToGuiForUserHistorySummary() {
+      return ImmutableMap.of("date", List<String>,
 //        "entryName", List<String>,
-//        "tags", List<List<String>>,
-//        "sentiment", List<Double>,
-//        "uniqueEntryID", List<String>);
-//    }
+        "tags", List<List<String>>,
+        "sentiment", List<Double>,
+        "uniqueEntryID", List<String>);
+    }
 }

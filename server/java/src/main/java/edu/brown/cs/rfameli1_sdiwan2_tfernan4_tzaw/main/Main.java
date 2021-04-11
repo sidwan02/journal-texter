@@ -9,8 +9,6 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.JournalTexterREPL
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.WordnikAPIHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -111,10 +109,10 @@ public final class Main {
 //    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
     // get user input
     Spark.post("/handleUserResponse", new GUIHandler.HandleRequestQuestion());
-    Spark.post("/handleSaveUserEntry", new GUIHandler.HandleSaveUserEntry());
+    Spark.post("/handleSaveUserEntry", new GUIHandler.HandleClickSaveButton());
     Spark.post("/handleUserHistoryRequest", new GUIHandler.HandleUserHistoryRequest());
     Spark.post("/handleUserHistorySummary", new GUIHandler.HandleUserHistorySummary());
-    Spark.post("/handleSelectedQuestion", new GUIHandler.HandleSelectedQuestion());
+    Spark.post("/handleSelectedQuestion", new GUIHandler.HandleSelectQuestion());
   }
 
   /**
