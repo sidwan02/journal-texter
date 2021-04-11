@@ -108,7 +108,7 @@ public final class Main {
     // Setup Spark Routes
 //    Spark.get("/stars", new StarsGuiHandler.FrontHandler(), freeMarker);
     // get user input
-    Spark.post("/handleUserResponse", new GUIHandler.HandleRequestQuestion());
+    Spark.post("/handleUserResponse", new GUIHandler.HandleSaveResponses());
     Spark.post("/handleSaveUserEntry", new GUIHandler.HandleClickSaveButton());
     Spark.post("/handleUserHistoryRequest", new GUIHandler.HandleUserHistoryRequest());
     Spark.post("/handleUserHistorySummary", new GUIHandler.HandleUserHistorySummary());

@@ -50,13 +50,12 @@ public class GUIHandler {
       Map<String, Object> variables;
 
       Integer entryId = Integer.parseInt(data.getString("entryID"));
-      String question = data.getString("question");
       String userNameOrUserID = data.getString("userID");
       JSONArray text = data.getJSONArray("text");
-      String state = data.getString("start"); // "true" -> on load / ""
+      String state = data.getString("start");
 
       if (state.equals("start")) {
-        List<String> questions = getRandomlyGeneratedQuestions(5);
+        List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(5);
 
         variables = ImmutableMap.of(
           "questions", questions,
@@ -71,51 +70,23 @@ public class GUIHandler {
           }
         }
 
-        WordCountVec vectorizor = new WordCountVec();
-
         String combinedResponses = String.join(" ", responses);
 
-        Map<String, Integer> frequencies
-          = vectorizor.getFrequenciesFromText(combinedResponses, 1);
+        Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
-        SortedSet<Map.Entry<String, Integer>> sortedFrequencies
-          = vectorizor.sortByValues(frequencies);
-
-        JournalTexterDB jtDB = new JournalTexterDB();
-        Set<String> tags = jtDB.getAllTagsFromDB();
-
-        List<String> foundTags = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : sortedFrequencies) {
-          if (tags.contains(entry.getKey())) {
-            foundTags.add(entry.getKey());
-          }
-        }
-
-        List<String> questions = new ArrayList<>();
-        for (String tag : foundTags) {
-          List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
-          for (Question q : questionsFromTag) {
-            questions.add(q.getText());
-            if (questions.size() >= 5) {
-              break;
-            }
-          }
-        }
+        List<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
 
         List<String> additionalQuestions
-          = getRandomlyGeneratedQuestions(5 - questions.size());
+          = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size());
 
         questions.addAll(additionalQuestions);
 
-        SentimentAnalysis senti = new SentimentAnalysis();
-        Double sentiment = senti.getSentimentFromText(combinedResponses);
+        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
         variables = ImmutableMap.of(
           "questions", questions,
           "tags", foundTags,
           "sentiment", sentiment);
-      } else if (state.equals("saveBtn")) {
-
       }
 
       /*-------*/
@@ -137,66 +108,92 @@ public class GUIHandler {
 
       return GSON.toJson(variables);
     }
-
-    public List<String> getRandomlyGeneratedQuestions(int n) {
-      JournalTexterDB jtDB = new JournalTexterDB();
-      Set<String> tags = jtDB.getAllTagsFromDB();
-
-      List<String> randomlyChosenTags = new ArrayList<>();
-      for (String tag : tags) {
-        randomlyChosenTags.add(tag);
-        if (randomlyChosenTags.size() == n) {
-          break;
-        }
-      }
-
-      List<String> questions = new ArrayList<>();
-      for (String tag : randomlyChosenTags) {
-        List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
-        for (Question q : questionsFromTag) {
-          questions.add(q.getText());
-          if (questions.size() >= 5) {
-            break;
-          }
-        }
-      }
-    }
   }
 
-//  public static class HandleSelectQuestion implements Route {
-//    private static final Gson GSON = new Gson();
-//    /**
-//     * Handles Axios requests from the javascript front-end and returns
-//     * the appropriate JSON object to be used by the front-end.
-//     *
-//     * @param request - request object for Axios request
-//     * @param response - response object for Axios request
-//     * @return a JSON object representing information to be used by the front end
-//     * @throws Exception if data cannot be accessed from given JSON object
-//     */
-//    @Override
-//    public Object handle(Request request, Response response) throws Exception {
-//
-//      JSONObject data = new JSONObject(request.body());
-//      Map<String, Object> variables;
-//
-//      Integer entryId = Integer.parseInt(data.getString("entryID"));
-//      String userNameOrUserID = data.getString("userID");
-//      String question = data.getString("question");
-//      // probably will not even need this, ideally from backend should be able to detect
-//      // the most recently saved entry and get that from SQL using a query
-//
-//
-//      /*
-//      Question Handler saves question and previous response
-//       */
-//
-//      WordCountVec vectorizor = new WordCountVec();
-//      variables = vectorizor.parseToGui();
-//
-//      return GSON.toJson(variables);
-//    }
-//  }
+  public static class HandleSaveUserInputs implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles Axios requests from the javascript front-end and returns
+     * the appropriate JSON object to be used by the front-end.
+     *
+     * @param request  - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+      // If state requestQuestions Saves previous response list and new selected question, entry tags created here
+      // If state start just gives questions
+
+      JSONObject data = new JSONObject(request.body());
+      Map<String, Object> variables;
+
+      Integer entryId = Integer.parseInt(data.getString("entryID"));
+      String question = data.getString("question");
+      String userNameOrUserID = data.getString("userID");
+      JSONArray text = data.getJSONArray("text");
+      String state = data.getString("state");
+
+      if (state.equals("saveQuestion")) {
+        List<String> responses = new ArrayList<>();
+        if (text != null) {
+          int len = text.length();
+          for (int i=0;i<len;i++){
+            responses.add(text.get(i).toString());
+          }
+        }
+
+        String combinedResponses = String.join(" ", responses);
+
+        Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
+
+        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+
+        variables = ImmutableMap.of(
+          "tags", foundTags,
+          "sentiment", sentiment);
+      } else if (state.equals("saveEntry")) {
+        List<String> responses = new ArrayList<>();
+        if (text != null) {
+          int len = text.length();
+          for (int i = 0; i < len; i++) {
+            responses.add(text.get(i).toString());
+          }
+        }
+
+        String combinedResponses = String.join(" ", responses);
+
+        Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
+
+        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+
+        variables = ImmutableMap.of(
+          "tags", foundTags,
+          "sentiment", sentiment);
+      }
+
+      /*-------*/
+      /*
+      You can get all the tags in the database using the jtDatabase getAllTagsFromDb method and
+      find which ones apply using your vectorizor. Then you can find all questions that use those
+      tags using findQuestionsFromTag (returns a List of Questions).
+       */
+      /*-------*/
+
+      /*-------*/
+      /*
+      When a user selects a question, that question should be added to the entry string. This would
+      essentially be updating the entry in the database, and would have similar functionality
+      to HandleSaveUserEntry. I can also easily create an appendToCurrentEntry method to add to
+      the entry. This would require the entry's id, the username, and the text to be appended.
+       */
+      /*-------*/
+
+      return GSON.toJson(variables);
+    }
+  }
 
   //public static class HandleCreateEntry implements Route {
     // Request ==>
