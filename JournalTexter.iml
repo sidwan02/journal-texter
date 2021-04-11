@@ -5,6 +5,11 @@
       <map />
     </option>
   </component>
+  <component name="FacetManager">
+    <facet type="Python" name="Python">
+      <configuration sdkName="Python 3.9" />
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -54,5 +59,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.5" level="project" />
+    <orderEntry type="library" name="Python 3.9 interpreter library" level="application" />
   </component>
 </module>

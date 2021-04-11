@@ -1,16 +1,3 @@
-from torch.utils.data import DataLoader, TensorDataset
-import en_core_web_sm
-import numpy as np
-import spacy
-import itertools
-import emoji
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-import string
-import re
-import os
-import torch
 from clean_review import clean_filter_lemma_mini
 import pandas as pd
 from collections import Counter
@@ -34,7 +21,6 @@ def get_review_sentiment_dict():
 
 def generate_vocabulary(review_to_sentiment_dict):
     all_words = []
-    # vocabulary = {}
     count = 0
     for review in review_to_sentiment_dict.keys():
         review = clean_filter_lemma_mini(review)

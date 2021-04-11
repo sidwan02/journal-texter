@@ -1,18 +1,4 @@
-from torch.utils.data import DataLoader, TensorDataset
-import en_core_web_sm
-import numpy as np
-import spacy
-import itertools
-import emoji
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-import string
-import re
-import os
 import torch
-from train import Train
-from clean_review import clean_filter_lemma_mini
 from data_processing import *
 from extract_data_IMDB import *
 from model import SentimentRNN
@@ -34,7 +20,6 @@ def predict_sentiment(review):
 
     is_cuda = torch.cuda.is_available()
 
-
     # If we have a GPU available, we'll set our device to GPU. We'll use this device variable later in our code.
     if is_cuda:
         device = torch.device("cuda")
@@ -45,11 +30,7 @@ def predict_sentiment(review):
 
     model.to(device)
 
-
     def predict_text(text):
-        # word_seq = np.array([vocab[preprocess_string(word)] for word in text.split()
-        #                      if preprocess_string(word) in vocab.keys()])
-
         rev = clean_filter_lemma_mini(text)
 
         _, _, review_to_sentiment_dict = get_review_sentiment_dict()
@@ -58,9 +39,8 @@ def predict_sentiment(review):
 
         word_seq = tokenize_sentence(rev, vocab)
 
-        reviews_tokenized = []
+        reviews_tokenized = [word_seq]
         # batch size of 1 doesn't work for some reason because of that squeeze error thingy remember [] vs [1]
-        reviews_tokenized.append(word_seq)
         # reviews_tokenized.append(word_seq)
 
         # word_seq = np.expand_dims(word_seq, axis=0)
@@ -74,11 +54,8 @@ def predict_sentiment(review):
         output, h = model(inputs, h)
         print(output)
 
-        return(output.item())
+        return output.item()
 
-
-    # pro = predict_text(
-    #     "horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible horrible ")
     pro = predict_text(review)
     status = "positive" if pro > 0.5 else "negative"
     print(f'Predicted sentiment is {status} with value {pro}')

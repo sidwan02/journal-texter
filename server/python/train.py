@@ -56,10 +56,6 @@ class Train(nn.Module):
 
         print(model)
 
-        # model = SentimentalLSTM(vocab_size=vocab_size).to(device)
-
-        # optimizer = optim.Adam(model.parameters(), lr=0.001)
-
         # loss and optimization functions
         lr = 0.001
 
@@ -70,9 +66,7 @@ class Train(nn.Module):
         # function to predict accuracy
 
         def acc(pred, label):
-            # print(pred)
             pred = torch.round(pred.squeeze())
-            # print(label)
             return torch.sum(pred == label.squeeze()).item()
 
         clip = 5
@@ -140,9 +134,6 @@ class Train(nn.Module):
             print(
                 f'train_accuracy : {epoch_train_acc*100} test_accuracy : {epoch_test_acc*100}')
             if epoch_val_loss <= valid_loss_min:
-                # torch.save(model.state_dict(), '../working/state_dict.pt')
-                # print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
-                #     valid_loss_min, epoch_val_loss))
                 print('Validation loss decreased ({:.6f} --> {:.6f}).'.format(
                     valid_loss_min, epoch_val_loss))
                 valid_loss_min = epoch_val_loss

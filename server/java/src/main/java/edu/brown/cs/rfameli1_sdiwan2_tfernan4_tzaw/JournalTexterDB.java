@@ -37,7 +37,7 @@ public final class JournalTexterDB {
   /**
    * Creates an instance of JournalTexterDB.
    */
-  private JournalTexterDB() { }
+  public JournalTexterDB() { }
 
   /**
    * Retrieves the current instance of JournalTexterDB.
