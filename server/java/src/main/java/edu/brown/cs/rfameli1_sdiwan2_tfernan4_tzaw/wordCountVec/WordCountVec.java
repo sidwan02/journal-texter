@@ -10,9 +10,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class WordCountVec {
   public String cleanText(String text) {
@@ -110,8 +114,17 @@ public class WordCountVec {
     return getFrequenciesFromSplitText(splitText, nDiff);
   }
 
-  public ImmutableMap<String, Object> parseToGui() {
-    return ImmutableMap.of();
+  // https://stackoverflow.com/questions/2864840/treemap-sort-by-value
+  public <K,V extends Comparable<? super V>>
+  SortedSet<Map.Entry<K,V>> sortByValues(Map<K,V> map) {
+    SortedSet<Map.Entry<K,V>> sortedEntries = new TreeSet<>(
+      (e1, e2) -> {
+        int res = e1.getValue().compareTo(e2.getValue());
+        return res != 0 ? res : 1;
+      }
+    );
+    sortedEntries.addAll(map.entrySet());
+    return sortedEntries;
   }
 
 //  public ImmutableMap<String, Object> parseToGuiForQuestion() {
@@ -127,11 +140,11 @@ public class WordCountVec {
 //      "sentiment", Double,
 //      "date", String);
 //
-    public ImmutableMap<String, Object> parseToGuiForUserHistorySummary() {
-      return ImmutableMap.of("date", List<String>,
-//        "entryName", List<String>,
-        "tags", List<List<String>>,
-        "sentiment", List<Double>,
-        "uniqueEntryID", List<String>);
-    }
+//    public ImmutableMap<String, Object> parseToGuiForUserHistorySummary() {
+//      return ImmutableMap.of("date", List<String>,
+////        "entryName", List<String>,
+//        "tags", List<List<String>>,
+//        "sentiment", List<Double>,
+//        "uniqueEntryID", List<String>);
+//    }
 }

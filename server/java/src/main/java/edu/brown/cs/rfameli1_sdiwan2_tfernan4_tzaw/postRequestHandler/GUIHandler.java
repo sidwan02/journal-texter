@@ -1,14 +1,21 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
 import com.google.gson.Gson;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
 
 /**
  * postRequestHandler class to manage all handlers to the stars page.
@@ -38,12 +45,52 @@ public class GUIHandler {
       Map<String, Object> variables;
 
       String userNameOrUserID = data.getString("userID");
-      String text = data.getString("text");
+      JSONArray text = data.getJSONArray("text");
       String startState = data.getString("start"); // "true" -> on load / ""
-      // probably will not even need this, ideally from backend should be able to detect
-      // the most recently saved entry and get that from SQL using a query
-      WordCountVec vectorizor = new WordCountVec();
-      variables = vectorizor.parseToGui();
+
+      if (startState.equals("true")) {
+
+      } else {
+        List<String> responses = new ArrayList<>();
+        if (text != null) {
+          int len = text.length();
+          for (int i=0;i<len;i++){
+            responses.add(text.get(i).toString());
+          }
+        }
+
+        WordCountVec vectorizor = new WordCountVec();
+        Map<String, Integer> frequencies
+          = vectorizor.getFrequenciesFromText(String.join(" ", responses), 1);
+
+        SortedSet<Map.Entry<String, Integer>> sortedFrequencies
+          = vectorizor.sortByValues(frequencies);
+
+        JournalTexterDB jtDB = new JournalTexterDB();
+        Set<String> tags = jtDB.getAllTagsFromDB();
+
+        List<String> foundTags = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : sortedFrequencies) {
+          if (tags.contains(entry.getKey())) {
+            foundTags.add(entry.getKey());
+          }
+        }
+
+        List<String> questions = new ArrayList<>();
+        for (String tag : tags) {
+          List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
+          for (Question q : questionsFromTag) {
+            questions.add(q.getText());
+          }
+          if (questions.size() >= 5) {
+            break;
+          }
+        }
+
+        if (questions.size() < 5) {
+          
+        }
+      }
 
       /*-------*/
       /*
