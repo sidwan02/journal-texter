@@ -7,6 +7,7 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ public class BackendConnection {
   public BackendConnection() {
   }
 
-  public static List<String> getRandomlyGeneratedQuestions(int n) {
+  public static List<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
     JournalTexterDB jtDB = new JournalTexterDB();
     Set<String> tags = jtDB.getAllTagsFromDB();
 
@@ -44,7 +45,7 @@ public class BackendConnection {
     return questions;
   }
 
-  public static Set<String> getTagsFromResponses(String combinedResponses) {
+  public static Set<String> getTagsFromResponses(String combinedResponses) throws SQLException {
     WordCountVec vectorizor = new WordCountVec();
 
     Map<String, Integer> frequencies
@@ -66,7 +67,7 @@ public class BackendConnection {
     return foundTags;
   }
 
-  public static List<String> getQuestionsFromTags(Set<String> foundTags) {
+  public static List<String> getQuestionsFromTags(Set<String> foundTags) throws SQLException {
     List<String> questions = new ArrayList<>();
 
     JournalTexterDB jtDB = new JournalTexterDB();
@@ -91,7 +92,7 @@ public class BackendConnection {
     return sentiment;
   }
 
-  public static List<HashMap<String, Object>> getEntriesSummaryFromUsername(String username) {
+  public static List<HashMap<String, Object>> getEntriesSummaryFromUsername(String username) throws SQLException {
     JournalTexterDB jtDB = new JournalTexterDB();
     List<Entry<JournalText>> entries = jtDB.getUserEntriesByUsername(username);
 

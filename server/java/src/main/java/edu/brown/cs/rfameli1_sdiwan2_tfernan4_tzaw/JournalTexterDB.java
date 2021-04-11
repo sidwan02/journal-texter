@@ -219,7 +219,7 @@ public class JournalTexterDB {
     return allTags;
   }
 
-  private void addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
+  public void addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
     checkConnection();
     PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
         + "(date, entry_text, author) VALUES (?, ?, ?);");

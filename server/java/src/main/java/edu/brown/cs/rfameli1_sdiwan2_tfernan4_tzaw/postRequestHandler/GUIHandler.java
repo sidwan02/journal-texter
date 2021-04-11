@@ -185,6 +185,7 @@ public class GUIHandler {
   }
 
   public static class HandleCreateEntry implements Route {
+    private static final Gson GSON = new Gson();
 //     Request ==>
 //     Response ==> id of the entry that was created, store on the frontend and use it to request
 //     specific entries from the backend
@@ -200,7 +201,7 @@ public class GUIHandler {
       String state = data.getString("state");
 
       JournalTexterDB jtDB = new JournalTexterDB();
-      jtDB.addUserEntry(date, text, userNameOrUserID);
+      jtDB.addUserEntry(date, "", userNameOrUserID);
 
       variables = ImmutableMap.of(
         "entryId",
