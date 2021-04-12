@@ -20,6 +20,10 @@ function JournallerPage() {
 
     const history = useHistory();
 
+    // TODO: Replace for final build
+    const user = "placeholder";
+    //const user = JSON.parse(localStorage.getItem('token'))['token'];
+
     function handleClick() {
         history.push('/');
     }
@@ -60,8 +64,8 @@ function JournallerPage() {
     const requestQuestions = () => {
         if (currentResponse.length !== 0) {
             const toSend = {
-                entryId: 1, //TODO: Replace this with actual entryId
-                userId: "placeholder", //TODO: Replace this with actual username
+                entryID: 1, //TODO: Replace this with actual entryID
+                userID: user, //TODO: Replace this with actual username
                 text: currentResponse,
                 state: "requestQuestion"
             }
@@ -99,9 +103,9 @@ function JournallerPage() {
         if (selectedQuestion !== "") {
 
             const toSend = {
-                entryId: 1, // TODO: Replace with actual entryId,
+                entryID: 1, // TODO: Replace with actual entryID,
                 question: selectedQuestion,
-                userID: "username", // TODO: Replace with actual userID
+                userID: user,
                 text: [],
                 state: "saveQuestion"
             }
@@ -152,8 +156,8 @@ function JournallerPage() {
 
         // TODO: Replace what's below this line with Axios post request stuff
         const toSend = {
-            entryId: 1, //TODO: Replace this with actual entryId
-            userId: "username", //TODO: Replace this with actual username
+            entryID: 1, //TODO: Replace this with actual entryId
+            userID: user,
             text: [],
             state: "start"
         }
@@ -196,9 +200,9 @@ function JournallerPage() {
      */
     const saveEntry = () => {
         const toSend = {
-            entryId: 1, // TODO: Replace with actual entryId,
+            entryID: 1, // TODO: Replace with actual entryId,
             question: "",
-            userID: "username", // TODO: Replace with actual userID
+            userID: user,
             text: currentResponse,
             state: "saveEntry"
         }
@@ -245,6 +249,11 @@ function JournallerPage() {
         padding: 10,
     }
 
+    const paddingStyle = {
+        margin: 'auto',
+        width: 400,
+    }
+
     return (
         <div>
             <nav className="dashboard-nav">
@@ -263,24 +272,36 @@ function JournallerPage() {
                                       type="text"/>
             <br/>
             <br/>
+            <div id="toggleButtons" style={paddingStyle}>
             <ToggleButtonGroup value={selectedQuestion} orientation="vertical"
                                exclusive onChange={handleQuestions}>
-                <ToggleButton value={question1}>
-                    {question1}
-                </ToggleButton>
-                <ToggleButton value={question2}>
-                    {question2}
-                </ToggleButton>
-                <ToggleButton value={question3}>
+                {question1 !== "" &&
+                    <ToggleButton value={question1}>
+                        {question1}
+                    </ToggleButton>
+                }
+                {question2 !== "" &&
+                    <ToggleButton value={question2}>
+                        {question2}
+                    </ToggleButton>
+                }
+                {question3 !== "" &&
+                    <ToggleButton value={question3}>
                     {question3}
-                </ToggleButton>
-                <ToggleButton value={question4}>
-                    {question4}
-                </ToggleButton>
-                <ToggleButton value={question5}>
-                    {question5}
-                </ToggleButton>
+                    </ToggleButton>
+                }
+                {question4 !== "" &&
+                    <ToggleButton value={question4}>
+                        {question4}
+                    </ToggleButton>
+                }
+                {question5 !== "" &&
+                    <ToggleButton value={question5}>
+                        {question5}
+                    </ToggleButton>
+                }
             </ToggleButtonGroup>
+            </div>
 
             <div style={{width: 1000, padding: 10, margin: 'auto',}}>
             <AwesomeButton id="saveButton" type="secondary" onPress={saveEntry}
