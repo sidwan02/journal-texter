@@ -23,7 +23,6 @@ import java.util.Set;
 
 /**
  * postRequestHandler class to manage all handlers to the stars page.
- *
  */
 public class GUIHandler {
 
@@ -37,7 +36,7 @@ public class GUIHandler {
      * Handles Axios requests from the javascript front-end and returns
      * the appropriate JSON object to be used by the front-end.
      *
-     * @param request - request object for Axios request
+     * @param request  - request object for Axios request
      * @param response - response object for Axios request
      * @return a JSON object representing information to be used by the front end
      * @throws Exception if data cannot be accessed from given JSON object
@@ -71,14 +70,14 @@ public class GUIHandler {
         jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
-          "questions", questions,
-          "tags", new ArrayList<>(),
-          "sentiment", -1);
+            "questions", questions,
+            "tags", new ArrayList<>(),
+            "sentiment", -1);
       } else if (state.equals("requestQuestion")) {
         List<String> responses = new ArrayList<>();
         if (text != null) {
           int len = text.length();
-          for (int i=0;i<len;i++){
+          for (int i = 0; i < len; i++) {
             responses.add(text.get(i).toString());
           }
         }
@@ -90,21 +89,21 @@ public class GUIHandler {
         List<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
 
         List<String> additionalQuestions
-          = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size());
+            = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size());
 
         questions.addAll(additionalQuestions);
 
         double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
         variables = ImmutableMap.of(
-          "questions", questions,
-          "tags", foundTags,
-          "sentiment", sentiment);
+            "questions", questions,
+            "tags", foundTags,
+            "sentiment", sentiment);
       } else {
         variables = ImmutableMap.of(
-          "questions", new ArrayList<>(),
-          "tags", new ArrayList<>(),
-          "sentiment", -1);
+            "questions", new ArrayList<>(),
+            "tags", new ArrayList<>(),
+            "sentiment", -1);
       }
 
       /*-------*/
@@ -156,7 +155,7 @@ public class GUIHandler {
         List<String> responses = new ArrayList<>();
         if (text != null) {
           int len = text.length();
-          for (int i=0;i<len;i++){
+          for (int i = 0; i < len; i++) {
             responses.add(text.get(i).toString());
           }
         }
@@ -168,8 +167,8 @@ public class GUIHandler {
         double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
         variables = ImmutableMap.of(
-          "tags", foundTags,
-          "sentiment", sentiment);
+            "tags", foundTags,
+            "sentiment", sentiment);
       } else if (state.equals("saveEntry")) {
         List<String> responses = new ArrayList<>();
         if (text != null) {
@@ -196,13 +195,13 @@ public class GUIHandler {
         jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
-          "tags", foundTags,
-          "sentiment", sentiment);
+            "tags", foundTags,
+            "sentiment", sentiment);
       } else {
         variables = ImmutableMap.of(
-          "questions", new ArrayList<>(),
-          "tags", new ArrayList<>(),
-          "sentiment", -1);
+            "questions", new ArrayList<>(),
+            "tags", new ArrayList<>(),
+            "sentiment", -1);
       }
 
       /*-------*/
@@ -228,7 +227,8 @@ public class GUIHandler {
 
   public static class HandleCreateEntry implements Route {
     private static final Gson GSON = new Gson();
-//     Request ==>
+
+    //     Request ==>
 //     Response ==> id of the entry that was created, store on the frontend and use it to request
 //     specific entries from the backend
     @Override
@@ -243,11 +243,10 @@ public class GUIHandler {
       String state = data.getString("state");
 
       JournalTexterDB jtDB = new JournalTexterDB();
-      // TODO fix
       int entryId = jtDB.addUserEntry(LocalDate.now(), "", userNameOrUserID);
 
       variables = ImmutableMap.of(
-        "entryId", entryId
+          "entryId", entryId
       );
 
       return GSON.toJson(variables);
@@ -305,7 +304,7 @@ public class GUIHandler {
      * Handles Axios requests from the javascript front-end and returns
      * the appropriate JSON object to be used by the front-end.
      *
-     * @param request - request object for Axios request
+     * @param request  - request object for Axios request
      * @param response - response object for Axios request
      * @return a JSON object representing information to be used by the front end
      * @throws Exception if data cannot be accessed from given JSON object
@@ -319,10 +318,10 @@ public class GUIHandler {
       String userNameOrUserID = data.getString("userID");
 
       List<HashMap<String, Object>> entriesMaps
-        = BackendConnection.getEntriesSummaryFromUsername(userNameOrUserID);
+          = BackendConnection.getEntriesSummaryFromUsername(userNameOrUserID);
 
       variables = ImmutableMap.of(
-        "entries", entriesMaps);
+          "entries", entriesMaps);
 
       /*-------*/
       /*
@@ -346,7 +345,7 @@ public class GUIHandler {
      * Handles Axios requests from the javascript front-end and returns
      * the appropriate JSON object to be used by the front-end.
      *
-     * @param request - request object for Axios request
+     * @param request  - request object for Axios request
      * @param response - response object for Axios request
      * @return a JSON object representing information to be used by the front end
      * @throws Exception if data cannot be accessed from given JSON object
@@ -372,18 +371,17 @@ public class GUIHandler {
           questions.add(jt.getText());
           accumulatedResponses.add(responsesForQuestion);
           responsesForQuestion = new ArrayList<>();
-        }
-        else {
+        } else {
           responsesForQuestion.add(jt.getText());
         }
       }
 
       variables = ImmutableMap.of(
-        "questions", questions,
-        "responses", accumulatedResponses,
-        "date", entry.getDate(),
-        "tags", entry.getTags(),
-        "sentiment", entry.getSentiment());
+          "questions", questions,
+          "responses", accumulatedResponses,
+          "date", entry.getDate(),
+          "tags", entry.getTags(),
+          "sentiment", entry.getSentiment());
 
       /*-------*/
       /*
