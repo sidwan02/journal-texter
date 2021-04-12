@@ -14,6 +14,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -186,7 +187,7 @@ public class GUIHandler {
 
         List<JournalText> entryInfo = new ArrayList<>();
         for (String res : responses) {
-          entryInfo.add(new edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response(res))
+          entryInfo.add(new edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response(res));
         }
 
         entryInfo.add(new Question(question));
@@ -242,8 +243,8 @@ public class GUIHandler {
       String state = data.getString("state");
 
       JournalTexterDB jtDB = new JournalTexterDB();
-
-      int entryId = jtDB.addUserEntry("", userNameOrUserID);
+      // TODO fix
+      int entryId = jtDB.addUserEntry(LocalDate.now(), "", userNameOrUserID);
 
       variables = ImmutableMap.of(
         "entryId", entryId

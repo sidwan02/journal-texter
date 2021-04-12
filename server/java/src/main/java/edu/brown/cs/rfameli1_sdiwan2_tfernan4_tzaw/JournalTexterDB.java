@@ -105,18 +105,19 @@ public final class JournalTexterDB {
       for (List<String> r : rows) {
         // Check if the question already exists in the table
         String question = r.get(0);
-        ps = conn.prepareStatement("SELECT * FROM questions WHERE question_text=?;");
+        ps = conn.prepareStatement("SELECT * FROM questions WHERE text=?;");
         ps.setString(1, question);
         rs = ps.executeQuery();
         boolean questionAlreadyInTable = rs.next();
         // insert question if its not already in the table
         if (!questionAlreadyInTable) {
-          ps = conn.prepareStatement("INSERT INTO questions (question_text) VALUES (?);");
+          ps = conn.prepareStatement("INSERT INTO questions (text) VALUES (?);");
           ps.setString(1, question);
           ps.executeUpdate();
         }
         // get the question's id
         ps = conn.prepareStatement("SELECT id FROM questions WHERE text=?;");
+        ps.setString(1, question);
         rs = ps.executeQuery();
         Integer questionId = rs.getInt(1);
 
@@ -135,6 +136,7 @@ public final class JournalTexterDB {
           }
           // get the tag's id
           ps = conn.prepareStatement("SELECT id FROM tags WHERE text=?;");
+          ps.setString(1, tag);
           rs = ps.executeQuery();
           Integer tagId = rs.getInt(1);
 
@@ -156,7 +158,8 @@ public final class JournalTexterDB {
       }
       return true;
     } catch (HeaderException | IOException | SQLException e) {
-      System.out.println(e.getMessage());
+      System.out.println("ERROR: " + e.getMessage());
+      e.printStackTrace();
       return false;
     }
   }
@@ -239,7 +242,7 @@ public final class JournalTexterDB {
    * @throws SQLException if connection has not been established or if an error occurs interacting
    * with the database
    */
-  private Integer addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
+  public Integer addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
     checkConnection();
     Date sqlDate = java.sql.Date.valueOf(date);
 

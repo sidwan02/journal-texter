@@ -9,3 +9,5 @@ config.properties
 /server/model/
 .db
 .sqlite3
+.csv
+.db-journal
