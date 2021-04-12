@@ -59,9 +59,9 @@ export default function Dashboard() {
     return (
         <div className="dashboard">
             <nav>
-                <div>
+                {/*<div>*/}
                     <h1 id="logo" onClick={handleReturnToHome}>JournalTexter</h1>
-                </div>
+                {/*</div>*/}
                 <div id="signout" onClick={handleSignOut}>
                     Sign Out
                 </div>

@@ -12,10 +12,10 @@
     padding: 0;
     border: 2px solid var(--blue-900);
     color: var(--blue-100);
-    border-radius: 10%;
+    border-radius: 2rem;
     max-width: 500px;
     text-align: center;
-    background-color: var(--blue-900);
+    background-color: var(--blue-400);
 }
 
 .title {
@@ -23,15 +23,20 @@
     margin: 1rem auto 2.5rem auto;
 }
 
-.link {
-    text-decoration: none;
-    /*color: var(--blue-900);*/
-    color: var(--blue-100);
-    transition: color ease 250ms;
+.home-link {
+    transition: color, -webkit-text-stroke ease 1000ms;
 }
 
-.link:hover {
-    color: var(--blue-400);
+.home-link:hover {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--blue-900);
+}
+
+.link {
+    text-decoration: none;
+    color: var(--blue-900);
+
+    font-family: 'Montserrat', sans-serif;
 }
 
 .login-form {
@@ -40,41 +45,42 @@
 }
 
 .text-box {
-    margin:0.9rem;
+    margin: 0.9rem;
 }
 
-.text-box input {
+input {
     width: 100%;
     height: 1.75rem;
-    border-radius: .5rem;
+    border-radius: 0.75rem;
+    text-indent: 0.4rem;
     border: var(--blue-400) 2px solid;
     font-size: 1.5rem;
     background-color: var(--blue-200);
 }
 
-.text-box input:focus {
-    background-color: #c9e6ff;
-    border: var(--blue-400) 2px solid;
+input:focus {
+    background-color: var(--blue-300);
 }
 
-button {
+.submit {
     font-size: 1.3rem;
     padding: 0.15rem;
     width: 50%;
     margin: 0 auto 1.5rem auto;
     background-color: var(--blue-200);
-    border-radius: 10%;
-    border: var(--blue-400) 3px solid;
-    transition: color, background-color 125ms ease;
+    border-radius: 1rem;
+    border: var(--blue-900) 2px solid;
+    transition: background-color, width 125ms ease;
 }
 
-button:hover {
-    background-color: var(--blue-400);
-    color: var(--blue-900);
+.submit:hover {
+    background-color: var(--blue-300);
+    width: 60%;
 }
 
 .error-text {
-    color: #fa1b32;
+    /*color: #fa1b32;*/
+    color: #ff0515;
     margin: .9rem;
     font-size: .875rem;
 }
@@ -87,4 +93,8 @@ button:hover {
 
 .sign-up-link {
     width: 4rem;
+}
+
+.sign-up-link:hover {
+    text-decoration: underline;
 }

@@ -66,7 +66,7 @@ export default function SignUpPage({setToken}) {
                     <LoginTextBox text="Password" change={setPassword} type="password"/>
                     <LoginTextBox text="Confirm Password" change={setConfirmPassword} type="password"/>
                     <p className="error-text">{error}</p>
-                    <button type="submit" onClick={handleSubmit}>Submit</button>
+                    <button className="submit" type="submit" onClick={handleSubmit}>Submit</button>
                 </div>
             </div>
         </div>

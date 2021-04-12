@@ -19,13 +19,14 @@ html, body, #root, #root>div {
 
 .App {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 :root {
-  --blue-100: #f0f8ff;
-  --blue-200: #dcefff;
-  --blue-300: #c9e6ff;
-  --blue-400: #b5ddff;
-  --blue-900: #00172c;
+  --blue-100: #ffffff;
+  --blue-200: #f0f8ff;
+  --blue-300: #d7ecff;
+  --blue-400: #bde0ff;
+  --blue-600: #a4d4ff;
+  --blue-900: #000205;
 }

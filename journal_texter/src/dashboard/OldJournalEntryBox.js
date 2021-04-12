@@ -6,7 +6,7 @@ function OldJournalEntryBox(props) {
     const history = useHistory();
 
     function handleClick() {
-        history.push('/journaller');
+        history.push('/journalentry');
     }
 
     return (

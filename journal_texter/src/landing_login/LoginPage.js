@@ -60,7 +60,7 @@ export default function LoginPage({setToken}) {
                     <LoginTextBox text="Username" change={setUserName} type="text"/>
                     <LoginTextBox text="Password" change={setPassword} type="password"/>
                     <p className="error-text">{error}</p>
-                    <button type="submit" onClick={handleSubmit}>Submit</button>
+                    <button className="submit" type="submit" onClick={handleSubmit}>Submit</button>
                 </div>
                 <div className="sign-up">
                     <Link className="sign-up-link link" to="/signup">Sign Up!</Link>
