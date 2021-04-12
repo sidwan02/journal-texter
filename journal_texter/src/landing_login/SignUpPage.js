@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import LoginTextBox from "./LoginTextBox";
 import '../css/LoginPage.css';
 
@@ -56,16 +56,19 @@ export default function SignUpPage({setToken}) {
     }
 
     return (
-        <div className="loginBox">
-            <h1>JournalTexter</h1>
-            <LoginTextBox text="Username" change={setUserName} type="text"/>
-            <LoginTextBox text="Password" change={setPassword} type="password"/>
-            <LoginTextBox text="Confirm Password" change={setConfirmPassword} type="password"/>
-            <p>{ error }</p>
-            <p>
-                <button onClick={handleSubmit}>Submit</button>
-            </p>
-
+        <div className="container">
+            <div className="login-box">
+                <div className="title">
+                    <Link className="home-link link" to="/">JournalTexter</Link>
+                </div>
+                <div className="login-form">
+                    <LoginTextBox text="Username" change={setUserName} type="text"/>
+                    <LoginTextBox text="Password" change={setPassword} type="password"/>
+                    <LoginTextBox text="Confirm Password" change={setConfirmPassword} type="password"/>
+                    <p className="error-text">{error}</p>
+                    <button type="submit" onClick={handleSubmit}>Submit</button>
+                </div>
+            </div>
         </div>
     )
 }

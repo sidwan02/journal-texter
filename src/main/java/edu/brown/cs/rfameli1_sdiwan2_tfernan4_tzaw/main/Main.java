@@ -4,35 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyPairGenerator;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-
-import com.google.gson.Gson;
-import com.google.common.collect.ImmutableMap;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.encryption.Encryptor;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.DashboardHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.LoginHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.SignUpHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.json.JSONObject;
 import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import freemarker.template.Configuration;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
 
 /**
  * The Main class of our project. This is where execution begins.
@@ -40,7 +23,6 @@ import javax.crypto.spec.SecretKeySpec;
 public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
-//  private static final Gson GSON = new Gson();
 
   /**
    * The initial method called when execution begins.

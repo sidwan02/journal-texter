@@ -51,17 +51,21 @@ export default function LoginPage({setToken}) {
     }
 
     return (
-        <div className="loginBox">
-            <h1>JournalTexter</h1>
-            <LoginTextBox text="Username" change={setUserName} type="text"/>
-            <LoginTextBox text="Password" change={setPassword} type="password"/>
-            <p>{ error }</p>
-            <p>
-                <button onClick={handleSubmit}>Submit</button>
-            </p>
-            <p>
-                <Link to="/signup">Sign Up!</Link>
-            </p>
+        <div className="container">
+            <div className="login-box">
+                <div className="title">
+                    <Link className="home-link link" to="/">JournalTexter</Link>
+                </div>
+                <div className="login-form">
+                    <LoginTextBox text="Username" change={setUserName} type="text"/>
+                    <LoginTextBox text="Password" change={setPassword} type="password"/>
+                    <p className="error-text">{error}</p>
+                    <button type="submit" onClick={handleSubmit}>Submit</button>
+                </div>
+                <div className="sign-up">
+                    <Link className="sign-up-link link" to="/signup">Sign Up!</Link>
+                </div>
+            </div>
         </div>
     )
 }

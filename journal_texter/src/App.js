@@ -1,5 +1,5 @@
-import './css/App.css';
-import React from "react";
+import "./index.css";
+import React, {Component} from "react";
 import {
     BrowserRouter as Router,
     Route,
@@ -22,50 +22,62 @@ function App() {
 
     if (!token) {
         return (
-        <div className="App">
-            <Router>
-                <Switch>
-                    <Route exact path="/" component={LandingPage}/>
-                    <Route exact path="/login">
-                        <LoginPage setToken={setToken}/>
-                    </Route>
-                    <Route exact path="/signup">
-                        <SignUpPage setToken={setToken}/>
-                    </Route>
-                    <Route exact path="/dashboard" component={LoginPage}/>
+            <div className="App">
+                <Router>
+                    <Switch>
+                        <Route exact path="/" component={LandingPage}/>
+                        <Route exact path="/login">
+                            <LoginPage setToken={setToken}/>
+                        </Route>
+                        <Route exact path="/signup">
+                            <SignUpPage setToken={setToken}/>
+                        </Route>
+                        <Route exact path="/dashboard" component={LoginPage}/>
 
-                    {/*TODO eventually move journaller and journalentry so you have to login*/}
-                    <Route exact path="/journaller" component={JournallerPage}/>
-                    <Route exact path="/journalentry" component={OldJournalEntry}/>
+                        {/*TODO eventually move journaller and journalentry so you have to login*/}
+                        <Route exact path="/journaller" component={JournallerPage}/>
+                        <Route exact path="/journalentry" component={OldJournalEntry}/>
 
-                    <Route exact path="/404" component={NotFoundPage}/>
-                    <Redirect to="/404"/>
-                </Switch>
-            </Router>
-        </div>
-            );
+                        <Route exact path="/404" component={NotFoundPage}/>
+                        <Redirect to="/404"/>
+                    </Switch>
+                </Router>
+            </div>
+        );
+    } else {
+        return (
+            <div className="App">
+                <Router>
+                    {/*All our Routes goes here!*/}
+                    <Switch>
+                        <Route exact path="/" component={Dashboard}/>
+                        <Route exact path="/login">
+                            <Redirect to="/"/>
+                        </Route>
+                        <Route exact path="/signup">
+                            <Redirect to="/"/>
+                        </Route>
+                        {/*<Route exact path="/dashboard" component={Dashboard}/>*/}
+                        <Route exact path="/journaller" component={JournallerPage}/>
+                        <Route exact path="/journalentry" component={OldJournalEntry}/>
+                        <Route exact path="/404" component={NotFoundPage}/>
+                        {/*This next line lets us default to the 404 page otherwise*/}
+                        <Redirect to="/404"/>
+                    </Switch>
+                </Router>
+            </div>
+        );
     }
-
     return (
-        <div className="App">
-            <Router>
-                {/*All our Routes goes here!*/}
-                <Switch>
-                    <Route exact path="/" component={Dashboard}/>
-                    <Route exact path="/login">
-                        <Redirect to="/"/>
-                    </Route>
-                    <Route exact path="/signup">
-                        <Redirect to="/"/>
-                    </Route>
-                    {/*<Route exact path="/dashboard" component={Dashboard}/>*/}
-                    <Route exact path="/journaller" component={JournallerPage}/>
-                    <Route exact path="/journalentry" component={OldJournalEntry}/>
-                    <Route exact path="/404" component={NotFoundPage}/>
-                    {/*This next line lets us default to the 404 page otherwise*/}
-                    <Redirect to="/404"/>
-                </Switch>
-            </Router>
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "blue"
+            }}
+        >
+            <button onClick={() => alert("hello")}>alert hello</button>
         </div>
     );
 }

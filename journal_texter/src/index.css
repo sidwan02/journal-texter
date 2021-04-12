@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html, body, #root, #root>div {
+  height: 100%;
+  margin: 0;
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+}
+
+:root {
+  --blue-100: #f0f8ff;
+  --blue-200: #dcefff;
+  --blue-300: #c9e6ff;
+  --blue-400: #b5ddff;
+  --blue-900: #00172c;
+}

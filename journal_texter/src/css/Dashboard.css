@@ -1,5 +1,11 @@
+.dashboard {
+    background-color: var(--blue-100);
+    color: var(--blue-900);
+    height: 100%;
+}
+
 .dashboardElement {
-    border: medium solid black;
+    border: medium solid var(--blue-900);
     width: 230px;
     height: 300px;
     margin: 0 0 30px 30px;
@@ -8,6 +14,16 @@
     flex-flow: column;
     justify-content: center;
     align-items: center;
+
+    text-align: center;
+
+    border-radius: 5%;
+    transition: background-color 125ms ease;
+    background-color: var(--blue-300);
+}
+
+.dashboardElement:hover {
+    background-color: var(--blue-400);
 }
 
 nav {
@@ -15,7 +31,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     height: 20%;
-    /*border-bottom: medium dotted black;*/
+    max-height: 8rem;
 }
 
 #logo {
@@ -29,7 +45,16 @@ nav {
 #signout {
     margin-right: 4%;
     padding: 10px 10px;
-    border: medium solid black;
+    border: medium solid var(--blue-900);
+    border-radius: 15%;
+    transition: background-color 125ms ease;
+    color: var(--blue-900);
+    background-color: var(--blue-400);
+}
+
+#signout:hover {
+    background-color: #3fa6ff;
+    color: var(--blue-900);
 }
 
 .entries {
@@ -39,8 +64,9 @@ nav {
 }
 
 #newEntry {
-    border: medium dashed black;
+    border: medium dashed var(--blue-900);
     font-size: 40px;
+
 }
 
 .newEntryTitle {

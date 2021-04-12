@@ -1,8 +1,8 @@
 function LoginTextBox(props) {
     return (
-        <p>
+        <div className="text-box">
             <input type={props.type} placeholder={props.text} onChange={event => props.change(event.target.value)} />
-        </p>
+        </div>
     );
 }
 
