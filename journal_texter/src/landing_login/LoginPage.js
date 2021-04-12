@@ -38,10 +38,14 @@ export default function LoginPage({setToken}) {
     }
 
     const handleSubmit = async e => {
-        const token = await loginUser();
+        if (username !== "") {
+            const token = await loginUser();
 
-        if (token !== null) {
-            assignToken(token);
+            if (token !== null) {
+                assignToken(token);
+            }
+        } else {
+            setError("Please enter username and password");
         }
     }
 

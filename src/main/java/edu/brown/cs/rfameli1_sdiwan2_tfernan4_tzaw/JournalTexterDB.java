@@ -309,7 +309,7 @@ public final class JournalTexterDB {
    * occurs
    * @throws FailedLoginException if the login credentials do not match those stored in the database
    */
-  public boolean authenticateUser(String username, byte[] inputPasswordBytes)
+  public void authenticateUser(String username, byte[] inputPasswordBytes)
       throws SQLException, FailedLoginException {
     checkConnection();
 
@@ -320,12 +320,10 @@ public final class JournalTexterDB {
     if (!rs.next()) {
       throw new FailedLoginException("No user found with username " + username);
     }
-    Blob inputPasswordBlob = new javax.sql.rowset.serial.SerialBlob(inputPasswordBytes);
-    Blob registeredPasswordBlob = rs.getBlob(2);
-    if (!inputPasswordBlob.equals(registeredPasswordBlob)) {
+    byte[] registeredPasswordBytes = rs.getBytes(2);
+    if (!Arrays.equals(inputPasswordBytes, registeredPasswordBytes)) {
       throw new FailedLoginException("Incorrect password");
     }
-    return true;
   }
 
   /**
@@ -339,14 +337,13 @@ public final class JournalTexterDB {
   public void registerUser(String username, byte[] passwordBytes)
       throws SQLException, FailedLoginException {
     checkConnection();
-    Blob passwordBlob = new javax.sql.rowset.serial.SerialBlob(passwordBytes);
     // Check if the username has been registered already
     if (usernameIsRegistered(username)) {
-      throw new FailedLoginException("Username" + username + "already registered");
+      throw new FailedLoginException("Username " + username + " already registered");
     }
     PreparedStatement ps = conn.prepareStatement("INSERT INTO users VALUES (?, ?);");
     ps.setString(1, username);
-    ps.setBlob(2, passwordBlob);
+    ps.setBytes(2, passwordBytes);
     ps.executeUpdate();
   }
 

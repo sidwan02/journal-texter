@@ -63,8 +63,8 @@ public final class Main {
 //    SentimentAnalysis pyt = new SentimentAnalysis();
 //    System.out.println("oh yeah wooo: " + cool);
 
-    SendEmail.Send();
-//    new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
+//    SendEmail.Send();
+    new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
   }
 
   private static FreeMarkerEngine createEngine() {

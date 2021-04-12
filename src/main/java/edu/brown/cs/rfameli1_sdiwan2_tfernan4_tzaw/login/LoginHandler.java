@@ -2,11 +2,14 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.encryption.Encryptor;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.security.auth.login.FailedLoginException;
 import java.util.Map;
 
 /**
@@ -23,17 +26,21 @@ public class LoginHandler implements Route {
     String username = data.getString("username");
     String password = data.getString("password");
 
-    //TODO connect username and password to database
+    byte[] encryptedPassword = Encryptor.encryptMessage(password);
+    JournalTexterDB database = JournalTexterDB.getInstance();
 
-    boolean validUserNamePassword = username.equals("theo");
-    String failedLoginMessage = "Unable to login";
+    try {
+      database.authenticateUser(username, encryptedPassword);
 
-    if (validUserNamePassword) {
       Map<String, Object> variables = ImmutableMap.of("token", username);
       return GSON.toJson(variables);
-    } else {
+    } catch (FailedLoginException flEx) {
       response.status(401);
-      return failedLoginMessage;
+      return flEx.getMessage();
+    } catch (Exception e) {
+      e.printStackTrace();
+      response.status(500);
+      return e.getMessage();
     }
   }
 }

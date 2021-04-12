@@ -39,14 +39,16 @@ export default function SignUpPage({setToken}) {
     }
 
     const handleSubmit = async e => {
-        if (password === confirmPassword) {
+        if (password !== confirmPassword) {
+            setError("Passwords do not match");
+        } else if (username === "") {
+            setError("Username cannot be blank.");
+        } else {
             const token = await signUpUser();
 
             if (token !== null) {
                 assignToken(token);
             }
-        } else {
-            setError("Passwords do not match");
         }
     }
 
