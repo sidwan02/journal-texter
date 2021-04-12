@@ -51,6 +51,7 @@ public class GUIHandler {
 
       // id of the entry
       Integer entryId = Integer.parseInt(data.getString("entryID"));
+
       // username
       String username = data.getString("userID");
       // list of responses in the from of a JSON array
@@ -58,7 +59,7 @@ public class GUIHandler {
       // either "start" or "requestQuestion"
       // "start" -> when loading the first question of an entry
       // "requestQuestion" -> when loading a question based on user responses to a previous question
-      String state = data.getString("start");
+      String state = data.getString("state");
 
       if (state.equals("start")) {
         List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(1);
@@ -93,7 +94,9 @@ public class GUIHandler {
 
         questions.addAll(additionalQuestions);
 
-        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+        // TODO: Deal with sentiment
+        double sentiment = -1.0;
+        //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
         variables = ImmutableMap.of(
             "questions", questions,

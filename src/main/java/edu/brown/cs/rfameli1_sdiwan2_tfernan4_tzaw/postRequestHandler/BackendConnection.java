@@ -17,11 +17,15 @@ import java.util.Set;
 import java.util.SortedSet;
 
 public class BackendConnection {
+
+  private final JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
   public BackendConnection() {
   }
 
   public static List<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
-    JournalTexterDB jtDB = new JournalTexterDB();
+    //JournalTexterDB jtDB = new JournalTexterDB();
+    JournalTexterDB jtDB = JournalTexterDB.getInstance();
     Set<String> tags = jtDB.getAllTagsFromDB();
 
     List<String> randomlyChosenTags = new ArrayList<>();
@@ -55,8 +59,14 @@ public class BackendConnection {
     SortedSet<Map.Entry<String, Integer>> sortedFrequencies
       = vectorizor.sortByValues(frequencies);
 
-    JournalTexterDB jtDB = new JournalTexterDB();
-    Set<String> tags = jtDB.getAllTagsFromDB();
+    //JournalTexterDB jtDB = new JournalTexterDB();
+    JournalTexterDB jtDB = JournalTexterDB.getInstance();
+    Set<String> tags = new HashSet<>();
+    try {
+      tags = jtDB.getAllTagsFromDB();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
 
     Set<String> foundTags = new HashSet<>();
     for (Map.Entry<String, Integer> entry : sortedFrequencies) {
@@ -71,7 +81,8 @@ public class BackendConnection {
   public static List<String> getQuestionsFromTags(Set<String> foundTags) throws SQLException {
     List<String> questions = new ArrayList<>();
 
-    JournalTexterDB jtDB = new JournalTexterDB();
+    //JournalTexterDB jtDB = new JournalTexterDB();
+    JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
     for (String tag : foundTags) {
       List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
@@ -94,7 +105,9 @@ public class BackendConnection {
   }
 
   public static List<HashMap<String, Object>> getEntriesSummaryFromUsername(String username) throws SQLException {
-    JournalTexterDB jtDB = new JournalTexterDB();
+    //JournalTexterDB jtDB = new JournalTexterDB();
+    JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
     List<Entry<JournalText>> entries = jtDB.getUserEntriesByUsername(username);
 
     List<HashMap<String, Object>> entriesMaps = new ArrayList<>();

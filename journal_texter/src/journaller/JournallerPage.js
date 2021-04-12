@@ -21,8 +21,8 @@ function JournallerPage() {
     const history = useHistory();
 
     // TODO: Replace for final build
-    const user = "placeholder";
-    //const user = JSON.parse(localStorage.getItem('token'))['token'];
+    //const user = "placeholder";
+    const user = JSON.parse(localStorage.getItem('token'))['token'];
 
     function handleClick() {
         history.push('/');
@@ -87,9 +87,16 @@ function JournallerPage() {
                 toSend,
                 config
             ).then(response => {
-
-            })
-
+                console.log(response.data)
+                let questionsList = response.data["questions"]
+                console.log(questionsList)
+                setQuestion1(questionsList[0])
+                setQuestion2(questionsList[1])
+                setQuestion3(questionsList[2])
+                setQuestion4(questionsList[3])
+                setQuestion5(questionsList[4])
+                }
+            )
             setCurrentResponse([]);
         }
     }
