@@ -7,6 +7,10 @@ import java.io.StringWriter;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.DashboardHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.LoginHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.SignUpHandler;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL.JournalTexterREPL;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -51,7 +55,14 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
-    // THIS IS WERE WE WERE CALLING THE REPL AND STUFF
+//    WordnikAPIHandler hoho = new WordnikAPIHandler();
+//    hoho.getSynonyms("earth");
+//
+//    SentimentAnalysis pyt = new SentimentAnalysis();
+//    System.out.println("oh yeah wooo: " + cool);
+
+
+    new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
   }
 
   private static FreeMarkerEngine createEngine() {
@@ -60,8 +71,7 @@ public final class Main {
     try {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
-      System.out.printf("ERROR: Unable use %s for template loading.%n",
-          templates);
+      System.out.printf("ERROR: Unable use %s for template loading.%n", templates);
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
@@ -91,9 +101,15 @@ public final class Main {
 
     FreeMarkerEngine freeMarker = createEngine();
 
+    // Setup Spark Routes
     Spark.post("/login", new LoginHandler());
     Spark.post("/dashboard", new DashboardHandler());
     Spark.post("/signup", new SignUpHandler());
+    Spark.post("/handleRequestQuestion", new GUIHandler.HandleRequestQuestion());
+    Spark.post("/handleSaveUserInputs", new GUIHandler.HandleSaveUserInputs());
+    Spark.post("/handleCreateEntry", new GUIHandler.HandleCreateEntry());
+    Spark.post("/handleUserHistorySummary", new GUIHandler.HandleRequestUserHistorySummary());
+    Spark.post("/handleUserHistoryRequest", new GUIHandler.HandleRequestUserSpecificHistory());
   }
 
   /**
