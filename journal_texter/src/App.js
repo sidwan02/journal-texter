@@ -4,7 +4,7 @@ import {
     BrowserRouter as Router,
     Route,
     Switch,
-    Redirect
+    Redirect, useHistory
 } from "react-router-dom";
 
 //Pages

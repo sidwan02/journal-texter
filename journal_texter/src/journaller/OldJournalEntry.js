@@ -9,7 +9,12 @@ function OldJournalEntry() {
     }
 
     function handleSignOut() {
-        history.push("/login");
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
+
+        history.push('/login');
+
+        window.location.reload(false);
     }
 
     const historyStyle = {
@@ -23,10 +28,8 @@ function OldJournalEntry() {
 
     return (
         <div>
-            <nav>
-                <div>
-                    <h1 id="logo" onClick={handleClick}>JournalTexter</h1>
-                </div>
+            <nav className="dashboard-nav">
+                <h1 id="logo" onClick={handleClick}>JournalTexter</h1>
                 <div id="signout" onClick={handleSignOut}>
                     Sign Out
                 </div>
