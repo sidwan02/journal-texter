@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.email.SendEmail;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.DashboardHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.LoginHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.SignUpHandler;
@@ -61,8 +63,8 @@ public final class Main {
 //    SentimentAnalysis pyt = new SentimentAnalysis();
 //    System.out.println("oh yeah wooo: " + cool);
 
-
-    new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
+    SendEmail.Send();
+//    new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
   }
 
   private static FreeMarkerEngine createEngine() {
