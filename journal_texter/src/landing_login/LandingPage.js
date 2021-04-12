@@ -6,7 +6,7 @@ function LandingPage() {
     return (
         <div className="landing-page">
             <div className="header">
-                <h1>Journal Texter</h1>
+                <h1 className="website-title">Journal Texter</h1>
                 <h3>Journaling made easy!</h3>
             </div>
             <div className="body">

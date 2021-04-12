@@ -58,17 +58,15 @@ export default function Dashboard() {
 
     return (
         <div className="dashboard">
-            <nav>
-                {/*<div>*/}
-                    <h1 id="logo" onClick={handleReturnToHome}>JournalTexter</h1>
-                {/*</div>*/}
+            <nav className="dashboard-nav">
+                <h1 id="logo" onClick={handleReturnToHome}>JournalTexter</h1>
                 <div id="signout" onClick={handleSignOut}>
                     Sign Out
                 </div>
             </nav>
             <div className="entries">
                 <NewJournalBox title="Create New Entry" link="journaller"/>
-                { pastEntries }
+                {pastEntries}
             </div>
         </div>
     );
