@@ -35,16 +35,17 @@ public class SentimentAnalysis {
     // https://www.edureka.co/community/358/how-to-execute-a-python-file-with-few-arguments-in-java
     Process process;
     try {
-      process = Runtime.getRuntime().exec(new String[]{
-        "python.exe",
-        "server/python/script_python.py",
-        review});
+      process = Runtime.getRuntime().exec(new String[] {
+          "python.exe",
+          "server/python/script_python.py",
+          review});
       mProcess = process;
     } catch (Exception e) {
       System.out.println("Exception Raised" + e.toString());
     }
     InputStream stdout = mProcess.getInputStream();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(stdout, StandardCharsets.UTF_8));
+    BufferedReader reader =
+        new BufferedReader(new InputStreamReader(stdout, StandardCharsets.UTF_8));
     String line;
     String finalOutput = null;
     try {
