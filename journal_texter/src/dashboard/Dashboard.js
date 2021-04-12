@@ -13,6 +13,8 @@ export default function Dashboard() {
     async function getUserJournals() {
         const toSend = JSON.parse(localStorage.getItem('token'));
 
+        console.log(toSend);
+
         let config = {
             headers: {
                 "Content-Type": "application/json",
@@ -21,7 +23,7 @@ export default function Dashboard() {
         }
 
         axios.post(
-            "http://localhost:4567/dashboard",
+            "http://localhost:4567/handleUserHistorySummary",
             toSend,
             config
         )

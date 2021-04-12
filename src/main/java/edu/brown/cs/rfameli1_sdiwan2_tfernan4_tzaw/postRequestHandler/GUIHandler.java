@@ -318,7 +318,7 @@ public class GUIHandler {
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
-      String userNameOrUserID = data.getString("userID");
+      String userNameOrUserID = data.getString("token");
 
       List<HashMap<String, Object>> entriesMaps
           = BackendConnection.getEntriesSummaryFromUsername(userNameOrUserID);
