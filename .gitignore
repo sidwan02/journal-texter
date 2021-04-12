@@ -7,7 +7,7 @@ config.properties
 /data/stanfordSentimentTreebank/
 /data/IMDB DS
 /server/model/
-.db
-.sqlite3
-.csv
-.db-journal
+*.db
+*.sqlite3
+*.csv
+*.db-journal
