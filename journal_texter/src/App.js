@@ -1,10 +1,10 @@
 import "./index.css";
-import React, {Component} from "react";
+import React from "react";
 import {
     BrowserRouter as Router,
     Route,
     Switch,
-    Redirect, useHistory
+    Redirect,
 } from "react-router-dom";
 
 //Pages
@@ -34,9 +34,12 @@ function App() {
                         </Route>
                         <Route exact path="/dashboard" component={LoginPage}/>
 
-                        {/*TODO eventually move journaller and journalentry so you have to login*/}
-                        <Route exact path="/journaller" component={JournallerPage}/>
-                        <Route exact path="/journalentry" component={OldJournalEntry}/>
+                        <Route exact path="/journaller">
+                            <Redirect to="/login"/>
+                        </Route>
+                        <Route exact path="/journalentry">
+                            <Redirect to="/login"/>
+                        </Route>
 
                         <Route exact path="/404" component={NotFoundPage}/>
                         <Redirect to="/404"/>
@@ -68,18 +71,6 @@ function App() {
             </div>
         );
     }
-    return (
-        <div
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "blue"
-            }}
-        >
-            <button onClick={() => alert("hello")}>alert hello</button>
-        </div>
-    );
 }
 
 export default App;

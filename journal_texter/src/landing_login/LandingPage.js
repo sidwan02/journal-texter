@@ -35,7 +35,7 @@ function LandingPage() {
                 </div>
                 <div id="circle"/>
                 <div className="links">
-                    <Link className="link-class" to="/journaller">Start Today</Link>
+                    <Link className="link-class" to="/signup">Start Today</Link>
                 </div>
             </div>
         </div>

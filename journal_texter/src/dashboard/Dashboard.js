@@ -24,6 +24,7 @@ export default function Dashboard() {
 
         axios.post(
             "http://localhost:4567/handleUserHistorySummary",
+            // "http://localhost:4567/dashboard",
             toSend,
             config
         )
