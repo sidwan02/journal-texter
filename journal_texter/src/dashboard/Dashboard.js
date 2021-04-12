@@ -1,11 +1,47 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../css/Dashboard.css'
-import { useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import OldJournalEntryBox from "./OldJournalEntryBox";
 import NewJournalBox from "./NewJournalBox";
+import axios from "axios";
 
 export default function Dashboard() {
     const history = useHistory();
+    let entries = [];
+    const [pastEntries, setPastEntries] = useState([]);
+
+    async function getUserJournals() {
+        const toSend = JSON.parse(localStorage.getItem('token'));
+
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+
+        axios.post(
+            "http://localhost:4567/dashboard",
+            toSend,
+            config
+        )
+            .then(response => {
+                entries = response.data["entries"];
+
+                console.log(entries);
+                setPastEntries(entries.map(entry =>
+                    <OldJournalEntryBox date={entry}/>
+                ));
+            })
+            .catch(error => {
+                console.log(error.response);
+                return null;
+            });
+    }
+
+    useEffect(() => {
+        getUserJournals().then(() => undefined);
+    }, [])
 
     function handleReturnToHome() {
         history.push('/');
@@ -32,11 +68,7 @@ export default function Dashboard() {
             </nav>
             <div className="entries">
                 <NewJournalBox title="Create New Entry" link="journaller"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
-                <OldJournalEntryBox date="[ Date ]" name="[ Entry Name ]" text="[ Custom Note ]" link="journaller"/>
+                { pastEntries }
             </div>
         </div>
     );

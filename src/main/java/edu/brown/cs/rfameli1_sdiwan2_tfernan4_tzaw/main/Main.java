@@ -14,6 +14,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.encryption.Encryptor;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.DashboardHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.LoginHandler;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -108,6 +109,7 @@ public final class Main {
     FreeMarkerEngine freeMarker = createEngine();
 
     Spark.post("/login", new LoginHandler());
+    Spark.post("/dashboard", new DashboardHandler());
   }
 
   /**
