@@ -14,7 +14,7 @@ import java.util.Map;
  * with a username and a password and checks to see if a user exists.  If they do, it returns
  * the token, if not it returns an error.
  */
-public class LoginHandler implements Route {
+public class SignUpHandler implements Route {
   private static final Gson GSON = new Gson();
 
   @Override

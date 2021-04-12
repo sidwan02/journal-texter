@@ -8,6 +8,7 @@ import '../css/LoginPage.css';
 export default function LoginPage({setToken}) {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const history = useHistory();
 
     async function loginUser() {
@@ -31,6 +32,7 @@ export default function LoginPage({setToken}) {
             .then(response => response.data)
             .catch(error => {
                 console.log(error.response);
+                setError(error.response.data);
                 return null;
             });
     }
@@ -53,6 +55,7 @@ export default function LoginPage({setToken}) {
             <h1>JournalTexter</h1>
             <LoginTextBox text="Username" change={setUserName} type="text"/>
             <LoginTextBox text="Password" change={setPassword} type="password"/>
+            <p>{ error }</p>
             <p>
                 <button onClick={handleSubmit}>Submit</button>
             </p>

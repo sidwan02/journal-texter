@@ -29,7 +29,9 @@ function App() {
                     <Route exact path="/login">
                         <LoginPage setToken={setToken}/>
                     </Route>
-                    <Route exact path="/signup" component={SignUpPage}/>
+                    <Route exact path="/signup">
+                        <SignUpPage setToken={setToken}/>
+                    </Route>
                     <Route exact path="/dashboard" component={LoginPage}/>
 
                     {/*TODO eventually move journaller and journalentry so you have to login*/}
