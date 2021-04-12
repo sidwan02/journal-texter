@@ -10,7 +10,7 @@ function JournallerPage() {
     // currentLine - the current input in the textbox
     const [currentLine, setCurrentLine] = useState("");
     // currentResponse - all of the currentLine before the user clicks "Request Questions"
-    const [currentResponse, setCurrentResponse] = useState("");
+    const [currentResponse, setCurrentResponse] = useState([]);
     const [selectedQuestion, setSelectedQuestion] = useState("");
     const [question1, setQuestion1] = useState("");
     const [question2, setQuestion2] = useState("");
@@ -28,6 +28,9 @@ function JournallerPage() {
         history.push("/login");
     }
 
+    /**
+     * Takes what the user types in the text box and sends it into the journal history
+     */
     const userInput = () => {
         let journalHistoryDiv = document.getElementById("journalHistory")
         let filteredExpression = currentLine.replaceAll('<', '');
@@ -41,59 +44,79 @@ function JournallerPage() {
                 + filteredExpression + "</div>"
                 + "<div style=\"float: right; height: 1px; width: 1000px;\"/>"
 
-            setCurrentResponse(currentResponse + " " + filteredExpression);
+            setCurrentResponse(currentResponse.concat(currentLine));
             setCurrentLine("");
         }
     }
 
-    // Request questions from the backend
-    // TODO: Currently only an outline
+    /**
+     * Requests 5 questions from the backend depending on what the currentResponse is
+     */
     const requestQuestions = () => {
-        const toSend = {
-            text: currentResponse
-        }
-
-        let config = {
-            headers: {
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*',
+        if (currentResponse.length !== 0) {
+            const toSend = {
+                entryId: 1, //TODO: Replace this with actual entryId
+                userId: "placeholder", //TODO: Replace this with actual username
+                text: currentResponse,
+                state: "requestQuestion"
             }
+
+            let config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                }
+            }
+
+            // TODO: Insert post request here for "/handleRequestQuestion"
+            // Response is variables = ImmutableMap.of(
+            //             "questions", List<String>,
+            //             "tags", List<String>,
+            //             "sentiment", double);
+            axios.post(
+                "http://localhost:4567/handleRequestQuestion",
+                toSend,
+                config
+            ).then(response => {
+
+            })
+
+            setCurrentResponse([]);
         }
-
-        // TODO: Insert post request here for "/handleUserResponse"
-        /*
-        axios.post(
-            "http://localhost:4567/handleUserResponse",
-            toSend,
-            config
-        ).then(response => {
-
-        })
-         */
-
-        // This is a save and request button
-        // Needs userID
-
-        // Send only the most recent history to backend for processing
-        // "text" is the key
-
-        // Returns immutable map that contains a list of strings
-        // That list of strings is a list of questions
-        // "questions" is the key
-        // Said immutable map contains a list of tags that is a list of strings
-        // "tags" is the key for that
-        // Also get a "sentiment" - a double
-        // localhost 4567, /handleUserResponse
-
-        // setCurrentResponse("");
     }
 
+    /**
+     * Sends the currently selected question into the journal history
+     */
     const chooseQuestion = () => {
         let journalHistoryDiv = document.getElementById("journalHistory")
 
-        // TODO: Insert post request here for "/handleSelectedQuestion"
+        if (selectedQuestion !== "") {
 
-        if (selectedQuestion !== "" && currentResponse !== '') {
+            const toSend = {
+                entryId: 1, // TODO: Replace with actual entryId,
+                question: selectedQuestion,
+                userID: "username", // TODO: Replace with actual userID
+                text: [],
+                state: "saveQuestion"
+            }
+
+            let config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                }
+            }
+
+            // TODO: Insert post request here for "/handleSaveUserInputs"
+            axios.post(
+                "http://localhost:4567/handleSaveUserInputs",
+                toSend,
+                config
+            ).then(response => {
+
+            })
+
             journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
                 + "padding: 8px; margin-top: 10px;"
                 + "max-width: 600px; word-wrap: break-word\">"
@@ -109,14 +132,47 @@ function JournallerPage() {
         }
     }
 
+    /**
+     * Handles the toggling of the generated questions
+     */
     const handleQuestions = (event, newQuestion) => {
         setSelectedQuestion(newQuestion);
     }
 
+    /**
+     * Retrieves a question from the backend immediately upon loading the page
+     */
     const firstQuestionLoad = async () => {
         let journalHistoryDiv = document.getElementById("journalHistory")
 
         // TODO: Replace what's below this line with Axios post request stuff
+        const toSend = {
+            entryId: 1, //TODO: Replace this with actual entryId
+            userId: "username", //TODO: Replace this with actual username
+            text: [],
+            state: "start"
+        }
+
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+
+        // TODO: Insert post request here for "/handleRequestQuestion"
+        // Response is variables = ImmutableMap.of(
+        //             "questions", List<String>,
+        //             "tags", List<String>,
+        //             "sentiment", double);
+        axios.post(
+            "http://localhost:4567/handleRequestQuestion",
+            toSend,
+            config
+        ).then(response => {
+
+        })
+
         let firstQuestion = "How are you doing?"
         journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
             + "padding: 8px; margin-top: 10px;"
@@ -130,23 +186,49 @@ function JournallerPage() {
     }, [])
 
 
+    /**
+     * Manually saves the entry. TODO: Close the entry too
+     */
     const saveEntry = () => {
-        // TODO: Axios Post request stuff here for "/handleSaveUserEntry"
+        const toSend = {
+            entryId: 1, // TODO: Replace with actual entryId,
+            question: "",
+            userID: "username", // TODO: Replace with actual userID
+            text: currentResponse,
+            state: "saveEntry"
+        }
+
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+
+        // TODO: Insert post request here for "/handleSaveUserInputs"
+        axios.post(
+            "http://localhost:4567/handleSaveUserInputs",
+            toSend,
+            config
+        ).then(response => {
+
+        })
     }
 
     // TODO: Delete this and its corresponding button later, only for testing
     const quickGenerateQuestions = () => {
+        if (currentResponse.length !== 0) {
+            setCurrentResponse([]);
 
-        setCurrentResponse("");
-
-        let questionArray = ["Tell me about your day", "How is school going?",
-            "What interesting things have you done today?", "How is the weather today?",
-            "Are you feeling well?"]
-        setQuestion1(questionArray[0]);
-        setQuestion2(questionArray[1]);
-        setQuestion3(questionArray[2]);
-        setQuestion4(questionArray[3]);
-        setQuestion5(questionArray[4]);
+            let questionArray = ["Tell me about your day", "How is school going?",
+                "What interesting things have you done today?", "How is the weather today?",
+                "Are you feeling well?"]
+            setQuestion1(questionArray[0]);
+            setQuestion2(questionArray[1]);
+            setQuestion3(questionArray[2]);
+            setQuestion4(questionArray[3]);
+            setQuestion5(questionArray[4]);
+        }
     }
 
     const historyStyle = {
