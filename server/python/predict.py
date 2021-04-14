@@ -15,8 +15,12 @@ def predict_sentiment(review):
     model = SentimentRNN(num_layers, vocab_size, hidden_dim,
                          embedding_dim, drop_prob=0.5)
 
+    # model.load_state_dict(torch.load(
+    #     r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\server\model" + "\sentiment_model.pth"))
+
+
     model.load_state_dict(torch.load(
-        r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\server\model" + "\sentiment_model.pth"))
+        r"server/model/sentiment_model.pth"))
 
     is_cuda = torch.cuda.is_available()
 

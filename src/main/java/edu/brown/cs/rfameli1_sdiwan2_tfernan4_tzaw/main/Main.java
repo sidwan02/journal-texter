@@ -13,6 +13,7 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL.JournalTexterREPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -61,7 +62,12 @@ public final class Main {
 //    hoho.getSynonyms("earth");
 //
 //    SentimentAnalysis pyt = new SentimentAnalysis();
-//    System.out.println("oh yeah wooo: " + cool);
+//    System.out.println("oh yeah wooo: ");
+
+
+//    SentimentAnalysis senti = new SentimentAnalysis();
+//    Double sentiment = senti.getSentimentFromText("hello there");
+//    System.out.println(sentiment);
 
 //    SendEmail.Send();
     new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
