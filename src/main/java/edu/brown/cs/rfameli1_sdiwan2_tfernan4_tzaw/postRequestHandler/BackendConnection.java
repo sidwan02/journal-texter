@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -29,11 +30,24 @@ public class BackendConnection {
     Set<String> tags = jtDB.getAllTagsFromDB();
 
     List<String> randomlyChosenTags = new ArrayList<>();
-    for (String tag : tags) {
-      randomlyChosenTags.add(tag);
-      if (randomlyChosenTags.size() == n) {
-        break;
+
+    int size = tags.size();
+    int counter = n;
+    while (counter > 0) {
+      int item = new Random().nextInt(size);
+      int i = 0;
+      for(String tag : tags)
+      {
+        if (i == item)
+//          return tag;
+          randomlyChosenTags.add(tag);
+        i++;
       }
+
+//      if (randomlyChosenTags.size() == n) {
+//        break;
+//      }
+      counter --;
     }
 
     List<String> questions = new ArrayList<>();
