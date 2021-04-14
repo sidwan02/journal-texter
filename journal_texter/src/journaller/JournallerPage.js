@@ -51,7 +51,7 @@ function JournallerPage() {
                 + "padding: 8px; margin-top: 10px;"
                 + "max-width: 600px; word-wrap: break-word\">"
                 + filteredExpression + "</div>"
-                + "<div style=\"float: right; height: 1px; width: 1000px;\"/>"
+                + "<div style=\"float: right; height: 1px; width: 800px;\"/>"
 
             setCurrentResponse(currentResponse.concat(currentLine));
             setCurrentLine("");
@@ -137,7 +137,7 @@ function JournallerPage() {
                 + "padding: 8px; margin-top: 10px;"
                 + "max-width: 600px; word-wrap: break-word\">"
                 + selectedQuestion + "</div>"
-                + "<div style=\"float: left; height: 1px; width: 1000px; \"/>"
+                + "<div style=\"float: left; height: 1px; width: 800px; \"/>"
 
             setSelectedQuestion("");
             setQuestion1("");
@@ -194,7 +194,7 @@ function JournallerPage() {
             + "padding: 8px; margin-top: 10px;"
             + "max-width: 600px; word-wrap: break-word\">"
             + firstQuestion + "</div>"
-            + "<div style=\"float: left; height: 1px; width: 1000px; \"/>"
+            + "<div style=\"float: left; height: 1px; width: 800px; \"/>"
     }
 
     useEffect(() => {
@@ -249,16 +249,21 @@ function JournallerPage() {
 
     const historyStyle = {
         height: 400,
-        width: 1000,
-        margin: 'auto',
+        width: 800,
         border: '2px solid black',
         overflow: 'auto',
         padding: 10,
+        float: 'left',
+        marginLeft: 10,
     }
 
-    const paddingStyle = {
-        margin: 'auto',
-        width: 400,
+    const questionsStyle = {
+        marginLeft: 20,
+        height: 419,
+        width: 300,
+        float: 'left',
+        border: '2px solid black',
+        textAlign: 'center',
     }
 
     return (
@@ -274,43 +279,45 @@ function JournallerPage() {
 
             <br/>
             <div id="journalHistory" className="journalHistory" style={historyStyle}/>
-            <JournalTextBoxAndButtons id="inputBox" typeText={setCurrentLine} sendClick={userInput}
-                                      promptClick={requestQuestions} confirmClick={chooseQuestion}
-                                      type="text"/>
-            <br/>
-            <br/>
-            <div id="toggleButtons" style={paddingStyle}>
-            <ToggleButtonGroup value={selectedQuestion} orientation="vertical"
-                               exclusive onChange={handleQuestions}>
-                {question1 !== "" &&
+            <div id="toggleButtons" style={questionsStyle}>
+                <h3>Generated Questions (Click one):</h3>
+                <hr/>
+                <ToggleButtonGroup value={selectedQuestion} orientation="vertical"
+                                   exclusive onChange={handleQuestions}>
+                    {question1 !== "" &&
                     <ToggleButton value={question1}>
                         {question1}
                     </ToggleButton>
-                }
-                {question2 !== "" &&
+                    }
+                    {question2 !== "" &&
                     <ToggleButton value={question2}>
                         {question2}
                     </ToggleButton>
-                }
-                {question3 !== "" &&
+                    }
+                    {question3 !== "" &&
                     <ToggleButton value={question3}>
-                    {question3}
+                        {question3}
                     </ToggleButton>
-                }
-                {question4 !== "" &&
+                    }
+                    {question4 !== "" &&
                     <ToggleButton value={question4}>
                         {question4}
                     </ToggleButton>
-                }
-                {question5 !== "" &&
+                    }
+                    {question5 !== "" &&
                     <ToggleButton value={question5}>
                         {question5}
                     </ToggleButton>
-                }
-            </ToggleButtonGroup>
+                    }
+                </ToggleButtonGroup>
+                <AwesomeButton type="secondary" onPress={chooseQuestion} style={{float: 'center', marginTop: 10}}>
+                    Choose Question
+                </AwesomeButton>
             </div>
-
-            <div style={{width: 1000, padding: 10, margin: 'auto',}}>
+            <JournalTextBoxAndButtons id="inputBox" typeText={setCurrentLine} sendClick={userInput}
+                                      promptClick={requestQuestions}
+                                      type="text"/>
+            <div style={{width: 1000, padding: 10, marginLeft: 10, float: 'left'}}>
             <AwesomeButton id="saveButton" type="secondary" onPress={saveEntry}
                            style={{float: 'left'}}>Save Entry</AwesomeButton>
             <AwesomeButton type="secondary" onPress={quickGenerateQuestions}
