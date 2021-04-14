@@ -5,6 +5,7 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.HeaderException;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.InvalidFileException;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetData;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetReader;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.utils.DateConversion;
@@ -74,21 +75,6 @@ public final class JournalTexterDB {
   }
 
   /**
-   * Clears a given table in the current database. Only works for questions and tags tables.
-   * @param tableName the name of the table to clear
-   * @throws SQLException if no connection has been established or if an error occurs with the SQL
-   * update
-   */
-  public void clearTable(String tableName) throws SQLException {
-    checkConnection();
-    if (tableName.equals("questions") || tableName.equals("tags")) {
-      PreparedStatement ps = conn.prepareStatement("DELETE FROM ?");
-      ps.setString(1, tableName);
-      ps.executeUpdate();
-    }
-  }
-
-  /**
    * Loads all the questions and tags from a spreadsheet into the questions and tags tables in the
    * current database.
    * @param filename the name of the spreadsheet file to be read from (must be in .tsv format)
@@ -99,6 +85,9 @@ public final class JournalTexterDB {
       SpreadsheetData sd = SpreadsheetReader.parseSpreadsheet(filename, "\t",
           Arrays.asList("Question", "Tags"));
       List<List<String>> rows = sd.getRows();
+      if (rows == null) {
+        throw new InvalidFileException("Empty file passed into loadDataFromSpreadsheet");
+      }
       PreparedStatement ps;
       ResultSet rs;
 
@@ -157,7 +146,7 @@ public final class JournalTexterDB {
         }
       }
       return true;
-    } catch (HeaderException | IOException | SQLException e) {
+    } catch (HeaderException | IOException | SQLException | InvalidFileException e) {
       System.out.println("ERROR: " + e.getMessage());
       e.printStackTrace();
       return false;
@@ -271,12 +260,12 @@ public final class JournalTexterDB {
     PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
     ps.setInt(1, entryId);
     ResultSet rs = ps.executeQuery();
-    String entryText = rs.getString(1);
+    StringBuilder entryText = new StringBuilder(rs.getString(1));
     for (JournalText jt : toAdd) {
-      entryText += jt.stringRepresentation();
+      entryText.append(jt.stringRepresentation());
     }
     ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
-    ps.setString(1, entryText);
+    ps.setString(1, entryText.toString());
     ps.setInt(2, entryId);
     ps.executeUpdate();
   }
