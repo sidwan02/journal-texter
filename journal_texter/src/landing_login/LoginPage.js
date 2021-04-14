@@ -5,12 +5,24 @@ import {Link, useHistory} from "react-router-dom";
 import LoginTextBox from "./LoginTextBox";
 import '../css/LoginPage.css';
 
+/**
+ * This is the component where the user is able to login JournalTexter.
+ *
+ * @param setToken A method to set the token to the user's unique login id.
+ * @returns {JSX.Element} The user login element.
+ * @constructor
+ */
 export default function LoginPage({setToken}) {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const history = useHistory();
 
+    /**
+     * Sends a request to the backend to try and login the user.
+     *
+     * @returns {Promise<AxiosResponse<any>>} When the method resolves.
+     */
     async function loginUser() {
         const toSend = {
             username: username,
@@ -37,7 +49,12 @@ export default function LoginPage({setToken}) {
             });
     }
 
-    const handleSubmit = async e => {
+    /**
+     * Handles the user submitting the form.
+     *
+     * @returns {Promise<void>} Assigns when the token is assigned to the user.
+     */
+    const handleSubmit = async () => {
         if (username !== "") {
             const token = await loginUser();
 

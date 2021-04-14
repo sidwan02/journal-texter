@@ -2,6 +2,13 @@ import React from 'react';
 import '../css/Dashboard.css'
 import {useHistory} from "react-router-dom";
 
+/**
+ * Component represents old journal entry link.
+ *
+ * @param props Takes in the text to display in the box and the link to go to.
+ * @returns {JSX.Element} The old journal entry tile.
+ * @constructor
+ */
 function OldJournalEntryBox(props) {
     const history = useHistory();
 

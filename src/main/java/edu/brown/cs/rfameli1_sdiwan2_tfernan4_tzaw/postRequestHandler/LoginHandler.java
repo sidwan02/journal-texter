@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -20,6 +20,14 @@ import java.util.Map;
 public class LoginHandler implements Route {
   private static final Gson GSON = new Gson();
 
+  /**
+   * Handles login requests from the server.
+   *
+   * @param request The request sent from the server.
+   * @param response The response to the server.
+   * @return The body of the response to the server.
+   * @throws Exception If the data cannot be processed correctly.
+   */
   @Override
   public Object handle(Request request, Response response) throws Exception {
     JSONObject data = new JSONObject(request.body());

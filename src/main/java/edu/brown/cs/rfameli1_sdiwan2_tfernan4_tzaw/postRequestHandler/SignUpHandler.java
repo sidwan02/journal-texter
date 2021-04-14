@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -10,7 +10,6 @@ import spark.Response;
 import spark.Route;
 
 import javax.security.auth.login.FailedLoginException;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -21,6 +20,14 @@ import java.util.Map;
 public class SignUpHandler implements Route {
   private static final Gson GSON = new Gson();
 
+  /**
+   * Handles post requests from the server from the signup page.
+   *
+   * @param request The request to the server.
+   * @param response The response from the server.
+   * @return The body of the response.
+   * @throws Exception If there is a server error.
+   */
   @Override
   public Object handle(Request request, Response response) throws Exception {
     JSONObject data = new JSONObject(request.body());
