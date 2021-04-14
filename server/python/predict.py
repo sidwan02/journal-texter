@@ -47,15 +47,17 @@ def predict_sentiment(review):
         pad = torch.from_numpy(
             np.array(normalize_length(500, reviews_tokenized)))
         inputs = pad.to(device)
-        print(inputs)
+        # print(inputs)
         batch_size = 1
         h = model.init_hidden(batch_size)
         h = tuple([each.data for each in h])
         output, h = model(inputs, h)
-        print(output)
+        # print(output)
 
         return output.item()
 
     pro = predict_text(review)
     status = "positive" if pro > 0.5 else "negative"
     print(f'Predicted sentiment is {status} with value {pro}')
+
+    return pro

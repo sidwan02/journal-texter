@@ -34,6 +34,6 @@ def generate_vocabulary(review_to_sentiment_dict):
     # creating a dict
     vocabulary = {w: i+1 for i, w in enumerate(corpus_)}
 
-    print(vocabulary)
+    # print(vocabulary)
 
     return vocabulary

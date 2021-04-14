@@ -67,8 +67,11 @@ public class GUIHandler {
         List<JournalText> entryInfo = new ArrayList<>();
         entryInfo.add(new Question(questions.get(0)));
 
-        JournalTexterDB jtDB = new JournalTexterDB();
-        jtDB.addToEntry(entryId, entryInfo);
+        //JournalTexterDB jtDB = new JournalTexterDB();
+        JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
+        //TODO: Uncomment, breaks for some reason
+        //jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
             "questions", questions,
@@ -194,7 +197,9 @@ public class GUIHandler {
 
         entryInfo.add(new Question(question));
 
-        JournalTexterDB jtDB = new JournalTexterDB();
+        //JournalTexterDB jtDB = new JournalTexterDB();
+        JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
         jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
@@ -245,7 +250,9 @@ public class GUIHandler {
       String userNameOrUserID = data.getString("userID");
       String state = data.getString("state");
 
-      JournalTexterDB jtDB = new JournalTexterDB();
+      //JournalTexterDB jtDB = new JournalTexterDB();
+      JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
       int entryId = jtDB.addUserEntry(LocalDate.now(), "", userNameOrUserID);
 
       variables = ImmutableMap.of(
@@ -362,7 +369,9 @@ public class GUIHandler {
       Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
 
-      JournalTexterDB jtDB = new JournalTexterDB();
+      //JournalTexterDB jtDB = new JournalTexterDB();
+      JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
       Entry<JournalText> entry = jtDB.getEntryById(entryId);
 
       List<String> questions = new ArrayList<>();
