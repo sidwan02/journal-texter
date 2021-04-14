@@ -11,9 +11,9 @@ function JournalTextBoxAndButtons(props) {
         }
     }
 
-    const sendClickEvent = (event) => {
+    const sendPressEvent = (event) => {
         {
-            props.sendClick(event)
+            props.sendPress(event)
         }
         let journalTextBox = document.getElementById("journalTextBox");
         journalTextBox.value = "";
@@ -22,16 +22,16 @@ function JournalTextBoxAndButtons(props) {
     const enterPressEvent = (event) => {
         if (event.key === 'Enter') {
             {
-                props.sendClick(event)
+                props.sendPress(event)
             }
             let journalTextBox = document.getElementById("journalTextBox");
             journalTextBox.value = "";
         }
     }
 
-    const promptQuestionEvent = (event) => {
+    const savePressEvent = (event) => {
         {
-            props.promptClick(event)
+            props.savePress(event)
         }
     }
 
@@ -53,10 +53,10 @@ function JournalTextBoxAndButtons(props) {
             <input id="journalTextBox" type={props.type} placeholder={props.text} style={TextBoxStyle}
                    onChange={typeTextEvent} onKeyPress={enterPressEvent}/>
             <br/><br/>
-            <AwesomeButton id="sendButton" type="primary" onPress={sendClickEvent}
+            <AwesomeButton id="sendButton" type="primary" onPress={sendPressEvent}
                            style={{float: 'right'}}>Send</AwesomeButton>
-            <AwesomeButton type="secondary" onPress={promptQuestionEvent} style={{float: 'left'}}>
-                Request Questions</AwesomeButton>
+            <AwesomeButton type="secondary" onPress={savePressEvent} style={{float: 'left'}}>
+                Save Entry</AwesomeButton>
         </div>
     );
 }

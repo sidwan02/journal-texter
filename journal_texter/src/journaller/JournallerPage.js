@@ -20,8 +20,6 @@ function JournallerPage() {
 
     const history = useHistory();
 
-    // TODO: Replace for final build
-    //const user = "placeholder";
     const user = JSON.parse(localStorage.getItem('token'))['token'];
 
     function handleClick() {
@@ -240,11 +238,12 @@ function JournallerPage() {
     }
 
     const questionsStyle = {
-        marginLeft: 20,
+        marginRight: 40,
         width: 300,
-        float: 'left',
+        float: 'right',
         border: '2px solid black',
         textAlign: 'center',
+        wordWrap: 'break-word'
     }
 
     return (
@@ -261,7 +260,12 @@ function JournallerPage() {
             <br/>
             <div id="journalHistory" className="journalHistory" style={historyStyle}/>
             <div id="toggleButtons" style={questionsStyle}>
-                <h3>Generated Questions (Click one):</h3>
+                <h3>Generated Questions (Click a question to select it):</h3>
+                <AwesomeButton type="secondary" onPress={requestQuestions}
+                               style={{float: 'center', marginBottom: 10}}>
+                    Request Questions
+                </AwesomeButton>
+                <br/>
                 <ToggleButtonGroup value={selectedQuestion} orientation="vertical"
                                    exclusive onChange={handleQuestions}>
                     {question1 !== "" &&
@@ -295,13 +299,9 @@ function JournallerPage() {
                     Choose Question
                 </AwesomeButton>
             </div>
-            <JournalTextBoxAndButtons id="inputBox" typeText={setCurrentLine} sendClick={userInput}
-                                      promptClick={requestQuestions}
+            <JournalTextBoxAndButtons id="inputBox" typeText={setCurrentLine} sendPress={userInput}
+                                      savePress={saveEntry}
                                       type="text"/>
-            <div style={{width: 1000, padding: 10, marginLeft: 10, float: 'left'}}>
-            <AwesomeButton id="saveButton" type="secondary" onPress={saveEntry}
-                           style={{float: 'left'}}>Save Entry</AwesomeButton>
-            </div>
         </div>
     );
 }
