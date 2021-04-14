@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseFunctionTester {
@@ -18,19 +17,10 @@ public class DatabaseFunctionTester {
 
   public static boolean createEmptyDatabase(String filename)
       throws IOException, SQLException, ClassNotFoundException {
-    // Attempt to create the file a maximum of 2 times
-    for (int i = 0; i < 2; i++) {
-      File newDb = new File(filename);
-      if (!newDb.createNewFile()) {
-        if (i == 1) {
-          // return false if trying to delete the file the first time failed
-          return false;
-        } else {
-          deleteDatabaseFile(filename);
-        }
-      } else {
-        break;
-      }
+    File newDb = new File(filename);
+    deleteFileIfExists(filename);
+    if (!newDb.createNewFile()) {
+      return false;
     }
     Database db = new Database(filename);
     conn = db.getConnection();
@@ -108,10 +98,12 @@ public class DatabaseFunctionTester {
     ps.executeUpdate();
   }
 
-  public static void deleteDatabaseFile(String filename) throws IOException {
+  public static void deleteFileIfExists(String filename) throws IOException {
     File f = new File(filename);
-    if (!f.delete()) {
-      throw new IOException("File " + filename + " could not be deleted in DatabaseGenerator.deleteDatabaseFile");
+    if (f.exists()) {
+      if (!f.delete()) {
+        throw new IOException("File " + filename + " could not be deleted in DatabaseGenerator.deleteDatabaseFile");
+      }
     }
   }
 

@@ -1,10 +1,13 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response;
 import org.junit.Test;
 import org.junit.After;
 import org.junit.Before;
+import org.springframework.cglib.core.Local;
 
 import javax.security.auth.login.FailedLoginException;
 import java.io.IOException;
@@ -16,12 +19,14 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
 public class JournalTexterDBTest {
   private JournalTexterDB jtDb = null;
-  final String testDatabaseFileName = "test-database.db";
+  private final String testDatabaseFileName = "data/testdata/test-database.db";
   private Connection conn = null;
   private PreparedStatement ps;
   private ResultSet rs;
@@ -41,20 +46,19 @@ public class JournalTexterDBTest {
 
   @After
   public void tearDown() throws IOException {
-    DatabaseFunctionTester.deleteDatabaseFile(testDatabaseFileName);
+    DatabaseFunctionTester.deleteFileIfExists(testDatabaseFileName);
     jtDb.setConnection(null);
     conn = null;
   }
 
   @Test
-  public void testConnectionSetup() throws SQLException, IOException, ClassNotFoundException {
-    setUp();
+  public void testEntryMethodErrors() {
+
   }
 
   @Test
   public void testCreateAndAddToEntry()
-      throws IOException, SQLException, ClassNotFoundException, FailedLoginException {
-    setUp();
+      throws SQLException, FailedLoginException {
     jtDb.registerUser("riki", "riki".getBytes(StandardCharsets.UTF_8));
     int entryId = jtDb.addUserEntry(LocalDate.now(), "{@Yo whats up}{not much}", "riki");
     assertEquals(1, entryId);
@@ -82,8 +86,36 @@ public class JournalTexterDBTest {
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", rs.getString(3));
-    tearDown();
   }
-  
+
+  @Test
+  public void testGetEntriesFromDatabase()
+      throws SQLException, FailedLoginException {
+    jtDb.registerUser("siddy", "siddy".getBytes(StandardCharsets.UTF_8));
+    jtDb.registerUser("riddy", "riddy".getBytes(StandardCharsets.UTF_8));
+    ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
+    rs = ps.executeQuery();
+    assertFalse(rs.next());
+
+    LocalDate d = LocalDate.now();
+
+    jtDb.addUserEntry(d, "{@How are you?}{apple}", "siddy");
+    List<Entry<JournalText>> riddyEntries = jtDb.getUserEntriesByUsername("riddy");
+    assertEquals(Collections.emptyList(), riddyEntries);
+
+    try {
+      List<Entry<JournalText>> siddyEntries = jtDb.getUserEntriesByUsername("siddy");
+      Entry<JournalText> siddyEntry = siddyEntries.get(0);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println(e.getMessage());
+    }
+  }
+
+  @Test
+  public void testLoadQuestions() {
+
+  }
+
 
 }

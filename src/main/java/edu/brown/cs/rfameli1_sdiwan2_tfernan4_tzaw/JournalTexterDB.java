@@ -3,7 +3,6 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.HeaderException;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.InvalidFileException;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetData;
@@ -12,7 +11,6 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.utils.DateConversion;
 
 import javax.security.auth.login.FailedLoginException;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -26,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Handles all interactions with JournalTexter-related databases. Implements the Singleton design
@@ -108,7 +107,7 @@ public final class JournalTexterDB {
         ps = conn.prepareStatement("SELECT id FROM questions WHERE text=?;");
         ps.setString(1, question);
         rs = ps.executeQuery();
-        Integer questionId = rs.getInt(1);
+        int questionId = rs.getInt(1);
 
         // Get the tags from the second column of the spreadsheet
         String[] tags = r.get(1).split(",");
@@ -127,7 +126,7 @@ public final class JournalTexterDB {
           ps = conn.prepareStatement("SELECT id FROM tags WHERE text=?;");
           ps.setString(1, tag);
           rs = ps.executeQuery();
-          Integer tagId = rs.getInt(1);
+          int tagId = rs.getInt(1);
 
           // Check if the tag-question relation already exists in the database
           ps = conn.prepareStatement("SELECT * FROM tags_to_questions "
@@ -193,7 +192,7 @@ public final class JournalTexterDB {
       // May or may not need to use id / author in the future
       Integer id = rs.getInt(1);
       Date date = rs.getDate(2);
-      String stringRepresentation = rs.getString(3);
+      String stringRepresentation = Pattern.quote(rs.getString(3));
       String author = rs.getString(4);
       // Get date into the LocalDate format
       LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())

@@ -71,7 +71,7 @@ public class GUIHandler {
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
         //TODO: Uncomment, breaks for some reason
-        //jtDB.addToEntry(entryId, entryInfo);
+        jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
             "questions", questions,
