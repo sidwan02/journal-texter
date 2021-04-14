@@ -65,7 +65,7 @@ function JournallerPage() {
         if (currentResponse.length !== 0) {
             const toSend = {
                 entryID: 1, //TODO: Replace this with actual entryID
-                userID: user, //TODO: Replace this with actual username
+                userID: user,
                 text: currentResponse,
                 state: "requestQuestion"
             }
@@ -87,9 +87,7 @@ function JournallerPage() {
                 toSend,
                 config
             ).then(response => {
-                console.log(response.data)
                 let questionsList = response.data["questions"]
-                console.log(questionsList)
                 setQuestion1(questionsList[0])
                 setQuestion2(questionsList[1])
                 setQuestion3(questionsList[2])
@@ -124,7 +122,7 @@ function JournallerPage() {
                 }
             }
 
-            // TODO: Insert post request here for "/handleSaveUserInputs"
+            // TODO: What do I do with the response?
             axios.post(
                 "http://localhost:4567/handleSaveUserInputs",
                 toSend,
@@ -186,15 +184,15 @@ function JournallerPage() {
             toSend,
             config
         ).then(response => {
+            let questionsList = response.data["questions"]
+            let firstQuestion = questionsList[0]
+            journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
+                + "padding: 8px; margin-top: 10px;"
+                + "max-width: 600px; word-wrap: break-word\">"
+                + firstQuestion + "</div>"
+                + "<div style=\"float: left; height: 1px; width: 800px; \"/>"
 
         })
-
-        let firstQuestion = "How are you doing?"
-        journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
-            + "padding: 8px; margin-top: 10px;"
-            + "max-width: 600px; word-wrap: break-word\">"
-            + firstQuestion + "</div>"
-            + "<div style=\"float: left; height: 1px; width: 800px; \"/>"
     }
 
     useEffect(() => {
@@ -203,7 +201,7 @@ function JournallerPage() {
 
 
     /**
-     * Manually saves the entry. TODO: Close the entry too
+     * Manually saves the entry.
      */
     const saveEntry = () => {
         const toSend = {
@@ -221,7 +219,7 @@ function JournallerPage() {
             }
         }
 
-        // TODO: Insert post request here for "/handleSaveUserInputs"
+        // TODO: Close the entry
         axios.post(
             "http://localhost:4567/handleSaveUserInputs",
             toSend,
@@ -229,22 +227,6 @@ function JournallerPage() {
         ).then(response => {
 
         })
-    }
-
-    // TODO: Delete this and its corresponding button later, only for testing
-    const quickGenerateQuestions = () => {
-        if (currentResponse.length !== 0) {
-            setCurrentResponse([]);
-
-            let questionArray = ["Tell me about your day", "How is school going?",
-                "What interesting things have you done today?", "How is the weather today?",
-                "Are you feeling well?"]
-            setQuestion1(questionArray[0]);
-            setQuestion2(questionArray[1]);
-            setQuestion3(questionArray[2]);
-            setQuestion4(questionArray[3]);
-            setQuestion5(questionArray[4]);
-        }
     }
 
     const historyStyle = {
@@ -259,7 +241,6 @@ function JournallerPage() {
 
     const questionsStyle = {
         marginLeft: 20,
-        height: 419,
         width: 300,
         float: 'left',
         border: '2px solid black',
@@ -281,7 +262,6 @@ function JournallerPage() {
             <div id="journalHistory" className="journalHistory" style={historyStyle}/>
             <div id="toggleButtons" style={questionsStyle}>
                 <h3>Generated Questions (Click one):</h3>
-                <hr/>
                 <ToggleButtonGroup value={selectedQuestion} orientation="vertical"
                                    exclusive onChange={handleQuestions}>
                     {question1 !== "" &&
@@ -310,7 +290,8 @@ function JournallerPage() {
                     </ToggleButton>
                     }
                 </ToggleButtonGroup>
-                <AwesomeButton type="secondary" onPress={chooseQuestion} style={{float: 'center', marginTop: 10}}>
+                <AwesomeButton type="secondary" onPress={chooseQuestion}
+                               style={{float: 'center', marginTop: 10, marginBottom: 10}}>
                     Choose Question
                 </AwesomeButton>
             </div>
@@ -320,8 +301,6 @@ function JournallerPage() {
             <div style={{width: 1000, padding: 10, marginLeft: 10, float: 'left'}}>
             <AwesomeButton id="saveButton" type="secondary" onPress={saveEntry}
                            style={{float: 'left'}}>Save Entry</AwesomeButton>
-            <AwesomeButton type="secondary" onPress={quickGenerateQuestions}
-                           style={{float: 'left'}}>Test Generate</AwesomeButton>
             </div>
         </div>
     );
