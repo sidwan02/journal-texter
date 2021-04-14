@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+//TODO DELETE THIS FILE
+
 public class DashboardHandler implements Route {
   private static final Gson GSON = new Gson();
 
@@ -18,8 +20,6 @@ public class DashboardHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     JSONObject data = new JSONObject(request.body());
     String token = data.getString("token");
-
-    //TODO connect username and password to database
 
     List<String> entries = new ArrayList<>();
     entries.add("Date1");

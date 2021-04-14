@@ -17,6 +17,12 @@ import NotFoundPage from "./general_components/NotFoundPage";
 import OldJournalEntry from "./journaller/OldJournalEntry";
 import useToken from './useToken';
 
+/**
+ * The component that all the other components run under.
+ *
+ * @returns {JSX.Element} The component that contains all the other components.
+ * @constructor
+ */
 function App() {
     const {token, setToken} = useToken();
 

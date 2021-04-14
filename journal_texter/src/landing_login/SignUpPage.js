@@ -5,6 +5,13 @@ import {Link, useHistory} from "react-router-dom";
 import LoginTextBox from "./LoginTextBox";
 import '../css/LoginPage.css';
 
+/**
+ * This is the component where the user is able to sign up for JournalTexter.
+ *
+ * @param setToken A method to set the token to the user's unique login id.
+ * @returns {JSX.Element} The user sign up element.
+ * @constructor
+ */
 export default function SignUpPage({setToken}) {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
@@ -12,6 +19,11 @@ export default function SignUpPage({setToken}) {
     const [error, setError] = useState("");
     const history = useHistory();
 
+    /**
+     * Signs up the user in the database, or throws an error.
+     *
+     * @returns {Promise<AxiosResponse<any>>} The promise returns if the server returns data.
+     */
     async function signUpUser() {
         const toSend = {
             username: username,
@@ -38,7 +50,12 @@ export default function SignUpPage({setToken}) {
             });
     }
 
-    const handleSubmit = async e => {
+    /**
+     * Method to handle the user submitting the form.
+     *
+     * @returns {Promise<void>} Returns when the token is correctly assigned.
+     */
+    const handleSubmit = async () => {
         if (password !== confirmPassword) {
             setError("Passwords do not match");
         } else if (username === "") {
@@ -52,6 +69,11 @@ export default function SignUpPage({setToken}) {
         }
     }
 
+    /**
+     * Sets the token and goes to the dashboard.
+     *
+     * @param token The user's unique token id.
+     */
     function assignToken(token) {
         setToken(token);
         history.push('/');
@@ -75,6 +97,12 @@ export default function SignUpPage({setToken}) {
     )
 }
 
+/**
+ * Checks the types of the props.
+ *
+ * @type {{setToken: Validator<NonNullable<(...args: any[]) => any>>}} Requires that the type of setToken
+ * is a function.
+ */
 SignUpPage.propTypes = {
     setToken: PropTypes.func.isRequired
 };
