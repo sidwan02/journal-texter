@@ -51,8 +51,6 @@ public class GUIHandler {
       // id of the entry
       Integer entryId = Integer.parseInt(data.getString("entryID"));
 
-      System.out.println("entryID: " + entryId);
-
       // username
       String username = data.getString("userID");
       // list of responses in the from of a JSON array
@@ -70,10 +68,7 @@ public class GUIHandler {
 
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
-        //TODO: Uncomment, breaks for some reason
-        System.out.println("Got to before entry is added");
         jtDB.addToEntry(entryId, entryInfo);
-        System.out.println("Successfully added entry!!!");
 
         variables = ImmutableMap.of(
             "questions", questions,
@@ -172,7 +167,8 @@ public class GUIHandler {
 
         Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
-        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+        double sentiment = -1.0;
+        //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
         variables = ImmutableMap.of(
             "tags", foundTags,
@@ -190,7 +186,8 @@ public class GUIHandler {
 
         Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
-        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+        double sentiment = -1.0;
+        //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
         List<JournalText> entryInfo = new ArrayList<>();
         for (String res : responses) {

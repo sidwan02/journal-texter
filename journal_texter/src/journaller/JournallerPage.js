@@ -51,7 +51,7 @@ function JournallerPage(props) {
     const requestQuestions = () => {
         if (currentResponse.length !== 0) {
             const toSend = {
-                entryID: entryID, //TODO: Replace this with actual entryID
+                entryID: entryID,
                 userID: user,
                 text: currentResponse,
                 state: "requestQuestion"
@@ -64,7 +64,6 @@ function JournallerPage(props) {
                 }
             }
 
-            // TODO: Insert post request here for "/handleRequestQuestion"
             // Response is variables = ImmutableMap.of(
             //             "questions", List<String>,
             //             "tags", List<String>,
@@ -82,7 +81,6 @@ function JournallerPage(props) {
                 setQuestion5(questionsList[4])
                 }
             )
-            setCurrentResponse([]);
         }
     }
 
@@ -95,11 +93,11 @@ function JournallerPage(props) {
         if (selectedQuestion !== "") {
 
             const toSend = {
-                entryID: entryID, // TODO: Replace with actual entryID,
+                entryID: entryID,
                 question: selectedQuestion,
                 userID: user,
-                text: [],
-                state: "saveQuestion"
+                text: currentResponse,
+                state: "saveEntry"
             }
 
             let config = {
@@ -109,27 +107,26 @@ function JournallerPage(props) {
                 }
             }
 
-            // TODO: What do I do with the response?
             axios.post(
                 "http://localhost:4567/handleSaveUserInputs",
                 toSend,
                 config
             ).then(response => {
+                journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
+                    + "padding: 8px; margin-top: 10px;"
+                    + "max-width: 600px; word-wrap: break-word\">"
+                    + selectedQuestion + "</div>"
+                    + "<div style=\"float: left; height: 1px; width: 800px; \"/>"
 
+                setSelectedQuestion("");
+                setQuestion1("");
+                setQuestion2("");
+                setQuestion3("");
+                setQuestion4("");
+                setQuestion5("");
+                setCurrentResponse([]);
             })
 
-            journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
-                + "padding: 8px; margin-top: 10px;"
-                + "max-width: 600px; word-wrap: break-word\">"
-                + selectedQuestion + "</div>"
-                + "<div style=\"float: left; height: 1px; width: 800px; \"/>"
-
-            setSelectedQuestion("");
-            setQuestion1("");
-            setQuestion2("");
-            setQuestion3("");
-            setQuestion4("");
-            setQuestion5("");
         }
     }
 
@@ -160,7 +157,6 @@ function JournallerPage(props) {
             }
         }
 
-        // TODO: Insert post request here for "/handleRequestQuestion"
         // Response is variables = ImmutableMap.of(
         //             "questions", List<String>,
         //             "tags", List<String>,

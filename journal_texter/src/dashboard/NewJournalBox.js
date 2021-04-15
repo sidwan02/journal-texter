@@ -42,17 +42,13 @@ function NewJournalBox(props) {
             toSend,
             config
         ).then(response => {
-             let generatedEntryID = response.data["entryId"];
-             console.log("NewJournallerGeneratedID: " + generatedEntryID)
-
+            let generatedEntryID = response.data["entryId"];
             history.push({
                 pathname: '/' + props.link,
                 state: {entryID: generatedEntryID}
             })
-
             }
         )
-
     }
 
     return (
