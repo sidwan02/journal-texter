@@ -2,7 +2,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 6rem;
+    height: 12%;
+    /*max-height: 6rem;*/
 }
 
 #home-button {

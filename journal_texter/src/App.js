@@ -16,6 +16,7 @@ import JournallerPage from "./journaller/JournallerPage"
 import NotFoundPage from "./general_components/NotFoundPage";
 import OldJournalEntry from "./journaller/OldJournalEntry";
 import useToken from './useToken';
+import JournallerTest from "./Testing/JournallerTest";
 
 /**
  * The component that all the other components run under.
@@ -71,6 +72,9 @@ function App() {
                         <Route exact path="/journalentry" component={OldJournalEntry}/>
                         <Route exact path="/404" component={NotFoundPage}/>
                         {/*This next line lets us default to the 404 page otherwise*/}
+
+                        <Route exact path="/test" component={JournallerTest} />
+
                         <Redirect to="/404"/>
                     </Switch>
                 </Router>
