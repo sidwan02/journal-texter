@@ -1,6 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec;
 
 import com.google.common.collect.ImmutableMap;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.ProxiedSynonymFetcher;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.WordnikAPIHandler;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -86,10 +88,13 @@ public class WordCountVec {
         // word not in map
         System.out.println("word NOT in map");
 
-        WordnikAPIHandler wordnikConnection = new WordnikAPIHandler();
+//        WordnikAPIHandler wordnikConnection = new WordnikAPIHandler();
+         ProxiedSynonymFetcher prox = ProxiedSynonymFetcher.INSTANCE;
+         Set<String> synonyms = prox.get(nDiffWords);
         // check if any synonyms in map
         int synCount = 0;
-        for (String synonym : wordnikConnection.getSynonyms(nDiffWords)) {
+//        for (String synonym : wordnikConnection.getSynonyms(nDiffWords)) {
+        for (String synonym : synonyms) {
 //          System.out.println(synonym);
 //          System.out.println("ambient");
 //          System.out.println(nWordFrequencies.keySet());

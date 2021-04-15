@@ -10,28 +10,20 @@ import java.util.Properties;
 
 // https://itnext.io/how-to-store-passwords-and-api-keys-in-project-code-1eaf5cb235c9
 /**
- * The class Properties reader.
+ * Class that reads a properties file containing API keys.
  */
 public final class PropertiesReader {
 
-  /**
-   * Constant LOGGER.
-   */
-  private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesReader.class);
+  private static final Logger LOGGER
+    = LoggerFactory.getLogger(PropertiesReader.class);
 
-  /**
-   * Constant PROPERTIES.
-   */
   private static final Properties PROPERTIES;
 
   /**
-   * Constant PROP_FILE.
+   * File location of the config file.
    */
   private static final String PROP_FILE = "config.properties";
 
-  /**
-   * Default private constructor PropertiesReader.
-   */
   private PropertiesReader() {
   }
 
@@ -49,8 +41,7 @@ public final class PropertiesReader {
   }
 
   /**
-   * Method getProperty.
-   *
+   * Get the configuration key for a given keyword
    * @param name String name file.
    * @return Return property
    */

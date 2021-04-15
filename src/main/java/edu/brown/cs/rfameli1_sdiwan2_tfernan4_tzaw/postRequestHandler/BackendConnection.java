@@ -1,5 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.dialectTranslation.DialectType;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.dialectTranslation.TranslationsAPIHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
@@ -18,8 +20,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 public class BackendConnection {
-
-  private final JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
   public BackendConnection() {
   }
@@ -50,12 +50,14 @@ public class BackendConnection {
       counter --;
     }
 
+    TranslationsAPIHandler translate = new TranslationsAPIHandler();
+
     List<String> questions = new ArrayList<>();
     for (String tag : randomlyChosenTags) {
       List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
 
       for (Question q : questionsFromTag) {
-        questions.add(q.getText());
+        questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
         if (questions.size() >= 5) {
           break;
         }

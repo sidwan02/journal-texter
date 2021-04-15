@@ -6,17 +6,25 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+/**
+ * Class to determine what dialect to translate incoming text to through an API.
+ */
 public class TranslationsAPIHandler {
+  /**
+   * API URLs to translate text.
+   */
   public HashMap<Integer, String> dialectURLs = new HashMap<>(){{
     put(0, "");
     put(1, "https://pirate.monkeyness.com/api/translate?english=");
   }};
 
+  /**
+   * Converts text to the desired dialect.
+   * @param sentence a sentence to translate.
+   * @param type an ENUM representing the dialect to translate to.
+   */
   public String convertToDialect(String sentence, DialectType type) {
 
     HttpHeaders header = new HttpHeaders();
@@ -34,6 +42,7 @@ public class TranslationsAPIHandler {
 
       return translatedSentence;
     } else {
+      // no translation
       return sentence;
     }
   }
