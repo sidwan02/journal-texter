@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 
 public class JournalTexterDBTest {
   private JournalTexterDB jtDb = null;
-  private final String testDatabaseFileName = "data/testdata/test-database.db";
+  private final String testDatabaseFileName = "data/test-database.db";
   private Connection conn = null;
   private PreparedStatement ps;
   private ResultSet rs;
