@@ -25,7 +25,6 @@ public class BackendConnection {
   }
 
   public static List<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
-    //JournalTexterDB jtDB = new JournalTexterDB();
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
     Set<String> tags = jtDB.getAllTagsFromDB();
 
@@ -73,7 +72,6 @@ public class BackendConnection {
     SortedSet<Map.Entry<String, Integer>> sortedFrequencies
       = vectorizor.sortByValues(frequencies);
 
-    //JournalTexterDB jtDB = new JournalTexterDB();
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
     Set<String> tags = new HashSet<>();
     try {
