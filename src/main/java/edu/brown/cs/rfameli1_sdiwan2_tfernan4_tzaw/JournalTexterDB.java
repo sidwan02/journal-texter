@@ -37,7 +37,7 @@ public final class JournalTexterDB {
   /**
    * Creates an instance of JournalTexterDB.
    */
-  public JournalTexterDB() { }
+  private JournalTexterDB() { }
 
   /**
    * Retrieves the current instance of JournalTexterDB.
@@ -192,7 +192,7 @@ public final class JournalTexterDB {
       // May or may not need to use id / author in the future
       Integer id = rs.getInt(1);
       Date date = rs.getDate(2);
-      String stringRepresentation = Pattern.quote(rs.getString(3));
+      String stringRepresentation = rs.getString(3);
       String author = rs.getString(4);
       // Get date into the LocalDate format
       LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())
@@ -230,7 +230,8 @@ public final class JournalTexterDB {
    * @throws SQLException if connection has not been established or if an error occurs interacting
    * with the database
    */
-  public Integer addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
+  public Integer addUserEntry(LocalDate date, String entryText, String username)
+      throws SQLException {
     checkConnection();
     Date sqlDate = java.sql.Date.valueOf(date);
 

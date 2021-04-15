@@ -1,15 +1,10 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +17,7 @@ public class Entry<T extends JournalText> {
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
-  private final Integer sentiment = 0;
+  private final Double sentiment = 0.0;
   private Set<String> tags = null;
 
   /**
@@ -106,7 +101,7 @@ public class Entry<T extends JournalText> {
    * Gets the total sentiment of all responses in the entry.
    * @return a value between 0 and 1 representing the overall sentiment of all responses
    */
-  public Integer getSentiment() {
+  public Double getSentiment() {
     return this.sentiment;
   }
 

@@ -74,18 +74,21 @@ public class JournalTexterDBTest {
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}", rs.getString(3));
+    assertEquals("{@Yo whats up}{not much}{I am good}", jtDb.getEntryById(1).getString());
 
     // Add a question
     jtDb.addToEntry(1, Collections.singletonList(question1));
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}", rs.getString(3));
+    assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}", jtDb.getEntryById(1).getString());
 
     // Add a question and response
     jtDb.addToEntry(1, Arrays.asList(question1, emptyQuestion, emptyResponse, response1));
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", rs.getString(3));
+    assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", jtDb.getEntryById(1).getString());
   }
 
   @Test
@@ -98,24 +101,18 @@ public class JournalTexterDBTest {
     assertFalse(rs.next());
 
     LocalDate d = LocalDate.now();
-
-    jtDb.addUserEntry(d, "{@How are you?}{apple}", "siddy");
+    String siddyEntryText = "{@How are you?}{apple}";
+    jtDb.addUserEntry(d, siddyEntryText, "siddy");
     List<Entry<JournalText>> riddyEntries = jtDb.getUserEntriesByUsername("riddy");
     assertEquals(Collections.emptyList(), riddyEntries);
 
-    try {
-      List<Entry<JournalText>> siddyEntries = jtDb.getUserEntriesByUsername("siddy");
-      Entry<JournalText> siddyEntry = siddyEntries.get(0);
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println(e.getMessage());
-    }
+    Entry<JournalText> siddyEntry = jtDb.getUserEntriesByUsername("siddy").get(0);
+    assertEquals(siddyEntryText, siddyEntry.getString());
+    assertEquals(siddyEntryText, jtDb.getEntryById(1).getString());
   }
 
   @Test
   public void testLoadQuestions() {
-
+    // TODO add a test questions sheet to load in data from
   }
-
-
 }
