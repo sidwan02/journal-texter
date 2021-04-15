@@ -293,7 +293,6 @@ public final class JournalTexterDB {
    * Checks if the input log in information correctly matches the database.
    * @param username the input username
    * @param inputPasswordBytes the input password as a byte array
-   * @return true if the login information was correct
    * @throws SQLException if the database connection has not been set up or if a SQL-related error
    * occurs
    * @throws FailedLoginException if the login credentials do not match those stored in the database

@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 
 public class JournalTexterDBTest {
   private JournalTexterDB jtDb = null;
-  private final String testDatabaseFileName = "data/testdata/test-database.db";
+  private final String testDatabaseFileName = "data/test-database.db";
   private Connection conn = null;
   private PreparedStatement ps;
   private ResultSet rs;
@@ -112,7 +112,21 @@ public class JournalTexterDBTest {
   }
 
   @Test
-  public void testLoadQuestions() {
+  public void testLoadAndFindQuestions() {
     // TODO add a test questions sheet to load in data from
   }
+
+  @Test
+  public void testAuthenticateUser() throws FailedLoginException, SQLException {
+    byte[] siddyPassword = "siddy".getBytes(StandardCharsets.UTF_8);
+
+    jtDb.registerUser("siddy", siddyPassword);
+    jtDb.authenticateUser("siddy", siddyPassword);
+    assertThrows(FailedLoginException.class,
+        () -> jtDb.authenticateUser("siddy", "soddy".getBytes(StandardCharsets.UTF_8)));
+    assertThrows(FailedLoginException.class,
+        () -> jtDb.authenticateUser("soddy", "siddy".getBytes(StandardCharsets.UTF_8)));
+  }
+
+
 }
