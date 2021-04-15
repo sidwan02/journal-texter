@@ -6,7 +6,7 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import {AwesomeButton} from "react-awesome-button";
 import axios from "axios";
 
-function JournallerPage() {
+function JournallerPage(props) {
     // currentLine - the current input in the textbox
     const [currentLine, setCurrentLine] = useState("");
     // currentResponse - all of the currentLine before the user clicks "Request Questions"
@@ -21,6 +21,7 @@ function JournallerPage() {
     const history = useHistory();
 
     const user = JSON.parse(localStorage.getItem('token'))['token'];
+    const entryID = props.entryID;
 
     function handleClick() {
         history.push('/');
@@ -62,7 +63,7 @@ function JournallerPage() {
     const requestQuestions = () => {
         if (currentResponse.length !== 0) {
             const toSend = {
-                entryID: 1, //TODO: Replace this with actual entryID
+                entryID: entryID, //TODO: Replace this with actual entryID
                 userID: user,
                 text: currentResponse,
                 state: "requestQuestion"
@@ -106,7 +107,7 @@ function JournallerPage() {
         if (selectedQuestion !== "") {
 
             const toSend = {
-                entryID: 1, // TODO: Replace with actual entryID,
+                entryID: entryID, // TODO: Replace with actual entryID,
                 question: selectedQuestion,
                 userID: user,
                 text: [],
@@ -157,9 +158,8 @@ function JournallerPage() {
     const firstQuestionLoad = async () => {
         let journalHistoryDiv = document.getElementById("journalHistory")
 
-        // TODO: Replace what's below this line with Axios post request stuff
         const toSend = {
-            entryID: 1, //TODO: Replace this with actual entryId
+            entryID: entryID, //TODO: Replace this with actual entryId
             userID: user,
             text: [],
             state: "start"
@@ -203,7 +203,7 @@ function JournallerPage() {
      */
     const saveEntry = () => {
         const toSend = {
-            entryID: 1, // TODO: Replace with actual entryId,
+            entryID: entryID, // TODO: Replace with actual entryId,
             question: "",
             userID: user,
             text: currentResponse,

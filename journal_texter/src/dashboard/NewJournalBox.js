@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../css/Dashboard.css'
 import {useHistory} from "react-router-dom";
+import axios from "axios";
 
 /**
  * Component represents new journal entry link.
@@ -10,6 +11,8 @@ import {useHistory} from "react-router-dom";
  * @constructor
  */
 function NewJournalBox(props) {
+    const [entryID, setEntryID] = useState(0);
+    const user = JSON.parse(localStorage.getItem('token'))['token'];
     const history = useHistory();
 
     /**
@@ -17,6 +20,37 @@ function NewJournalBox(props) {
      */
     function handleClick() {
         history.push('/' + props.link);
+        /*
+        generateEntry()
+        history.push({
+            pathname: '/' + props.link,
+            state: {entryID: entryID}
+        })
+        */
+    }
+
+    const generateEntry = () => {
+        const toSend = {
+            userID: user
+        }
+
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+
+        axios.post(
+            "http://localhost:4567/handleCreateEntry",
+            toSend,
+            config
+        ).then(response => {
+             let generatedEntryID = response.data["entryId"];
+             setEntryID(generatedEntryID);
+            }
+        )
+
     }
 
     return (
