@@ -13,7 +13,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Class that connects to the Wordnik thesaurus API.
+ */
 public class WordnikAPIHandler {
+  /**
+   * Gets the synonyms of a desired word.
+   * @param word a word whose synonyms must be found.
+   * @return a Set of String of all synonyms associated with the passed word.
+   */
   public Set<String> getSynonyms(String word) {
     HttpHeaders header = new HttpHeaders();
 
@@ -22,24 +30,25 @@ public class WordnikAPIHandler {
 
     // https://docs.spring.io/spring-android/docs/current/reference/html/rest-template.html
     try {
-      ResponseEntity<String> response = rt.exchange("https://api.wordnik.com/v4/word.json/" + word + "/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=" + PropertiesReader.getProperty("WORDNIK_KEY"),
+      ResponseEntity<String> response
+        = rt.exchange(
+          "https://api.wordnik.com/v4/word.json/"
+          + word
+          + "/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key="
+          + PropertiesReader.getProperty("WORDNIK_KEY"),
         HttpMethod.GET, entity, String.class);
 
       String eventBody = response.getBody();
-//    System.out.println(eventBody);
 
+      // extract all synonyms from the stringified object from the API
+      assert eventBody != null;
       String spliceToStart = eventBody.split("\\[", 3)[2];
       String spliceUntilEnd = spliceToStart.split("\\]", 2)[0];
-//    System.out.println(spliceUntilEnd);
 
-      Set<String> synonyms
-        = Arrays.stream(spliceUntilEnd.replaceAll("\"", "").split(",")).collect(Collectors.toSet());
-
-      System.out.println(synonyms);
-
-      return synonyms;
+      return Arrays.stream(spliceUntilEnd.replaceAll("\"", "")
+        .split(",")).collect(Collectors.toSet());
     } catch (HttpClientErrorException e) {
-      System.out.println("word not found");
+      // word does not have synonyms within the Wordnik API
       return new HashSet<>();
     }
   }
