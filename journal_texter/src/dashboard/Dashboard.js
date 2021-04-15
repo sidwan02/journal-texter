@@ -42,10 +42,10 @@ export default function Dashboard() {
             .then(response => {
                 entries = response.data["entries"];
 
-                console.log(entries);
-                setPastEntries(entries.map(entry =>
-                    <OldJournalEntryBox date={entry}/>
-                ));
+                // console.log(entries);
+                // setPastEntries(entries.map(entry =>
+                //     <OldJournalEntryBox date={entry}/>
+                // ));
             })
             .catch(error => {
                 console.log(error.response);

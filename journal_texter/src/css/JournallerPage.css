@@ -1,0 +1,102 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--blue-100);
+}
+
+.login-box {
+    width: 50%;
+    padding: 0;
+    border: 2px solid var(--blue-900);
+    color: var(--blue-100);
+    border-radius: 2rem;
+    max-width: 500px;
+    text-align: center;
+    background-color: var(--blue-400);
+}
+
+.title {
+    font-size: 3.5rem;
+    margin: 1rem auto 2.5rem auto;
+}
+
+.home-link {
+    transition: color, -webkit-text-stroke ease 1000ms;
+}
+
+.home-link:hover {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--blue-900);
+}
+
+.link {
+    text-decoration: none;
+    color: var(--blue-900);
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.login-text-box {
+    margin: 0.9rem;
+}
+
+.login-text-box-input {
+    width: 100%;
+    height: 1.75rem;
+    border-radius: 0.75rem;
+    text-indent: 0.4rem;
+    border: var(--blue-400) 2px solid;
+    font-size: 1.5rem;
+    background-color: var(--blue-200);
+}
+
+.login-text-box-input:focus {
+    background-color: var(--blue-300);
+}
+
+.submit {
+    font-size: 1.3rem;
+    padding: 0.15rem;
+    width: 50%;
+    margin: 0 auto 1.5rem auto;
+    background-color: var(--blue-200);
+    border-radius: 1rem;
+    border: var(--blue-900) 2px solid;
+    transition: background-color, width 125ms ease;
+
+    cursor: pointer;
+}
+
+.submit:hover {
+    background-color: var(--blue-300);
+    width: 60%;
+}
+
+.error-text {
+    /*color: #fa1b32;*/
+    color: #ff0515;
+    margin: .9rem;
+    font-size: .875rem;
+}
+
+.sign-up {
+    width: 45%;
+    margin: 0 auto 1.5rem auto;
+    text-align: left;
+}
+
+.sign-up-link {
+    width: 4rem;
+}
+
+.sign-up-link:hover {
+    text-decoration: underline;
+}
