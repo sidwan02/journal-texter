@@ -11,7 +11,6 @@ import axios from "axios";
  * @constructor
  */
 function NewJournalBox(props) {
-    const [entryID, setEntryID] = useState(0);
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const history = useHistory();
 
@@ -21,10 +20,6 @@ function NewJournalBox(props) {
     function handleClick() {
         // history.push('/' + props.link);
         generateEntry()
-        history.push({
-            pathname: '/' + props.link,
-            state: {entryID: entryID}
-        })
     }
 
     /**
@@ -48,7 +43,13 @@ function NewJournalBox(props) {
             config
         ).then(response => {
              let generatedEntryID = response.data["entryId"];
-             setEntryID(generatedEntryID);
+             console.log("NewJournallerGeneratedID: " + generatedEntryID)
+
+            history.push({
+                pathname: '/' + props.link,
+                state: {entryID: generatedEntryID}
+            })
+
             }
         )
 

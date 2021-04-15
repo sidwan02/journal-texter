@@ -257,17 +257,38 @@ public final class JournalTexterDB {
    */
   public void addToEntry(Integer entryId, List<JournalText> toAdd) throws SQLException {
     checkConnection();
+
     PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
+
     ps.setInt(1, entryId);
+
     ResultSet rs = ps.executeQuery();
-    StringBuilder entryText = new StringBuilder(rs.getString(1));
+
+    StringBuilder entryText = new StringBuilder();
+
+    try {
+      if (rs.next()) {
+        if (rs.isClosed()) {
+          System.out.println("rs is closed");
+        }
+        entryText = new StringBuilder(rs.getString(1));
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     for (JournalText jt : toAdd) {
       entryText.append(jt.stringRepresentation());
     }
+
     ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
+
     ps.setString(1, entryText.toString());
+
     ps.setInt(2, entryId);
+
     ps.executeUpdate();
+
   }
 
   /**

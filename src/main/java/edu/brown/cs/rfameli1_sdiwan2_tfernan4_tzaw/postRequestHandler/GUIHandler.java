@@ -71,7 +71,9 @@ public class GUIHandler {
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
         //TODO: Uncomment, breaks for some reason
-        // jtDB.addToEntry(entryId, entryInfo);
+        System.out.println("Got to before entry is added");
+        jtDB.addToEntry(entryId, entryInfo);
+        System.out.println("Successfully added entry!!!");
 
         variables = ImmutableMap.of(
             "questions", questions,

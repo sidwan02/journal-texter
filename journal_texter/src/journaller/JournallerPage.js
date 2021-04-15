@@ -22,7 +22,7 @@ function JournallerPage(props) {
     const history = useHistory();
 
     const user = JSON.parse(localStorage.getItem('token'))['token'];
-    const entryID = props.location.state.entryID;
+    const [entryID, setEntryID] = useState(props.location.state.entryID);
 
     /**
      * Takes what the user types in the text box and sends it into the journal history
@@ -191,7 +191,7 @@ function JournallerPage(props) {
      */
     const saveEntry = () => {
         const toSend = {
-            entryID: entryID, // TODO: Replace with actual entryId,
+            entryID: entryID,
             question: "",
             userID: user,
             text: currentResponse,

@@ -43,9 +43,12 @@ export default function Dashboard() {
 
                 console.log(entries);
 
+                /*
                 setPastEntries(entries.map(entry =>
                     <OldJournalEntryBox date={entry["date"]} entryID={entry["entryId"]}/>
                 ));
+
+                 */
 
             })
             .catch(error => {
