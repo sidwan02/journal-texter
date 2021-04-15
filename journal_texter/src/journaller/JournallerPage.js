@@ -21,7 +21,7 @@ function JournallerPage(props) {
     const history = useHistory();
 
     const user = JSON.parse(localStorage.getItem('token'))['token'];
-    const entryID = props.entryID;
+    const entryID = 1; //props.entryID;
 
     function handleClick() {
         history.push('/');

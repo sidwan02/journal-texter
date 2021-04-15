@@ -27,7 +27,11 @@ public class BackendConnection {
   public static List<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
     //JournalTexterDB jtDB = new JournalTexterDB();
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
+    System.out.println("Instance gotten from Backend Connection");
     Set<String> tags = jtDB.getAllTagsFromDB();
+
+    System.out.println("Got all tags from DB");
 
     List<String> randomlyChosenTags = new ArrayList<>();
 
@@ -53,6 +57,7 @@ public class BackendConnection {
     List<String> questions = new ArrayList<>();
     for (String tag : randomlyChosenTags) {
       List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
+      System.out.println("Find Questions From Tag reached");
       for (Question q : questionsFromTag) {
         questions.add(q.getText());
         if (questions.size() >= 5) {
