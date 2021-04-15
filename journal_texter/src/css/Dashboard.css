@@ -28,38 +28,7 @@
     background-color: var(--blue-400);
 }
 
-.dashboard-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 12%;
-    max-height: 7rem;
-}
-
-#logo {
-    margin: 0 0 0 3rem;
-    font-size: 2.5rem;
-
-    cursor: pointer;
-}
-
-#signout {
-    margin-right: 4%;
-    padding: 10px 10px;
-    border: medium solid var(--blue-900);
-    border-radius: 0.5rem;
-    transition: background-color 125ms ease;
-    color: var(--blue-900);
-    background-color: var(--blue-300);
-
-    cursor: pointer;
-}
-
-#signout:hover {
-    background-color: var(--blue-400);
-}
-
-.entries {
+.dashboard-entries {
     display: flex;
     flex-flow: row wrap;
     margin-top: 10px;
@@ -70,10 +39,10 @@
     font-size: 40px;
 }
 
-.newEntryTitle {
+.dashboard .newEntryTitle {
     width: 200px;
 }
 
-.dashboardElementText {
+.dashboard .dashboardElementText {
     font-size: 20px;
 }

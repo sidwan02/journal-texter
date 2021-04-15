@@ -1,0 +1,33 @@
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 6rem;
+}
+
+#home-button {
+    margin: 0 2.5rem;
+    font-size: 2.75rem;
+    transition: background-color, font-weight ease 125ms;
+    cursor: pointer;
+}
+
+#home-button:hover {
+    color: #003767;
+}
+
+#signout-button {
+    margin: 0 2.5rem;
+    padding: .75rem .75rem;
+    border: medium solid var(--blue-900);
+    border-radius: 0.5rem;
+    transition: background-color 125ms ease;
+    color: var(--blue-900);
+    background-color: var(--blue-300);
+
+    cursor: pointer;
+}
+
+#signout-button:hover {
+    background-color: var(--blue-400);
+}

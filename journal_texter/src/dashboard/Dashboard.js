@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import '../css/Dashboard.css'
-import {useHistory} from "react-router-dom";
 import OldJournalEntryBox from "./OldJournalEntryBox";
 import NewJournalBox from "./NewJournalBox";
 import axios from "axios";
+import NavBar from "./NavBar";
 
 /**
  * Renders the dashboard for the UI.
@@ -12,7 +12,6 @@ import axios from "axios";
  * @constructor
  */
 export default function Dashboard() {
-    const history = useHistory();
     let entries = [];
     const [pastEntries, setPastEntries] = useState([]);
 
@@ -62,27 +61,10 @@ export default function Dashboard() {
         getUserJournals().then(() => undefined);
     }, [])
 
-    /**
-     * Deletes the users token, sends them to the login page, and reloads the page.
-     */
-    function handleSignOut() {
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('token');
-
-        history.push('/login');
-
-        window.location.reload(false);
-    }
-
     return (
         <div className="dashboard">
-            <nav className="dashboard-nav">
-                <h1 id="logo">JournalTexter</h1>
-                <div id="signout" onClick={handleSignOut}>
-                    Sign Out
-                </div>
-            </nav>
-            <div className="entries">
+            <NavBar />
+            <div className="dashboard-entries">
                 <NewJournalBox title="Create New Entry" link="journaller"/>
                 {pastEntries}
             </div>

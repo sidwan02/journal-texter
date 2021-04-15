@@ -1,23 +1,10 @@
 import React, {useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
+import NavBar from "../dashboard/NavBar";
 
 function OldJournalEntry() {
     const user = JSON.parse(localStorage.getItem('token'))['token'];
-    const history = useHistory();
-
-    function handleClick() {
-        history.push('/');
-    }
-
-    function handleSignOut() {
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('token');
-
-        history.push('/login');
-
-        window.location.reload(false);
-    }
 
     // TODO: Send a post request to "/handleUserHistoryRequest"
     const loadEntry = async () => {
@@ -88,12 +75,7 @@ function OldJournalEntry() {
 
     return (
         <div>
-            <nav className="dashboard-nav">
-                <h1 id="logo" onClick={handleClick}>JournalTexter</h1>
-                <div id="signout" onClick={handleSignOut}>
-                    Sign Out
-                </div>
-            </nav>
+            <NavBar />
 
             <hr style={{backgroundColor: 'black', height: '1px'}}/>
 

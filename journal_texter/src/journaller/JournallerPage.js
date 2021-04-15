@@ -5,6 +5,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import {AwesomeButton} from "react-awesome-button";
 import axios from "axios";
+import NavBar from "../dashboard/NavBar";
 
 function JournallerPage(props) {
     // currentLine - the current input in the textbox
@@ -22,19 +23,6 @@ function JournallerPage(props) {
 
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
-
-    function handleClick() {
-        history.push('/');
-    }
-
-    function handleSignOut() {
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('token');
-
-        history.push('/login');
-
-        window.location.reload(false);
-    }
 
     /**
      * Takes what the user types in the text box and sends it into the journal history
@@ -248,12 +236,7 @@ function JournallerPage(props) {
 
     return (
         <div>
-            <nav className="dashboard-nav">
-                <h1 id="logo" onClick={handleClick}>JournalTexter</h1>
-                <div id="signout" onClick={handleSignOut}>
-                    Sign Out
-                </div>
-            </nav>
+            <NavBar />
 
             <hr style={{backgroundColor: 'black', height: '1px'}}/>
 
