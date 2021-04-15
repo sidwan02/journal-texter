@@ -17,7 +17,6 @@ public class JournalTexterREPL {
     // Commands that take in jtDatabase are able to access/modify the database
     repl.registerCommand(new SetDatabaseCommand(jtDatabase));
     repl.registerCommand(new LoadQuestionsCommand(jtDatabase));
-    repl.registerCommand(new ClearTableCommand(jtDatabase));
   }
 
   public void start() {

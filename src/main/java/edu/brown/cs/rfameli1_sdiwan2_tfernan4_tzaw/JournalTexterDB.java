@@ -3,15 +3,14 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.HeaderException;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.InvalidFileException;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetData;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.SpreadsheetReader;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.utils.DateConversion;
 
 import javax.security.auth.login.FailedLoginException;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -25,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Handles all interactions with JournalTexter-related databases. Implements the Singleton design
@@ -37,7 +37,7 @@ public final class JournalTexterDB {
   /**
    * Creates an instance of JournalTexterDB.
    */
-  public JournalTexterDB() { }
+  private JournalTexterDB() { }
 
   /**
    * Retrieves the current instance of JournalTexterDB.
@@ -74,21 +74,6 @@ public final class JournalTexterDB {
   }
 
   /**
-   * Clears a given table in the current database. Only works for questions and tags tables.
-   * @param tableName the name of the table to clear
-   * @throws SQLException if no connection has been established or if an error occurs with the SQL
-   * update
-   */
-  public void clearTable(String tableName) throws SQLException {
-    checkConnection();
-    if (tableName.equals("questions") || tableName.equals("tags")) {
-      PreparedStatement ps = conn.prepareStatement("DELETE FROM ?");
-      ps.setString(1, tableName);
-      ps.executeUpdate();
-    }
-  }
-
-  /**
    * Loads all the questions and tags from a spreadsheet into the questions and tags tables in the
    * current database.
    * @param filename the name of the spreadsheet file to be read from (must be in .tsv format)
@@ -99,6 +84,9 @@ public final class JournalTexterDB {
       SpreadsheetData sd = SpreadsheetReader.parseSpreadsheet(filename, "\t",
           Arrays.asList("Question", "Tags"));
       List<List<String>> rows = sd.getRows();
+      if (rows == null) {
+        throw new InvalidFileException("Empty file passed into loadDataFromSpreadsheet");
+      }
       PreparedStatement ps;
       ResultSet rs;
 
@@ -119,7 +107,7 @@ public final class JournalTexterDB {
         ps = conn.prepareStatement("SELECT id FROM questions WHERE text=?;");
         ps.setString(1, question);
         rs = ps.executeQuery();
-        Integer questionId = rs.getInt(1);
+        int questionId = rs.getInt(1);
 
         // Get the tags from the second column of the spreadsheet
         String[] tags = r.get(1).split(",");
@@ -138,7 +126,7 @@ public final class JournalTexterDB {
           ps = conn.prepareStatement("SELECT id FROM tags WHERE text=?;");
           ps.setString(1, tag);
           rs = ps.executeQuery();
-          Integer tagId = rs.getInt(1);
+          int tagId = rs.getInt(1);
 
           // Check if the tag-question relation already exists in the database
           ps = conn.prepareStatement("SELECT * FROM tags_to_questions "
@@ -157,7 +145,7 @@ public final class JournalTexterDB {
         }
       }
       return true;
-    } catch (HeaderException | IOException | SQLException e) {
+    } catch (HeaderException | IOException | SQLException | InvalidFileException e) {
       System.out.println("ERROR: " + e.getMessage());
       e.printStackTrace();
       return false;
@@ -242,7 +230,8 @@ public final class JournalTexterDB {
    * @throws SQLException if connection has not been established or if an error occurs interacting
    * with the database
    */
-  public Integer addUserEntry(LocalDate date, String entryText, String username) throws SQLException {
+  public Integer addUserEntry(LocalDate date, String entryText, String username)
+      throws SQLException {
     checkConnection();
     Date sqlDate = java.sql.Date.valueOf(date);
 
@@ -271,12 +260,12 @@ public final class JournalTexterDB {
     PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
     ps.setInt(1, entryId);
     ResultSet rs = ps.executeQuery();
-    String entryText = rs.getString(1);
+    StringBuilder entryText = new StringBuilder(rs.getString(1));
     for (JournalText jt : toAdd) {
-      entryText += jt.stringRepresentation();
+      entryText.append(jt.stringRepresentation());
     }
     ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
-    ps.setString(1, entryText);
+    ps.setString(1, entryText.toString());
     ps.setInt(2, entryId);
     ps.executeUpdate();
   }

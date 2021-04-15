@@ -28,9 +28,6 @@ import java.util.Set;
  */
 public class GUIHandler {
 
-  // for Riki: paste in methods required into each handler
-  private final JournalTexterDB jtDatabase = JournalTexterDB.getInstance();
-
   public static class HandleRequestQuestion implements Route {
     private static final Gson GSON = new Gson();
 
@@ -73,13 +70,12 @@ public class GUIHandler {
         List<JournalText> entryInfo = new ArrayList<>();
         entryInfo.add(new Question(questions.get(0)));
 
-        //JournalTexterDB jtDB = new JournalTexterDB();
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
         System.out.println("Got instance");
 
         //TODO: Uncomment, breaks for some reason
-        //jtDB.addToEntry(entryId, entryInfo);
+        jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
             "questions", questions,
@@ -205,7 +201,6 @@ public class GUIHandler {
 
         entryInfo.add(new Question(question));
 
-        //JournalTexterDB jtDB = new JournalTexterDB();
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
         jtDB.addToEntry(entryId, entryInfo);
@@ -258,7 +253,6 @@ public class GUIHandler {
       String userNameOrUserID = data.getString("userID");
       // String state = data.getString("state");
 
-      //JournalTexterDB jtDB = new JournalTexterDB();
       JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
       int entryId = jtDB.addUserEntry(LocalDate.now(), "", userNameOrUserID);
@@ -377,7 +371,6 @@ public class GUIHandler {
       Integer entryId = Integer.parseInt(data.getString("entryID"));
       String userNameOrUserID = data.getString("userID");
 
-      //JournalTexterDB jtDB = new JournalTexterDB();
       JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
       Entry<JournalText> entry = jtDB.getEntryById(entryId);

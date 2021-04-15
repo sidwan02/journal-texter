@@ -1,15 +1,10 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,11 +17,12 @@ public class Entry<T extends JournalText> {
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
-  private final Integer sentiment = 0;
+  private final Double sentiment = 0.0;
   private Set<String> tags = null;
 
   /**
    * Constructs an entry using a string representation of the entry.
+   * @param id a unique id for the entry
    * @param date the date the entry was created
    * @param stringRepresentation a string representation representing the text of the entry
    */
@@ -35,7 +31,7 @@ public class Entry<T extends JournalText> {
     // Questions will be represented as {@question}
     this.id = id;
     this.date = date;
-    Pattern regexParse = Pattern.compile("{([^{}]*)}");
+    Pattern regexParse = Pattern.compile(Pattern.quote("{([^{}]*)}"));
     Matcher m = regexParse.matcher(stringRepresentation);
     List<T> questionsResponses = new ArrayList<>();
     while (m.find()) {
@@ -52,6 +48,7 @@ public class Entry<T extends JournalText> {
 
   /**
    * Parameterized constructor for an entry.
+   * @param id a unique id for the entry
    * @param date the date the entry was created
    * @param questionsAndResponses a List of Questions and Responses
    */
@@ -92,36 +89,6 @@ public class Entry<T extends JournalText> {
     return this.questionsAndResponses;
   }
 
-
-  private Map<String, Integer> getMostFrequentWords() {
-    TreeMap<String, Integer> singleResponseMostFrequentWords;
-    Map<String, Integer> allResponsesMostFrequentWords = new TreeMap<>();
-
-    // Iterate through every JournalText, adding the most frequent words from each Response
-    for (JournalText questionOrResponse : questionsAndResponses) {
-      if (questionOrResponse.getType() == JournalTextType.RESPONSE) {
-        WordCountVec vectorized = new WordCountVec();
-        singleResponseMostFrequentWords =
-            vectorized.getFrequenciesFromText(questionOrResponse.getText(), 1);
-
-        for (String word : singleResponseMostFrequentWords.keySet()) {
-          Integer currentCount = allResponsesMostFrequentWords.get(word);
-          if (currentCount == null) {
-            // If the word is not already in the Map, add it and its initial count
-            allResponsesMostFrequentWords.put(word, singleResponseMostFrequentWords.get(word));
-          } else {
-            // If the word is already in the Map, update its count
-            allResponsesMostFrequentWords.put(word,
-                currentCount + singleResponseMostFrequentWords.get(word));
-          }
-        }
-      }
-    }
-    return allResponsesMostFrequentWords;
-    // TODO make a field so this can be stored and easily referenced without having to go
-    // through this process each time
-  }
-
   /**
    * Gets the tags from jtDatabase based on the most common words found in all responses.
    * @return a Map of tags and their frequencies in responses
@@ -130,12 +97,12 @@ public class Entry<T extends JournalText> {
     return this.tags; // <== instantiate this when retrieving from the database
   }
 
-  public Integer getSentiment() {
+  /**
+   * Gets the total sentiment of all responses in the entry.
+   * @return a value between 0 and 1 representing the overall sentiment of all responses
+   */
+  public Double getSentiment() {
     return this.sentiment;
   }
 
-  /**
-   * Analysis will be done on a combination of all responses
-   * List<String> ==>
-   */
 }
