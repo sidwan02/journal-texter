@@ -7,6 +7,7 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalTextType;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.encryption.Encryptor;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.security.auth.login.FailedLoginException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -404,6 +406,90 @@ public class GUIHandler {
       /*-------*/
 
       return GSON.toJson(variables);
+    }
+  }
+
+  /**
+   * Handles requests from the frontend to the user login server.  Takes in a request
+   * with a username and a password and checks to see if a user exists.  If they do, it returns
+   * the token, if not it returns an error.
+   */
+  public static class HandleSignUp implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles Axios requests from the javascript front-end and returns
+     * the appropriate JSON object to be used by the front-end.
+     *
+     * @param request  - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+      JSONObject data = new JSONObject(request.body());
+      String username = data.getString("username");
+      String password = data.getString("password");
+
+      byte[] encryptedPassword = Encryptor.encryptMessage(password);
+      JournalTexterDB database = JournalTexterDB.getInstance();
+
+      try {
+        database.registerUser(username, encryptedPassword);
+
+        Map<String, Object> variables = ImmutableMap.of("token", username);
+        return GSON.toJson(variables);
+      } catch (FailedLoginException flEx) {
+        response.status(401);
+        return flEx.getMessage();
+      } catch (Exception e) {
+        e.printStackTrace();
+        response.status(500);
+        return e.getMessage();
+      }
+    }
+  }
+
+  /**
+   * Handles requests from the frontend to the user login server.  Takes in a request
+   * with a username and a password and checks to see if a user exists.  If they do, it returns
+   * the token, if not it returns an error.
+   */
+  public static class HandleLogin implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles Axios requests from the javascript front-end and returns
+     * the appropriate JSON object to be used by the front-end.
+     *
+     * @param request  - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+      JSONObject data = new JSONObject(request.body());
+      String username = data.getString("username");
+      String password = data.getString("password");
+
+      byte[] encryptedPassword = Encryptor.encryptMessage(password);
+      JournalTexterDB database = JournalTexterDB.getInstance();
+
+      try {
+        database.authenticateUser(username, encryptedPassword);
+
+        Map<String, Object> variables = ImmutableMap.of("token", username);
+        return GSON.toJson(variables);
+      } catch (FailedLoginException flEx) {
+        response.status(401);
+        return flEx.getMessage();
+      } catch (Exception e) {
+        e.printStackTrace();
+        response.status(500);
+        return e.getMessage();
+      }
     }
   }
 }

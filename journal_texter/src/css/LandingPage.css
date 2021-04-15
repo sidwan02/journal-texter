@@ -30,7 +30,7 @@
 .action-bar .links {
     display: inline-block;
     width: 10rem;
-    margin: 3rem 0.5rem;
+    margin: 4.5rem 0.5rem;
 }
 
 .action-bar .link-class {
@@ -42,9 +42,19 @@
     text-decoration: underline;
 }
 
-#circle {
-    background-color: var(--blue-900);
-    width: 7rem;
-    height: 7rem;
+#logo-container {
+    background-color: var(--blue-400);
+    width: 10rem;
+    height: 10rem;
     border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img#logo {
+    width: 70%;
+    height: auto;
+    margin: 0;
 }
