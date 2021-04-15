@@ -28,5 +28,7 @@ html, body, #root, #root>div {
   --blue-300: #d7ecff;
   --blue-400: #bde0ff;
   --blue-600: #a4d4ff;
+  --blue-650: #8ecaff;
+  --blue-700: #0061b5;
   --blue-900: #000205;
 }

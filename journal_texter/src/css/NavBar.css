@@ -9,12 +9,12 @@
 #home-button {
     margin: 0 2.5rem;
     font-size: 2.75rem;
-    transition: background-color, font-weight ease 125ms;
+    transition: color ease 125ms;
     cursor: pointer;
 }
 
 #home-button:hover {
-    color: #003767;
+    color: var(--blue-700);
 }
 
 #signout-button {
