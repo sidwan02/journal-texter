@@ -71,6 +71,8 @@
     border-radius: 1rem;
     border: var(--blue-900) 2px solid;
     transition: background-color, width 125ms ease;
+
+    cursor: pointer;
 }
 
 .submit:hover {

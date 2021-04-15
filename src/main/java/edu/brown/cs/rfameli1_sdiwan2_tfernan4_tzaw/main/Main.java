@@ -67,7 +67,6 @@ public final class Main {
 //    Double sentiment = senti.getSentimentFromText("hello there");
 //    System.out.println(sentiment);
 
-//    SendEmail.Send();
     new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
   }
 

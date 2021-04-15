@@ -20,6 +20,8 @@
     border-radius: 1rem;
     transition: background-color 125ms ease;
     background-color: var(--blue-300);
+
+    cursor: pointer;
 }
 
 .dashboardElement:hover {
@@ -37,6 +39,8 @@
 #logo {
     margin: 0 0 0 3rem;
     font-size: 2.5rem;
+
+    cursor: pointer;
 }
 
 #signout {
@@ -47,6 +51,8 @@
     transition: background-color 125ms ease;
     color: var(--blue-900);
     background-color: var(--blue-300);
+
+    cursor: pointer;
 }
 
 #signout:hover {
