@@ -1,4 +1,4 @@
-.container {
+.login-page {
     width: 100%;
     height: 100%;
     display: flex;
@@ -18,33 +18,33 @@
     background-color: var(--blue-400);
 }
 
-.title {
+.login-box-title {
     font-size: 3.5rem;
     margin: 1rem auto 2.5rem auto;
 }
 
-.home-link {
+.login-box-home-link {
     transition: color, -webkit-text-stroke ease 1000ms;
 }
 
-.home-link:hover {
+.login-box-home-link:hover {
     color: transparent;
     -webkit-text-stroke: 2px var(--blue-900);
 }
 
-.link {
+.login-box-link {
     text-decoration: none;
     color: var(--blue-900);
 
     font-family: 'Montserrat', sans-serif;
 }
 
-.login-form {
+.login-box .login-form {
     width: 50%;
     margin: 0 auto;
 }
 
-.login-text-box {
+.login-form .login-text-box {
     margin: 0.9rem;
 }
 
@@ -62,7 +62,7 @@
     background-color: var(--blue-300);
 }
 
-.submit {
+.login-page-submit {
     font-size: 1.3rem;
     padding: 0.15rem;
     width: 50%;
@@ -75,28 +75,29 @@
     cursor: pointer;
 }
 
-.submit:hover {
+.login-page-submit:hover {
     background-color: var(--blue-300);
     width: 60%;
 }
 
-.error-text {
+.login-form-error-text {
     /*color: #fa1b32;*/
     color: #ff0515;
     margin: .9rem;
     font-size: .875rem;
 }
 
-.sign-up {
+.login-page .sign-up {
     width: 45%;
     margin: 0 auto 1.5rem auto;
     text-align: left;
 }
 
-.sign-up-link {
+.login-page .sign-up-link {
     width: 4rem;
+    text-decoration: underline;
 }
 
-.sign-up-link:hover {
-    text-decoration: underline;
+.login-page .sign-up-link:hover {
+    font-weight: bold;
 }
