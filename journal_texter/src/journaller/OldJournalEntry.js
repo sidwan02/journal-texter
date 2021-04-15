@@ -3,8 +3,9 @@ import {useHistory} from "react-router-dom";
 import axios from "axios";
 import NavBar from "../dashboard/NavBar";
 
-function OldJournalEntry() {
+function OldJournalEntry(props) {
     const user = JSON.parse(localStorage.getItem('token'))['token'];
+    const entryID = props.location.state.entryID;
 
     // TODO: Send a post request to "/handleUserHistoryRequest"
     const loadEntry = async () => {

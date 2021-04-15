@@ -19,7 +19,7 @@ function NewJournalBox(props) {
      * Handles the elements being clicked on and redirects to the specified link.
      */
     function handleClick() {
-        history.push('/' + props.link);
+        // history.push('/' + props.link);
         generateEntry()
         history.push({
             pathname: '/' + props.link,
