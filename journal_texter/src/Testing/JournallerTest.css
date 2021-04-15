@@ -4,7 +4,7 @@
 }
 
 .journaller-body {
-    background-color: #d7ecff;
+    /*background-color: #d7ecff;*/
     margin: 1rem auto;
 
     width: 85%;
@@ -20,6 +20,8 @@
 .grid-element {
     border: black 2px solid;
     border-radius: 1rem;
+
+    outline: none;
 }
 
 .grid-element.text-display {
@@ -30,54 +32,77 @@
 .grid-element.question-display {
     grid-column: span 2;
     grid-row: span 7;
+
+    overflow: hidden;
 }
 
-.grid-element.user-input {
-    grid-column: span 5;
-    grid-row: span 1;
-}
-
-.grid-element.user-input {
-    grid-column: span 5;
+.grid-element.journal-type-box {
+    grid-column: span 4;
     grid-row: span 1;
 
-    /*border: 0;*/
+    font-size: 1.75rem;
+    padding: 0.5rem;
 }
 
-.grid-element.save-journal-element {
+.grid-element.journal-type-box:focus {
+    border-color: var(--blue-700);
+}
+
+.grid-element.text-submit-button {
     grid-column: span 1;
     grid-row: span 1;
+
+    font-size: 1.75rem;
 }
 
-.user-input {
-    margin: 0;
-    border-radius: 1rem;
+.grid-element.save-journal-entry {
+    grid-column: span 1;
+    grid-row: span 1;
+
+    font-size: 1.75rem;
 }
 
-.user-input-form {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    border: 0;
+.question-display-element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    outline: 1px solid black;
 }
 
-.journal-response {
-    width: 78%;
-    height: 95%;
-    margin: 0 1rem 0 0;
-    border-radius: 1rem;
-    font-size: 2rem;
+.question-display-header {
+    height: 20%;
+    font-size: 1.5em;
+    font-weight: 600;
+    font-decoration: underline;
+
+    background-color: var(--blue-650);
 }
 
-.journal-submit-button {
-    width: 18%;
-    height: 100%;
-    border-radius: 1rem;
+.prompt-selector {
+    height: 16%;
+    background-color: var(--blue-100);
+    transition: background-color 125ms ease;
 }
 
-.save-journal-entry {
-    width: 100%;
-    height: 100%;
-    border-radius: 1rem;
+.prompt-selector:hover {
+    background-color: var(--blue-300);
 }
+
+.journal-button {
+    background: var(--blue-300);
+    transition: background-color 125ms ease;
+}
+
+.journal-button:hover {
+    background-color: var(--blue-600);
+}
+
+.journal-button:active {
+    border-color: var(--blue-700);
+    color: var(--blue-700);
+}
+
+/*.prompt-selector.selector5 {*/
+/*    border-radius: 0 0 calc(1rem - 2px) calc(1rem - 2px);*/
+/*}*/
