@@ -20,15 +20,16 @@ function NewJournalBox(props) {
      */
     function handleClick() {
         history.push('/' + props.link);
-        /*
         generateEntry()
         history.push({
             pathname: '/' + props.link,
             state: {entryID: entryID}
         })
-        */
     }
 
+    /**
+     * Generates the entryID
+     */
     const generateEntry = () => {
         const toSend = {
             userID: user

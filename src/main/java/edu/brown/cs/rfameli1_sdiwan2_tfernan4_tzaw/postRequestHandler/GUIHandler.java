@@ -45,13 +45,13 @@ public class GUIHandler {
       // If state requestQuestions Saves previous response list and new selected question, entry tags created here
       // If state start just gives questions
 
-      System.out.println("Got to the start");
-
       JSONObject data = new JSONObject(request.body());
       Map<String, Object> variables;
 
       // id of the entry
       Integer entryId = Integer.parseInt(data.getString("entryID"));
+
+      System.out.println("entryID: " + entryId);
 
       // username
       String username = data.getString("userID");
@@ -65,14 +65,10 @@ public class GUIHandler {
       if (state.equals("start")) {
         List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(1);
 
-        System.out.println("Random Question: " + questions.get(0));
-
         List<JournalText> entryInfo = new ArrayList<>();
         entryInfo.add(new Question(questions.get(0)));
 
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
-
-        System.out.println("Got instance");
 
         //TODO: Uncomment, breaks for some reason
         // jtDB.addToEntry(entryId, entryInfo);
