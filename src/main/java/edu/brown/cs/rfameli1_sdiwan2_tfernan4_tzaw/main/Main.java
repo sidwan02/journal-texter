@@ -6,8 +6,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.DashboardHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.LoginHandler;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.SignUpHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL.JournalTexterREPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
@@ -107,9 +105,9 @@ public final class Main {
     FreeMarkerEngine freeMarker = createEngine();
 
     // Setup Spark Routes
-    Spark.post("/login", new LoginHandler());
+    Spark.post("/login", new GUIHandler.HandleLogin());
     Spark.post("/dashboard", new DashboardHandler());
-    Spark.post("/signup", new SignUpHandler());
+    Spark.post("/signup", new GUIHandler.HandleSignUp());
     Spark.post("/handleRequestQuestion", new GUIHandler.HandleRequestQuestion());
     Spark.post("/handleSaveUserInputs", new GUIHandler.HandleSaveUserInputs());
     Spark.post("/handleCreateEntry", new GUIHandler.HandleCreateEntry());
