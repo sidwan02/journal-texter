@@ -1,79 +1,62 @@
 import './JournallerTest.css';
 import NavBar from "../dashboard/NavBar";
 import React, {useState} from "react";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import QuestionDisplay from "./SubComponents/QuestionDisplay";
+import HiddenQuestionDisplay from "./SubComponents/HiddenQuestionDisplay";
 
 export default function () {
     const [userResponse, setUserResponse] = useState("");
+    const [texts, setTexts] = useState([]);
+    const [showQuestionDisplay, setShowQuestionDisplay] = useState(true);
+    // const [questions, setQuestions] = useState(["", "", "", "", ""]);
+    // for testing
+    const [questions, setQuestions] = useState(["what happens if the question is longer and therefore takes up more space?", "prompt 2", "prompt 3", "prompt 4", "prompt 5"]);
 
-    function test() {
-        submitUserForm();
+    const addResponse = () => {
+        setTexts(texts.concat(
+            <div className="journal-entry-text-container align-right">
+                <div className="journal-entry-text">{userResponse}</div>
+            </div>));
+    }
+
+    function saveEntry() {
+        // TODO Connect to save functionality
+        alert("NEED TO ADD SAVE ENTRY");
     }
 
     function enterPressed(event) {
         let code = event.keyCode || event.which;
-        if(code === 13) {
-            submitUserForm();
+        if (code === 13) {
+            submitUserResponse();
         }
     }
 
-    function submitUserForm() {
-        setQuestion1("test1");
-        setQuestion2("test2");
-        setQuestion3("test3");
-        setQuestion4("test4");
-        setQuestion5("test5");
-    }
+    function submitUserResponse() {
+        setShowQuestionDisplay(true);
 
-    const [selectedQuestion, setSelectedQuestion] = useState("");
-    const [question1, setQuestion1] = useState("test1");
-    const [question2, setQuestion2] = useState("test2");
-    const [question3, setQuestion3] = useState("test3");
-    const [question4, setQuestion4] = useState("test4");
-    const [question5, setQuestion5] = useState("test5");
-
-    const handleQuestions = (event, newQuestion) => {
-        setSelectedQuestion(newQuestion);
-        setQuestion1("");
-        setQuestion2("");
-        setQuestion3("");
-        setQuestion4("");
-        setQuestion5("");
+        addResponse();
+        setUserResponse("");
+        document.getElementById("journaling-text-box").value = '';
     }
 
     return (
         <div className="journaller">
             <NavBar/>
             <div className="journaller-body">
-                <div className="text-display grid-element"></div>
-                <div className="question-display grid-element">
-                    <div className="question-display-header question-display-element">
-                        <div className="question-display-header-text">
-                            Select a prompt to respond to!
-                        </div>
-                    </div>
-                    <div className="prompt-selector question-display-element">
-                        <div>{question1}</div>
-                    </div>
-                    <div className="prompt-selector question-display-element">
-                        <div>{question2}</div>
-                    </div>
-                    <div className="prompt-selector question-display-element">
-                        <div>{question3}</div>
-                    </div>
-                    <div className="prompt-selector question-display-element">
-                        <div>{question4}</div>
-                    </div>
-                    <div className="prompt-selector question-display-element">
-                        <div>{question5}</div>
-                    </div>
+                <div className="text-display grid-element">
+                    {texts}
                 </div>
+                {showQuestionDisplay ?
+                    <QuestionDisplay questions={questions} texts={texts} setTexts={setTexts}
+                                                        setShowQuestionDisplay={setShowQuestionDisplay}/>
+                                                        : <HiddenQuestionDisplay />}
                 <input type="text" onKeyPress={enterPressed}
+                       autoComplete="off"
                        onChange={event => setUserResponse(event.target.value)}
+                       id="journaling-text-box"
                        className="grid-element journal-type-box"/>
-                <button onClick={test} className="grid-element text-submit-button journal-button">Send</button>
-                <button onClick={test} className="save-journal-entry grid-element journal-button">Save</button>
+                <button onClick={submitUserResponse} className="grid-element text-submit-button journal-button">Send</button>
+                <button onClick={saveEntry} className="save-journal-entry grid-element journal-button">Save</button>
             </div>
         </div>
     );

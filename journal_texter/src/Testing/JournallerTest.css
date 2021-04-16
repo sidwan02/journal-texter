@@ -4,7 +4,6 @@
 }
 
 .journaller-body {
-    /*background-color: #d7ecff;*/
     margin: 1rem auto;
 
     width: 85%;
@@ -27,6 +26,8 @@
 .grid-element.text-display {
     grid-column: span 4;
     grid-row: span 7;
+
+    overflow: auto;
 }
 
 .grid-element.question-display {
@@ -34,6 +35,17 @@
     grid-row: span 7;
 
     overflow: hidden;
+}
+
+.grid-element.hidden-question-display {
+    background-color: var(--blue-650);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5em;
+    font-weight: 600;
 }
 
 .grid-element.journal-type-box {
@@ -70,11 +82,15 @@
     outline: 1px solid black;
 }
 
+.question-display-element>div {
+    padding: 1rem;
+    text-align: center;
+}
+
 .question-display-header {
     height: 20%;
     font-size: 1.5em;
     font-weight: 600;
-    font-decoration: underline;
 
     background-color: var(--blue-650);
 }
@@ -103,6 +119,37 @@
     color: var(--blue-700);
 }
 
-/*.prompt-selector.selector5 {*/
-/*    border-radius: 0 0 calc(1rem - 2px) calc(1rem - 2px);*/
-/*}*/
+.journal-entry-text-container {
+    display: flex;
+
+    width: 96%;
+    padding: 1% 2%;
+}
+
+.journal-entry-text-container.align-right {
+    justify-content: flex-end;
+}
+
+.journal-entry-text-container.align-left {
+    justify-content: flex-start;
+
+
+}
+
+.align-right>div {
+    background-color: var(--blue-400);
+}
+
+.align-left>div {
+    background-color: #b5b5b5;
+}
+
+.journal-entry-text {
+    max-width: 60%;
+
+    font-size: 1.25rem;
+    padding: 0.5rem 0.75rem;
+
+    border: 2px black solid;
+    border-radius: 1rem;
+}
