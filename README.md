@@ -83,7 +83,7 @@ for pdf version
 
 **Project Idea(s):**
 ### JournalTexter
-JournalTexter is a journaling app that makes it easy and engaging for users to type up their thoughts. After a user signs up, they can make their first entry, in which they’ll be prompted by a JournallerPage. The JournallerPage will give them a prompt, and once they answer, the JournallerPage will provide a few related questions to get more of their thoughts down. Unlike a chatbot, the JournallerPage is just there to feed you related questions/prompts to help you explore and document different aspects of your life that you may not have considered writing down. Once the user is done journaling, they can save the entry to look back on later. This makes it easy for users to keep writing, however much they want.
+JournalTexter is a journaling app that makes it easy and engaging for users to type up their thoughts. After a user signs up, they can make their first entry, in which they’ll be prompted by a OldJournallerPage. The OldJournallerPage will give them a prompt, and once they answer, the OldJournallerPage will provide a few related questions to get more of their thoughts down. Unlike a chatbot, the OldJournallerPage is just there to feed you related questions/prompts to help you explore and document different aspects of your life that you may not have considered writing down. Once the user is done journaling, they can save the entry to look back on later. This makes it easy for users to keep writing, however much they want.
 
 #### Base Requirements
 Our program must be able to:
