@@ -1,17 +1,12 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec;
 
-import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.ProxiedSynonymFetcher;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.wordSyonyms.WordnikAPIHandler;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,12 +55,11 @@ public class WordCountVec {
         while (currentNCountIndex < (nDiff - 1)) {
 //          System.out.println("currentNCountIndex: " + currentNCountIndex);
           currentNDiffJointWord
-            .append(" ")
-            .append(splitText.get(currentIteration + currentNCountIndex + 1));
-          currentNCountIndex ++;
+            .append(" ").append(splitText.get(currentIteration + currentNCountIndex + 1));
+          currentNCountIndex++;
         }
         nDiffSplitText.add(currentNDiffJointWord.toString());
-        currentIteration ++;
+        currentIteration++;
       } catch (IndexOutOfBoundsException e) {
         System.out.println("index out of bounds");
       }
@@ -74,7 +68,8 @@ public class WordCountVec {
     return nDiffSplitText;
   }
 
-  public TreeMap<String, Integer> getFrequenciesFromSplitText(List<String> splitText, int nDiff) {
+  public TreeMap<String, Integer> getFrequenciesFromSplitText(List<String> splitText,
+                                                              int nDiff) {
     TreeMap<String, Integer> nWordFrequencies = new TreeMap<>();
 
     List<String> nDiffWordCombinations = getNDiffCombinations(splitText, nDiff);
@@ -89,8 +84,8 @@ public class WordCountVec {
         System.out.println("word NOT in map");
 
 //        WordnikAPIHandler wordnikConnection = new WordnikAPIHandler();
-         ProxiedSynonymFetcher prox = ProxiedSynonymFetcher.INSTANCE;
-         Set<String> synonyms = prox.get(nDiffWords);
+        ProxiedSynonymFetcher prox = ProxiedSynonymFetcher.INSTANCE;
+        Set<String> synonyms = prox.get(nDiffWords);
         // check if any synonyms in map
         int synCount = 0;
 //        for (String synonym : wordnikConnection.getSynonyms(nDiffWords)) {
@@ -102,7 +97,7 @@ public class WordCountVec {
           if (nWordFrequencies.containsKey(synonym)) {
             System.out.println("synonym in map");
             nWordFrequencies.put(synonym, nWordFrequencies.get(synonym) + 1);
-            synCount ++;
+            synCount++;
           }
         }
         // synonym not in map
@@ -120,14 +115,14 @@ public class WordCountVec {
   }
 
   // https://stackoverflow.com/questions/2864840/treemap-sort-by-value
-  public <K,V extends Comparable<? super V>>
-  SortedSet<Map.Entry<K,V>> sortByValues(Map<K,V> map) {
-    SortedSet<Map.Entry<K,V>> sortedEntries = new TreeSet<>(
-      (e1, e2) -> {
-        int res = e1.getValue().compareTo(e2.getValue());
-        return res != 0 ? res : 1;
-      }
-    );
+  public <K, V extends Comparable<? super V>>
+      SortedSet<Map.Entry<K, V>> sortByValues(Map<K, V> map) {
+    SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<>(
+          (e1, e2) -> {
+              int res = e1.getValue().compareTo(e2.getValue());
+              return res != 0 ? res : 1;
+          }
+        );
     sortedEntries.addAll(map.entrySet());
     return sortedEntries;
   }

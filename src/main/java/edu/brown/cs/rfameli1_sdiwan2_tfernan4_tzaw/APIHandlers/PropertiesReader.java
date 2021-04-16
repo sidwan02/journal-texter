@@ -14,8 +14,7 @@ import java.util.Properties;
  */
 public final class PropertiesReader {
 
-  private static final Logger LOGGER
-    = LoggerFactory.getLogger(PropertiesReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesReader.class);
 
   private static final Properties PROPERTIES;
 
@@ -41,9 +40,9 @@ public final class PropertiesReader {
   }
 
   /**
-   * Get the configuration key for a given keyword
+   * Get the configuration key for a given keyword.
    * @param name String name file.
-   * @return Return property
+   * @return Return property.
    */
   public static String getProperty(final String name) {
 

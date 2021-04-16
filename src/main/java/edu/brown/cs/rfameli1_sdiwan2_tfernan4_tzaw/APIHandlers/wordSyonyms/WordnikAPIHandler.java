@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class WordnikAPIHandler {
   /**
    * Gets the synonyms of a desired word.
+   *
    * @param word a word whose synonyms must be found.
    * @return a Set of String of all synonyms associated with the passed word.
    */
@@ -30,13 +31,11 @@ public class WordnikAPIHandler {
 
     // https://docs.spring.io/spring-android/docs/current/reference/html/rest-template.html
     try {
-      ResponseEntity<String> response
-        = rt.exchange(
-          "https://api.wordnik.com/v4/word.json/"
+      ResponseEntity<String> response = rt.exchange("https://api.wordnik.com/v4/word.json/"
           + word
-          + "/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key="
-          + PropertiesReader.getProperty("WORDNIK_KEY"),
-        HttpMethod.GET, entity, String.class);
+          + "/relatedWords?useCanonical=false&relationshipTypes=synonym"
+          + "&limitPerRelationshipType=10&api_key="
+          + PropertiesReader.getProperty("WORDNIK_KEY"), HttpMethod.GET, entity, String.class);
 
       String eventBody = response.getBody();
 
