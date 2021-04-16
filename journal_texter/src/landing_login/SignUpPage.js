@@ -80,17 +80,17 @@ export default function SignUpPage({setToken}) {
     }
 
     return (
-        <div className="container">
+        <div className="login-page">
             <div className="login-box">
-                <div className="title">
-                    <Link className="home-link link" to="/">JournalTexter</Link>
+                <div className="login-box-title">
+                    <Link className="login-box-home-link login-box-link" to="/">JournalTexter</Link>
                 </div>
                 <div className="login-form">
                     <LoginTextBox text="Username" change={setUserName} type="text"/>
                     <LoginTextBox text="Password" change={setPassword} type="password"/>
                     <LoginTextBox text="Confirm Password" change={setConfirmPassword} type="password"/>
-                    <p className="error-text">{error}</p>
-                    <button className="submit" type="submit" onClick={handleSubmit}>Submit</button>
+                    <p className="login-form-error-text">{error}</p>
+                    <button className="login-page-submit" type="submit" onClick={handleSubmit}>Submit</button>
                 </div>
             </div>
         </div>
