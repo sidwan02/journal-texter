@@ -40,9 +40,7 @@ export default function Dashboard() {
             .then(response => {
                 let entries = response.data["entries"]["values"];
 
-                console.log(entries.length)
-
-                for (let i = 0; i < entries.length; i++)
+                for (let i = entries.length - 1; i >= 0; i--)
                 {
                     let year = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["year"];
                     let month = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["month"];
@@ -53,19 +51,12 @@ export default function Dashboard() {
 
                     console.log(entryId);
                     console.log(date);
-                    // setPastEntries(pastEntries.concat(<OldJournalEntryBox date={date} entryID={entryId}/>));
 
-                    // console.log(pastEntries)
                     pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId}/>);
                     console.log(pastEntries)
                     setPastEntries(pastEntries.concat(<div></div>));
                 }
 
-                /*
-                setPastEntries(entries.map(entry =>
-                    <OldJournalEntryBox date={entry["date"]} entryID={entry["entryId"]}/>
-                ));
-                 */
                 let tempEntries = entries.data["date"];
                 console.log(tempEntries);
 

@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import QuestionDisplay from "./SubComponents/QuestionDisplay";
 import HiddenQuestionDisplay from "./SubComponents/HiddenQuestionDisplay";
 import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 export default function (props) {
     const [userResponse, setUserResponse] = useState("");
@@ -13,6 +14,7 @@ export default function (props) {
     const [questions, setQuestions] = useState(["", "", "", "", ""]);
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
+    const history = useHistory()
 
     /**
      * Loads in a random question at the start
@@ -112,7 +114,7 @@ export default function (props) {
         ).then(response => {
 
         })
-        //alert("NEED TO ADD SAVE ENTRY");
+        history.push('/');
     }
 
     function enterPressed(event) {
