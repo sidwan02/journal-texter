@@ -1,5 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.Database;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;

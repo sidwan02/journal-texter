@@ -1,5 +1,6 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DbUtils;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
@@ -16,6 +17,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -72,6 +74,11 @@ public final class JournalTexterDB {
       throw new SQLException("Database connection has not been set up in JournalTexter Database");
     }
   }
+
+  // ******************************
+  // Question Methods
+  // ******************************
+
 
   /**
    * Loads all the questions and tags from a spreadsheet into the questions and tags tables in the
@@ -175,6 +182,31 @@ public final class JournalTexterDB {
     return questions;
   }
 
+  // ******************************
+  // Tag Methods
+  // ******************************
+
+  /**
+   * Retrieves all tags from the tags table in the database.
+   * @return a Set of all tags as Strings
+   * @throws SQLException if connection has not been established or if an error occurs retrieving
+   * from the database
+   */
+  public Set<String> getAllTagsFromDB() throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("SELECT text FROM tags;");
+    ResultSet rs = ps.executeQuery();
+    Set<String> allTags = new HashSet<>();
+    while (rs.next()) {
+      allTags.add(rs.getString(1));
+    }
+    return allTags;
+  }
+
+  // ******************************
+  // Entry Methods
+  // ******************************
+
   /**
    * Gets all the entries of a user by using their username.
    * @param username the user's unique username
@@ -257,57 +289,58 @@ public final class JournalTexterDB {
    */
   public void addToEntry(Integer entryId, List<JournalText> toAdd) throws SQLException {
     checkConnection();
-
     PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
-
     ps.setInt(1, entryId);
-
     ResultSet rs = ps.executeQuery();
-
-    StringBuilder entryText = new StringBuilder();
-
-    try {
-      if (rs.next()) {
-        if (rs.isClosed()) {
-          System.out.println("rs is closed");
-        }
-        entryText = new StringBuilder(rs.getString(1));
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+    StringBuilder entryText;
+    if (rs.next()) {
+      entryText = new StringBuilder(rs.getString(1));
+    } else {
+      throw new SQLException("No entry found with id " + entryId);
     }
 
     for (JournalText jt : toAdd) {
       entryText.append(jt.stringRepresentation());
     }
-
     ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
-
     ps.setString(1, entryText.toString());
-
     ps.setInt(2, entryId);
-
     ps.executeUpdate();
 
   }
 
   /**
-   * Retrieves all tags from the tags table in the database.
-   * @return a Set of all tags as Strings
-   * @throws SQLException if connection has not been established or if an error occurs retrieving
-   * from the database
+   * Resets the text of the entry with the given id to the empty string.
+   * @param entryId the Id of the entry
+   * @throws SQLException if the database is missing or an error occurs when interacting with the
+   * database
    */
-  public Set<String> getAllTagsFromDB() throws SQLException {
+  public void resetEntryText(Integer entryId) throws SQLException {
     checkConnection();
-    PreparedStatement ps = conn.prepareStatement("SELECT text FROM tags;");
-    ResultSet rs = ps.executeQuery();
-    Set<String> allTags = new HashSet<>();
-    while (rs.next()) {
-      allTags.add(rs.getString(1));
-    }
-    return allTags;
+    PreparedStatement ps = conn.prepareStatement("UPDATE entries SET entry_text='' WHERE id=?;");
+    ps.setInt(1, entryId);
+    ps.executeUpdate();
+    DbUtils.closeQuietly(ps);
   }
 
+  /**
+   * Deletes the identified entry in the entries table.
+   * @param entryId the Id of the entry
+   * @throws SQLException if the database is missing or an error occurs when interacting with the
+   * database
+   */
+  public void deleteEntry(Integer entryId) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("DELETE FROM entries WHERE id=?");
+    ps.setInt(1, entryId);
+    ps.executeUpdate();
+    DbUtils.closeQuietly(ps);
+  }
+
+
+  // ******************************
+  // User Methods
+  // ******************************
 
 
   /**
