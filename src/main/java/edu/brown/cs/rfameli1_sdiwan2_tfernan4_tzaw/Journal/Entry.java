@@ -3,6 +3,7 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -18,7 +19,7 @@ public class Entry<T extends JournalText> {
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
   private final Double sentiment = 0.0;
-  private Set<String> tags = null;
+  private Set<String> tags = new HashSet<>();
 
   /**
    * Constructs an entry using a string representation of the entry.
@@ -77,7 +78,7 @@ public class Entry<T extends JournalText> {
   }
 
   /**
-   * Retrieves the ID of this entry
+   * Retrieves the ID of this entry.
    * @return this entry's id
    */
   public Integer getId() { return this.id; }
