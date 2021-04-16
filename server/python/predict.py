@@ -4,7 +4,6 @@ from extract_data_IMDB import *
 from model import SentimentRNN
 
 
-
 def predict_sentiment(review):
     # https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch
     num_layers = 2
@@ -16,16 +15,12 @@ def predict_sentiment(review):
     model = SentimentRNN(num_layers, vocab_size, hidden_dim,
                          embedding_dim, drop_prob=0.5)
 
-    # model.load_state_dict(torch.load(
-    #     r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\server\model" + "\sentiment_model.pth"))
-
-
     model.load_state_dict(torch.load(
         r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\server\model\sentiment_model.pth"))
 
     is_cuda = torch.cuda.is_available()
 
-    # If we have a GPU available, we'll set our device to GPU. We'll use this device variable later in our code.
+   # check if cuda is available
     if is_cuda:
         device = torch.device("cuda")
         print("GPU is available")
@@ -45,19 +40,16 @@ def predict_sentiment(review):
         word_seq = tokenize_sentence(rev, vocab)
 
         reviews_tokenized = [word_seq]
-        # batch size of 1 doesn't work for some reason because of that squeeze error thingy remember [] vs [1]
-        # reviews_tokenized.append(word_seq)
 
-        # word_seq = np.expand_dims(word_seq, axis=0)
         pad = torch.from_numpy(
             np.array(normalize_length(500, reviews_tokenized)))
         inputs = pad.to(device)
-        # print(inputs)
+
+        # get prediction
         batch_size = 1
         h = model.init_hidden(batch_size)
         h = tuple([each.data for each in h])
         output, h = model(inputs, h)
-        # print(output)
 
         return output.item()
 
@@ -66,5 +58,3 @@ def predict_sentiment(review):
     print(f'Predicted sentiment is {status} with value {pro}')
 
     return pro
-
-# print(predict_sentiment("hahah"))

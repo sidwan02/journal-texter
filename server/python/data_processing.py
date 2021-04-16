@@ -13,7 +13,6 @@ def try_tokenize(word, phrase_to_index_dict):
     try:
         return phrase_to_index_dict[word]
     except:
-        # return -1
         return 0
 
 
