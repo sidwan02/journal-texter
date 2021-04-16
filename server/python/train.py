@@ -1,32 +1,15 @@
-# Libraries
-
 import matplotlib.pyplot as plt
 import pandas as pd
 import torch
-
 from model import SentimentRNN
-
 import numpy as np
-
-
 from clean_review import clean_filter_lemma_mini
 from data_processing import *
-
-# Preliminaries
-
-# from torchtext.data import Field, TabularDataset, BucketIterator
-
-# Models
-
 import torch.nn as nn
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 
-# Training
-
 is_cuda = torch.cuda.is_available()
 
-
-# If we have a GPU available, we'll set our device to GPU. We'll use this device variable later in our code.
 if is_cuda:
     device = torch.device("cuda")
     print("GPU is available")
@@ -36,13 +19,11 @@ else:
 
 
 class Train(nn.Module):
-    # def __init__(self, embedding_dim, train_loader, test_loader, test_loader):
     def __init__(self, vocab_size, train_loader, test_loader, batch_size):
         super(Train, self).__init__()
 
-        # Instantiate the model w/ hyperparams
+        # hyperparams
         num_layers = 2
-
         vocab_size = vocab_size + 1  # extra 1 for padding
         embedding_dim = 64
         output_dim = 1
@@ -56,23 +37,21 @@ class Train(nn.Module):
 
         print(model)
 
-        # loss and optimization functions
+        # more hyperparams
         lr = 0.001
-
         criterion = nn.BCELoss()
-
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-        # function to predict accuracy
-
         def acc(pred, label):
+            # get the accuracy in terms of whether target and true are both positive (>0.5)
+            # or negative (< 0.5)
             pred = torch.round(pred.squeeze())
             return torch.sum(pred == label.squeeze()).item()
 
         clip = 5
         epochs = 5
         valid_loss_min = np.Inf
-        # train for some number of epochs
+
         epoch_tr_loss, epoch_vl_loss = [], []
         epoch_tr_acc, epoch_vl_acc = [], []
 
@@ -85,21 +64,19 @@ class Train(nn.Module):
             for inputs, labels in train_loader:
 
                 inputs, labels = inputs.to(device), labels.to(device)
-                # Creating new variables for the hidden state, otherwise
-                # we'd backprop through the entire training history
+
                 h = tuple([each.data for each in h])
 
                 model.zero_grad()
                 output, h = model(inputs, h)
 
-                # calculate the loss and perform backprop
                 loss = criterion(output.squeeze(), labels.float())
                 loss.backward()
                 train_losses.append(loss.item())
-                # calculating accuracy
+
                 accuracy = acc(output, labels)
                 train_acc += accuracy
-                # `clip_grad_norm` helps prevent the exploding gradient problem in RNNs / LSTMs.
+
                 nn.utils.clip_grad_norm_(model.parameters(), clip)
                 optimizer.step()
 
@@ -120,6 +97,7 @@ class Train(nn.Module):
                 accuracy = acc(output, labels)
                 test_acc += accuracy
 
+            # maintain epoch state
             epoch_train_loss = np.mean(train_losses)
             epoch_val_loss = np.mean(test_losses)
             epoch_train_acc = train_acc/len(train_loader.dataset)
@@ -139,5 +117,6 @@ class Train(nn.Module):
                 valid_loss_min = epoch_val_loss
             print(25*'==')
 
+        # save model upon training
         print("traning complete!")
         torch.save(model.state_dict(), r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\server\model" + "\sentiment_model.pth")

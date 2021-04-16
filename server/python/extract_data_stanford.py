@@ -8,8 +8,6 @@ def get_phrase_id_dicts():
     ) as f:
         phrases = f.read()
 
-    print("running")
-
     # convert into dict of phrase ID | phrase
     index_to_phrase_dict = {}
     phrase_to_index_dict = {}
@@ -30,11 +28,7 @@ def get_phrase_id_dicts():
             # this is the newline at the end of the txt
             break
         except ValueError:
-            print(" WHU WHWUH WUN UN W")
-            print(phrase_components[1])
 
-    print("done splitting phrases !!!!!!!!!!!!!!!!!: ",
-          len(index_to_phrase_dict))
     return (index_to_phrase_dict, phrase_to_index_dict)
 
 
@@ -54,14 +48,12 @@ def get_sentiment_dict():
             index = sentiment_components[0]
             sentiment = sentiment_components[1]
             if (sentiment == "sentiment values"):
-                print('skip header')
             else:
                 sentiment_dict[int(index)] = float(sentiment)
         except IndexError:
             # this is the newline at the end of the txt
             break
         except ValueError:
-            print('should not be here')
             break
     return sentiment_dict
 
@@ -75,14 +67,9 @@ def get_reviews():
 
     reviews_split = reviews.split("\n")
 
-    print("reviews_split: ", reviews_split[1])
     reviews_split_cleaned = []
 
     for rev in reviews_split:
         reviews_split_cleaned.append(clean_filter_lemma_mini(rev))
-
-    print(len(reviews_split_cleaned))
-
-    print("done splitting reviews !!!!!!!!!!!!!!!!!")
 
     return reviews_split_cleaned

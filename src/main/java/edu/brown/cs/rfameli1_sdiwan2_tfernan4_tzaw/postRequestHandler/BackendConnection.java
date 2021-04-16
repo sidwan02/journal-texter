@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,12 @@ public class BackendConnection {
   public BackendConnection() {
   }
 
+  /**
+   * Get the desired number of randomly generated questions.
+   *
+   * @param n the number of questions required.
+   * @return a list of questions.
+   */
   public static List<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
@@ -35,30 +40,35 @@ public class BackendConnection {
 
     int size = tags.size();
     int counter = n;
+    List<Integer> seenItems = new ArrayList<>();
     while (counter > 0) {
       int item = new Random().nextInt(size);
-      int i = 0;
-      for(String tag : tags)
-      {
-        if (i == item)
-//          return tag;
-          randomlyChosenTags.add(tag);
-        i++;
+      if (! seenItems.contains(item)) {
+        int i = 0;
+        for(String tag : tags) {
+          if (i == item) {
+            seenItems.add(item);
+            randomlyChosenTags.add(tag);
+          }
+          i++;
+        }
+        counter --;
+      } else {
+        // item has been seen, go through loop again
       }
-
-//      if (randomlyChosenTags.size() == n) {
-//        break;
-//      }
-      counter --;
     }
 
     TranslationsAPIHandler translate = new TranslationsAPIHandler();
 
+    // get questions associated with each tag
     List<String> questions = new ArrayList<>();
     for (String tag : randomlyChosenTags) {
       List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
 
       for (Question q : questionsFromTag) {
+        // use the American dialect
+        // In future updates this dialect can be dynamically changed
+        // through the passing of another parameter to this method.
         questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
         if (questions.size() >= 5) {
           break;
@@ -69,7 +79,13 @@ public class BackendConnection {
     return questions;
   }
 
-  public static Set<String> getTagsFromResponses(String combinedResponses) throws SQLException {
+  /**
+   * Get the tags from a user's responses.
+   *
+   * @param combinedResponses a combined string of all responses.
+   * @return a set of all tags associated with the responses.
+   */
+  public static Set<String> getTagsFromResponses(String combinedResponses) {
     WordCountVec vectorizor = new WordCountVec();
 
     Map<String, Integer> frequencies
@@ -96,16 +112,22 @@ public class BackendConnection {
     return foundTags;
   }
 
+  /**
+   * Get questions of desired tags.
+   *
+   * @param foundTags the tags associated with a user's responses.
+   * @return a list of questions.
+   */
   public static List<String> getQuestionsFromTags(Set<String> foundTags) throws SQLException {
     List<String> questions = new ArrayList<>();
 
-    //JournalTexterDB jtDB = new JournalTexterDB();
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
     for (String tag : foundTags) {
       List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
       for (Question q : questionsFromTag) {
         questions.add(q.getText());
+        // only 5 questions at most can be sent to the frontend
         if (questions.size() >= 5) {
           break;
         }
@@ -115,15 +137,25 @@ public class BackendConnection {
     return questions;
   }
 
+  /**
+   * Get the sentiment from a user's responses.
+   *
+   * @param combinedResponses the responses of a user.
+   * @return a number between 0 to 1, 0 being highly negative and 1 being highly positive.
+   */
   public static double getSentimentFromResponses(String combinedResponses) {
     SentimentAnalysis senti = new SentimentAnalysis();
-    Double sentiment = senti.getSentimentFromText(combinedResponses);
 
-    return sentiment;
+    return senti.getSentimentFromText(combinedResponses);
   }
 
+  /**
+   * Get the entries summary of a user.
+   *
+   * @param username unique username/ID of the person whose summary must be determined.
+   * @return a list of questions.
+   */
   public static JSONArray getEntriesSummaryFromUsername(String username) throws SQLException {
-    //JournalTexterDB jtDB = new JournalTexterDB();
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
     List<Entry<JournalText>> entries = jtDB.getUserEntriesByUsername(username);

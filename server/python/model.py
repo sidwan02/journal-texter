@@ -56,7 +56,7 @@ class SentimentRNN(nn.Module):
 
     def init_hidden(self, batch_size):
         is_cuda = torch.cuda.is_available()
-        # If we have a GPU available, we'll set our device to GPU. We'll use this device variable later in our code.
+
         if is_cuda:
             device = torch.device("cuda")
             print("GPU is available")
@@ -64,9 +64,6 @@ class SentimentRNN(nn.Module):
             device = torch.device("cpu")
             print("GPU not available, CPU used")
 
-        ''' Initializes hidden state '''
-        # Create two new tensors with sizes n_layers x batch_size x hidden_dim,
-        # initialized to zero, for hidden state and cell state of LSTM
         h0 = torch.zeros((self.num_layers, batch_size,
                          self.hidden_dim)).to(device)
         c0 = torch.zeros((self.num_layers, batch_size,

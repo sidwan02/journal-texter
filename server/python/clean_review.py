@@ -64,7 +64,7 @@ def filter(sentence):
     punct = r"[{}]".format(string.punctuation)
     sentence = re.sub(punct, " ", sentence)
     sentence = re.sub(r"[0-9]", " ", sentence)
-    # # correct spelling mistakes
+    # correct spelling mistakes
     sentence = re.sub(r"(^|\s)[a-z][a-z]($|\s)", " ", sentence)
     word_tokens = word_tokenize(sentence)
     # filter using NLTK library append it to a string
