@@ -12,11 +12,11 @@ import LandingPage from "./landing_login/LandingPage"
 import LoginPage from "./landing_login/LoginPage"
 import SignUpPage from "./landing_login/SignUpPage";
 import Dashboard from "./dashboard/Dashboard";
-import JournallerPage from "./journaller/JournallerPage"
+import OldJournallerPage from "./journaller/OldJournallerPage"
 import NotFoundPage from "./general_components/NotFoundPage";
 import OldJournalEntry from "./journaller/OldJournalEntry";
 import useToken from './useToken';
-import JournallerTest from "./journaller/JournallerTest";
+import JournallerTest from "./journaller/JournallerPage";
 import OldJournalEntryTest from "./Test/OldJournalEntryTest";
 
 /**

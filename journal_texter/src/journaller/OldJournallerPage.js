@@ -7,7 +7,7 @@ import {AwesomeButton} from "react-awesome-button";
 import axios from "axios";
 import NavBar from "../dashboard/NavBar";
 
-function JournallerPage(props) {
+function OldJournallerPage(props) {
     // currentLine - the current input in the textbox
     const [currentLine, setCurrentLine] = useState("");
     // currentResponse - all of the currentLine before the user clicks "Request Questions"
@@ -285,4 +285,4 @@ function JournallerPage(props) {
     );
 }
 
-export default JournallerPage;
+export default OldJournallerPage;

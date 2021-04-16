@@ -1,4 +1,4 @@
-import '../css/JournallerTest.css';
+import '../css/JournallerPage.css';
 import NavBar from "../dashboard/NavBar";
 import React, {useEffect, useState} from "react";
 import './OldJournalEntryTest.css';
