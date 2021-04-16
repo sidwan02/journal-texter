@@ -13,6 +13,11 @@ import logo from "../images/logo192.png"
 function LandingPage() {
     return (
         <div className="landing-page">
+            <div className="landing-page-nav-bar">
+                <div className="landing-page-nav-login-link-container">
+                    <button className="landing-page-nav-login-link">Sign In</button>
+                </div>
+            </div>
             <div className="landing-page-header">
                 <h1 className="landing-page-title">Journal Texter</h1>
                 <h3 className="landing-page-subtitle">Journaling made easy!</h3>
@@ -49,7 +54,7 @@ function LandingPage() {
                     <img id="landing-page-logo" src={logo} alt="JournalTexter Logo"/>
                 </div>
                 <div className="landing-page-link-container">
-                    <Link className="landing-page-link" to="/signup">Start Today!</Link>
+                    <Link className="landing-page-link" to="/signup">Sign Up!</Link>
                 </div>
             </div>
         </div>
