@@ -1,7 +1,11 @@
 import React from "react";
+import axios from "axios";
 
 export default function QuestionDisplay(props) {
     let questions = props.questions;
+    let recentUserResponse = props.recentUserResponse;
+    let user = props.user;
+    let entryID = props.entryID;
     let questionElements = questions.map((question) =>
         <div onClick={() => handleQuestion(question)} className="prompt-selector question-display-element">
             <div>{question}</div>
@@ -9,11 +13,38 @@ export default function QuestionDisplay(props) {
     )
 
     const handleQuestion = (question) => {
-        props.setTexts(props.texts.concat(
-            <div className="journal-entry-text-container align-left">
-                <div className="journal-entry-text">{question}</div>
-            </div>));
-        props.setShowQuestionDisplay(false);
+
+        if (question !== "") {
+            const toSend = {
+                entryID: entryID,
+                question: question,
+                userID: user,
+                text: recentUserResponse,
+                state: "saveEntry"
+            }
+
+            let config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                }
+            }
+
+            axios.post(
+                "http://localhost:4567/handleSaveUserInputs",
+                toSend,
+                config
+            ).then(response => {
+                props.setTexts(props.texts.concat(
+                    <div className="journal-entry-text-container align-left">
+                        <div className="journal-entry-text">{question}</div>
+                    </div>));
+
+                props.setShowQuestionDisplay(false);
+
+                props.setRecentUserResponse([]);
+            })
+        }
     }
 
     return (

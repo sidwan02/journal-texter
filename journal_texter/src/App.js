@@ -68,12 +68,12 @@ function App() {
                             <Redirect to="/"/>
                         </Route>
                         {/*<Route exact path="/dashboard" component={Dashboard}/>*/}
-                        <Route exact path="/journaller" component={JournallerPage}/>
+                        <Route exact path="/journaller" component={JournallerTest}/>
                         <Route exact path="/journalentry" component={OldJournalEntry}/>
                         <Route exact path="/404" component={NotFoundPage}/>
                         {/*This next line lets us default to the 404 page otherwise*/}
 
-                        <Route exact path="/test" component={JournallerTest} />
+                        <Route exact path="/test" component={JournallerPage} />
 
                         <Redirect to="/404"/>
                     </Switch>
