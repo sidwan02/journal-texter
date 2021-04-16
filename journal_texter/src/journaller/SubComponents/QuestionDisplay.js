@@ -54,7 +54,7 @@ export default function QuestionDisplay(props) {
                     Select a prompt to respond to!
                 </div>
             </div>
-            { questionElements }
+            {questionElements}
         </div>
     );
 }

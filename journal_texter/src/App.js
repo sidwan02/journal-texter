@@ -13,10 +13,9 @@ import LoginPage from "./landing_login/LoginPage"
 import SignUpPage from "./landing_login/SignUpPage";
 import Dashboard from "./dashboard/Dashboard";
 import NotFoundPage from "./general_components/NotFoundPage";
-import OldJournalEntry from "./journaller/OldJournalEntry";
 import useToken from './useToken';
 import JournallerTest from "./journaller/JournallerPage";
-import OldJournalEntryTest from "./Test/OldJournalEntryTest";
+import OldJournalEntry from "./journaller/OldJournalEntry";
 import TOS from "./landing_login/TOS";
 
 /**
@@ -77,8 +76,6 @@ function App() {
                         {/*This next line lets us default to the 404 page otherwise*/}
 
                         <Route exact path="/tos" component={TOS}/>
-
-                        <Route exact path="/test" component={OldJournalEntryTest} />
 
                         <Redirect to="/404"/>
                     </Switch>

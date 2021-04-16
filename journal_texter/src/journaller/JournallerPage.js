@@ -153,14 +153,15 @@ export default function (props) {
                                      recentUserResponse={recentUserResponse}
                                      setRecentUserResponse={setRecentUserResponse}
                                      user={user} entryID={entryID}
-                                                        setShowQuestionDisplay={setShowQuestionDisplay}/>
-                                                        : <HiddenQuestionDisplay text={"Respond to the prompt!"}/>}
+                                     setShowQuestionDisplay={setShowQuestionDisplay}/>
+                    : <HiddenQuestionDisplay text={"Respond to the prompt!"}/>}
                 <input type="text" onKeyPress={enterPressed}
                        autoComplete="off"
                        onChange={event => setUserResponse(event.target.value)}
                        id="journaling-text-box"
                        className="grid-element journal-type-box"/>
-                <button onClick={submitUserResponse} className="grid-element text-submit-button journal-button">Send</button>
+                <button onClick={submitUserResponse} className="grid-element text-submit-button journal-button">Send
+                </button>
                 <button onClick={saveEntry} className="save-journal-entry grid-element journal-button">Save</button>
             </div>
         </div>

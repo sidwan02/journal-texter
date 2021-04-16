@@ -1,17 +1,36 @@
-import React, {useEffect} from "react";
+import '../css/JournallerPage.css';
+import NavBar from "../dashboard/NavBar";
+import React, {useEffect, useState} from "react";
+import '../css/OldJournalEntry.css';
 import {useHistory} from "react-router-dom";
 import axios from "axios";
-import NavBar from "../dashboard/NavBar";
 
-function OldJournalEntry(props) {
+export default function OldJournalEntry(props) {
+    const [texts, setTexts] = useState([]);
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
+    const history = useHistory()
 
-    // TODO: Send a post request to "/handleUserHistoryRequest"
+
+    function addUserText(userResponse) {
+        console.log(userResponse);
+        setTexts(texts =>
+            [...texts, <div className="journal-entry-text-container align-right">
+                <div className="journal-entry-text">{userResponse}</div>
+        </div>]);
+    }
+
+    function addPromptText(prompt) {
+        console.log(prompt);
+        setTexts(texts =>
+            [...texts, <div className="journal-entry-text-container align-left">
+                <div className="journal-entry-text">{prompt}</div>
+            </div>]);
+    }
+
     const loadEntry = async () => {
-
         const toSend = {
-            entryID: entryID, // TODO: Replace with actual entryID
+            entryID: entryID,
             userID: user
         }
 
@@ -22,13 +41,6 @@ function OldJournalEntry(props) {
             }
         }
 
-        // TODO: Fill out/Load the response
-        // variables = ImmutableMap.of(
-        //           "questions", questions, -> list
-        //           "responses", accumulatedResponses, -> list of lists
-        //           "date", entry.getDate(),
-        //           "tags", entry.getTags(),
-        //           "sentiment", entry.getSentiment());
         axios.post(
             "http://localhost:4567/handleUserHistoryRequest",
             toSend,
@@ -36,30 +48,17 @@ function OldJournalEntry(props) {
         ).then(response => {
             let questionsList = response.data["questions"]
             let responsesList = response.data["responses"]
-            console.log(questionsList)
-            console.log(responsesList)
-
-            let journalHistoryDiv = document.getElementById("journalHistory")
-
             let i;
             for (i = 0; i < questionsList.length; i++) {
                 let question = questionsList[i].substring(1);
                 if (question !== "") {
-                    journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
-                        + "padding: 8px; margin-top: 10px;"
-                        + "max-width: 600px; word-wrap: break-word\">"
-                        + question + "</div>"
-                        + "<div style=\"float: left; height: 1px; width: 1000px; \"/>"
+                    addPromptText(question)
                 }
 
                 if (i < responsesList.length) {
                     let j;
                     for (j = 0; j < responsesList[i].length; j++) {
-                        journalHistoryDiv.innerHTML += "<div style=\"float: right; border-style: solid;"
-                            + "padding: 8px; margin-top: 10px;"
-                            + "max-width: 600px; word-wrap: break-word\">"
-                            + responsesList[i][j] + "</div>"
-                            + "<div style=\"float: right; height: 1px; width: 1000px;\"/>"
+                        addUserText(responsesList[i][j])
                     }
                 }
             }
@@ -70,25 +69,23 @@ function OldJournalEntry(props) {
         loadEntry()
     }, [])
 
-    const historyStyle = {
-        height: 400,
-        width: 1000,
-        margin: 'auto',
-        border: '2px solid black',
-        overflow: 'auto',
-        padding: 10,
+
+    const deleteEntry = () => {
+        //TODO DELETE ENTRY ID
+        alert("Entry ID = " + entryID);
+        history.push('/');
     }
 
     return (
-        <div>
-            <NavBar />
-
-            <hr style={{backgroundColor: 'black', height: '1px'}}/>
-
-            <br/>
-            <div id="journalHistory" className="journalHistory" style={historyStyle}/>
+        <div className="old-journal-entry">
+            <NavBar/>
+            <div className="old-journal-entry-body">
+                {texts}
+            </div>
+            <div className="journal-entry-button-container">
+                <button className="delete-journal-entry-button old-journal-entry-button" onClick={deleteEntry}>Delete Journal Entry</button>
+                <button className="return-to-home-button old-journal-entry-button" onClick={() => history.push('/')}>Return to Dashboard</button>
+            </div>
         </div>
     );
 }
-
-export default OldJournalEntry;
