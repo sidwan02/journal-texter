@@ -28,7 +28,7 @@
 .landing-page-body {
     display: flex;
     justify-content: space-around;
-    margin: 5rem;
+    margin: 4rem;
 }
 
 .landing-page-body .landing-page-info-card {
@@ -38,7 +38,7 @@
 .landing-page-action-bar {
     display: flex;
     justify-content: center;
-    margin: 2rem;
+    padding: 0 0 2rem 0;
 }
 
 .landing-page-action-bar .landing-page-link-container {
