@@ -130,7 +130,7 @@ public class BackendConnection {
 
     for (Entry<JournalText> entry : entries) {
       HashMap<String, Object> eMap = new HashMap<>();
-      eMap.put("entryId", entry.getDate());
+      eMap.put("entryId", entry.getId());
       eMap.put("date", entry.getDate());
       eMap.put("tags", entry.getTags());
       eMap.put("sentiment", entry.getSentiment());

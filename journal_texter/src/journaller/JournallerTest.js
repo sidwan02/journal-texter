@@ -1,4 +1,4 @@
-import './JournallerTest.css';
+import '../css/JournallerTest.css';
 import NavBar from "../dashboard/NavBar";
 import React, {useState} from "react";
 import QuestionDisplay from "./SubComponents/QuestionDisplay";

@@ -74,6 +74,12 @@ public class Entry<T extends JournalText> {
   }
 
   /**
+   * Retrieves the ID of this entry
+   * @return this entry's id
+   */
+  public Integer getId() { return this.id; }
+
+  /**
    * Gets the string representation of the Entry.
    * @return a formatted String such as "\{question\}\{response\}"
    */

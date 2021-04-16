@@ -16,7 +16,7 @@ import JournallerPage from "./journaller/JournallerPage"
 import NotFoundPage from "./general_components/NotFoundPage";
 import OldJournalEntry from "./journaller/OldJournalEntry";
 import useToken from './useToken';
-import JournallerTest from "./Testing/JournallerTest";
+import JournallerTest from "./journaller/JournallerTest";
 
 /**
  * The component that all the other components run under.
