@@ -14,8 +14,13 @@ function OldJournalEntryBox(props) {
 
     function handleClick() {
         // history.push('/journalentry');
+        // history.push({
+        //     pathname: '/journalentry',
+        //     state: {entryID: props.entryID}
+        // })
+
         history.push({
-            pathname: '/journalentry',
+            pathname: '/test',
             state: {entryID: props.entryID}
         })
     }

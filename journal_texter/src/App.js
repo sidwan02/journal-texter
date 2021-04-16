@@ -74,7 +74,7 @@ function App() {
                         <Route exact path="/404" component={NotFoundPage}/>
                         {/*This next line lets us default to the 404 page otherwise*/}
 
-                        <Route exact path="/test" component={OldJournalEntryTest()} />
+                        <Route exact path="/test" component={OldJournalEntryTest} />
 
                         <Redirect to="/404"/>
                     </Switch>

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import './OldJournalEntryTest.css';
 import {useHistory} from "react-router-dom";
 
-export default function (props) {
+export default function OldJournalEntryTest(props) {
     const [texts, setTexts] = useState([]);
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
@@ -12,6 +12,9 @@ export default function (props) {
 
     useEffect(() => {
         // TODO Load in past journal entries
+        // TODO Text is not updating correctly.  ONLY ADDS ONE MAX. WORKS WHEN USING BUTTON THOUGH.
+        addUserText("TEST");
+        addUserText("TEST");
     }, [])
 
     /**
@@ -34,10 +37,11 @@ export default function (props) {
     return (
         <div className="old-journal-entry">
             <NavBar/>
-            {/*<p>{entryID}</p>*/}
             <div className="old-journal-entry-body">
                 {texts}
             </div>
+            {/*TODO FOR SOME REASON THIS WORKS WHEN ADDING USER TEXT*/}
+            <button onClick={() => addUserText("Test")}>Add User Text Test</button>
         </div>
     );
 }

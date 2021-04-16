@@ -49,11 +49,11 @@ export default function Dashboard() {
                     let entryId = response.data["entries"]["values"][i]["nameValuePairs"]["entryId"]
                     let date = month + "/" + day + "/" + year;
 
-                    console.log(entryId);
-                    console.log(date);
+                    // console.log(entryId);
+                    // console.log(date);
 
                     pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId}/>);
-                    console.log(pastEntries)
+                    // console.log(pastEntries)
                     setPastEntries(pastEntries.concat(<div></div>));
                 }
 
