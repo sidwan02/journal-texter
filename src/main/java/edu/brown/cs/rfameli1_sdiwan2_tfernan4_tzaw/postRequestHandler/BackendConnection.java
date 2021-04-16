@@ -20,9 +20,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 
-public class BackendConnection {
+public final class BackendConnection {
 
-  public BackendConnection() {
+  private BackendConnection() {
   }
 
   /**
@@ -43,16 +43,16 @@ public class BackendConnection {
     List<Integer> seenItems = new ArrayList<>();
     while (counter > 0) {
       int item = new Random().nextInt(size);
-      if (! seenItems.contains(item)) {
+      if (!seenItems.contains(item)) {
         int i = 0;
-        for(String tag : tags) {
+        for (String tag : tags) {
           if (i == item) {
             seenItems.add(item);
             randomlyChosenTags.add(tag);
           }
           i++;
         }
-        counter --;
+        counter--;
       } else {
         // item has been seen, go through loop again
       }
@@ -88,11 +88,9 @@ public class BackendConnection {
   public static Set<String> getTagsFromResponses(String combinedResponses) {
     WordCountVec vectorizor = new WordCountVec();
 
-    Map<String, Integer> frequencies
-      = vectorizor.getFrequenciesFromText(combinedResponses, 1);
+    Map<String, Integer> frequencies = vectorizor.getFrequenciesFromText(combinedResponses, 1);
 
-    SortedSet<Map.Entry<String, Integer>> sortedFrequencies
-      = vectorizor.sortByValues(frequencies);
+    SortedSet<Map.Entry<String, Integer>> sortedFrequencies = vectorizor.sortByValues(frequencies);
 
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
     Set<String> tags = new HashSet<>();
@@ -165,10 +163,10 @@ public class BackendConnection {
     for (Entry<JournalText> entry : entries) {
       JSONObject jsonObject = new JSONObject();
       try {
-      jsonObject.put("entryId", entry.getId());
-      jsonObject.put("date", entry.getDate());
-      jsonObject.put("tags", entry.getTags());
-      jsonObject.put("sentiment", entry.getSentiment());
+        jsonObject.put("entryId", entry.getId());
+        jsonObject.put("date", entry.getDate());
+        jsonObject.put("tags", entry.getTags());
+        jsonObject.put("sentiment", entry.getSentiment());
       } catch (Exception e) {
         e.printStackTrace();
       }
