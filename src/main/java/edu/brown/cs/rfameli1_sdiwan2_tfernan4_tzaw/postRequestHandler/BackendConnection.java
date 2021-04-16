@@ -8,6 +8,8 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -120,24 +122,27 @@ public class BackendConnection {
     return sentiment;
   }
 
-  public static List<HashMap<String, Object>> getEntriesSummaryFromUsername(String username) throws SQLException {
+  public static JSONArray getEntriesSummaryFromUsername(String username) throws SQLException {
     //JournalTexterDB jtDB = new JournalTexterDB();
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
     List<Entry<JournalText>> entries = jtDB.getUserEntriesByUsername(username);
 
-    List<HashMap<String, Object>> entriesMaps = new ArrayList<>();
+    JSONArray jsonArray = new JSONArray();
 
     for (Entry<JournalText> entry : entries) {
-      HashMap<String, Object> eMap = new HashMap<>();
-      eMap.put("entryId", entry.getId());
-      eMap.put("date", entry.getDate());
-      eMap.put("tags", entry.getTags());
-      eMap.put("sentiment", entry.getSentiment());
-
-      entriesMaps.add(eMap);
+      JSONObject jsonObject = new JSONObject();
+      try {
+      jsonObject.put("entryId", entry.getId());
+      jsonObject.put("date", entry.getDate());
+      jsonObject.put("tags", entry.getTags());
+      jsonObject.put("sentiment", entry.getSentiment());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      jsonArray.put(jsonObject);
     }
 
-    return entriesMaps;
+    return jsonArray;
   }
 }

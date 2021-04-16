@@ -12,7 +12,6 @@ import NavBar from "./NavBar";
  * @constructor
  */
 export default function Dashboard() {
-    let entries = [];
     const [pastEntries, setPastEntries] = useState([]);
 
     /**
@@ -39,16 +38,36 @@ export default function Dashboard() {
             config
         )
             .then(response => {
-                entries = response.data["entries"];
+                let entries = response.data["entries"]["values"];
 
-                console.log(entries);
+                console.log(entries.length)
+
+                for (let i = 0; i < entries.length; i++)
+                {
+                    let year = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["year"];
+                    let month = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["month"];
+                    let day = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["day"];
+
+                    let entryId = response.data["entries"]["values"][i]["nameValuePairs"]["entryId"]
+                    let date = month + "/" + day + "/" + year;
+
+                    console.log(entryId);
+                    console.log(date);
+                    // setPastEntries(pastEntries.concat(<OldJournalEntryBox date={date} entryID={entryId}/>));
+
+                    // console.log(pastEntries)
+                    pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId}/>);
+                    console.log(pastEntries)
+                    setPastEntries(pastEntries.concat(<div></div>));
+                }
 
                 /*
                 setPastEntries(entries.map(entry =>
                     <OldJournalEntryBox date={entry["date"]} entryID={entry["entryId"]}/>
                 ));
-
                  */
+                let tempEntries = entries.data["date"];
+                console.log(tempEntries);
 
             })
             .catch(error => {
@@ -69,7 +88,7 @@ export default function Dashboard() {
             <NavBar />
             <div className="dashboard-entries">
                 <NewJournalBox title="Create New Entry" link="journaller"/>
-                {pastEntries}
+                { pastEntries }
             </div>
         </div>
     );

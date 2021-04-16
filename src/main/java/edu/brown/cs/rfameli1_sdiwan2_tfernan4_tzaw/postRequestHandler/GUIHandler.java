@@ -324,7 +324,7 @@ public class GUIHandler {
 
       String userNameOrUserID = data.getString("token");
 
-      List<HashMap<String, Object>> entriesMaps
+      JSONArray entriesMaps
           = BackendConnection.getEntriesSummaryFromUsername(userNameOrUserID);
 
       variables = ImmutableMap.of(
