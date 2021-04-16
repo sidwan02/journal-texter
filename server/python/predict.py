@@ -4,6 +4,7 @@ from extract_data_IMDB import *
 from model import SentimentRNN
 
 
+
 def predict_sentiment(review):
     # https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch
     num_layers = 2
@@ -20,7 +21,7 @@ def predict_sentiment(review):
 
 
     model.load_state_dict(torch.load(
-        r"server/model/sentiment_model.pth"))
+        r"C:\Users\sidwa\OneDrive\OneDriveNew\Personal\Sid\Brown University\Courses\Computer Science\CSCI 0320\Assignments\term-project-rfameli1-sdiwan2-tfernan4-tzaw\server\model\sentiment_model.pth"))
 
     is_cuda = torch.cuda.is_available()
 
@@ -65,3 +66,5 @@ def predict_sentiment(review):
     print(f'Predicted sentiment is {status} with value {pro}')
 
     return pro
+
+# print(predict_sentiment("hahah"))

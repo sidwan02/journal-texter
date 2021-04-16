@@ -170,9 +170,38 @@ public class GUIHandler {
         double sentiment = -1.0;
         //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
+        List<JournalText> entryInfo = new ArrayList<>();
+        for (String res : responses) {
+          entryInfo.add(new edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response(res));
+        }
+
+        entryInfo.add(new Question(question));
+
+        JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
+        jtDB.addToEntry(entryId, entryInfo);
+
         variables = ImmutableMap.of(
-            "tags", foundTags,
-            "sentiment", sentiment);
+          "tags", foundTags,
+          "sentiment", sentiment);
+//        List<String> responses = new ArrayList<>();
+//        if (text != null) {
+//          int len = text.length();
+//          for (int i = 0; i < len; i++) {
+//            responses.add(text.get(i).toString());
+//          }
+//        }
+//
+//        String combinedResponses = String.join(" ", responses);
+//
+//        Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
+//
+//        double sentiment = -1.0;
+//        //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+//
+//        variables = ImmutableMap.of(
+//            "tags", foundTags,
+//            "sentiment", sentiment);
       } else if (state.equals("saveEntry")) {
         List<String> responses = new ArrayList<>();
         if (text != null) {
@@ -194,7 +223,7 @@ public class GUIHandler {
           entryInfo.add(new edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response(res));
         }
 
-        entryInfo.add(new Question(question));
+//        entryInfo.add(new Question(question));
 
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
