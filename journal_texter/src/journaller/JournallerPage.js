@@ -154,7 +154,7 @@ export default function (props) {
                                      setRecentUserResponse={setRecentUserResponse}
                                      user={user} entryID={entryID}
                                                         setShowQuestionDisplay={setShowQuestionDisplay}/>
-                                                        : <HiddenQuestionDisplay />}
+                                                        : <HiddenQuestionDisplay text={"Respond to the prompt!"}/>}
                 <input type="text" onKeyPress={enterPressed}
                        autoComplete="off"
                        onChange={event => setUserResponse(event.target.value)}

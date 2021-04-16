@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.login.DashboardHandler;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL.JournalTexterREPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
@@ -106,7 +105,6 @@ public final class Main {
 
     // Setup Spark Routes
     Spark.post("/login", new GUIHandler.HandleLogin());
-    Spark.post("/dashboard", new DashboardHandler());
     Spark.post("/signup", new GUIHandler.HandleSignUp());
     Spark.post("/handleRequestQuestion", new GUIHandler.HandleRequestQuestion());
     Spark.post("/handleSaveUserInputs", new GUIHandler.HandleSaveUserInputs());

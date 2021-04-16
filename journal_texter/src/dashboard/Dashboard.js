@@ -33,7 +33,6 @@ export default function Dashboard() {
 
         axios.post(
             "http://localhost:4567/handleUserHistorySummary",
-            // "http://localhost:4567/dashboard",
             toSend,
             config
         )
@@ -42,8 +41,7 @@ export default function Dashboard() {
 
                 console.log(entries);
 
-                for (let i = entries.length - 1; i >= 0; i--)
-                {
+                for (let i = entries.length - 1; i >= 0; i--) {
                     let year = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["year"];
                     let month = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["month"];
                     let day = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["day"];
@@ -74,10 +72,10 @@ export default function Dashboard() {
 
     return (
         <div className="dashboard">
-            <NavBar />
+            <NavBar/>
             <div className="dashboard-entries">
                 <NewJournalBox title="Create New Entry" link="journaller"/>
-                { pastEntries }
+                {pastEntries}
             </div>
         </div>
     );

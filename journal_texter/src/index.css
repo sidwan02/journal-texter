@@ -31,4 +31,8 @@ html, body, #root, #root>div {
   --blue-650: #8ecaff;
   --blue-700: #0061b5;
   --blue-900: #000205;
+
+  --accent-200: #ff505b;
+  --accent-300: #ff3643;
+  --accent-400: #ff0515;
 }

@@ -92,7 +92,7 @@
 }
 
 .login-form-error-text {
-    color: #ff0515;
+    color: var(--accent-400);
     margin: .9rem;
     font-size: .875rem;
 }

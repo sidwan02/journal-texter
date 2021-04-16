@@ -1,10 +1,10 @@
 import React from "react";
 
-export default function HiddenQuestionDisplay() {
+export default function HiddenQuestionDisplay(props) {
     return (
         <div className="question-display grid-element hidden-question-display">
             <div>
-                Respond to the prompt!
+                { props.text }
             </div>
         </div>
     );

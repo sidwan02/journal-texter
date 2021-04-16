@@ -13,8 +13,14 @@ function OldJournalEntryBox(props) {
     const history = useHistory();
 
     function handleClick() {
+        // history.push({
+        //     pathname: '/journalentry',
+        //     state: {entryID: props.entryID}
+        // })
+
+        //TODO DELETE AFTER TESTING
         history.push({
-            pathname: '/journalentry',
+            pathname: '/test',
             state: {entryID: props.entryID}
         })
     }

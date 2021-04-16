@@ -34,14 +34,24 @@ export default function OldJournalEntryTest(props) {
             </div>));
     }
 
+    const deleteEntry = () => {
+        //TODO DELETE ENTRY ID
+        alert("Entry ID = " + entryID);
+        history.push('/');
+    }
+
     return (
         <div className="old-journal-entry">
             <NavBar/>
             <div className="old-journal-entry-body">
                 {texts}
+                {/*TODO FOR SOME REASON THIS WORKS WHEN ADDING USER TEXT*/}
+                <button onClick={() => addUserText("Test")}>Add User Text Test</button>
             </div>
-            {/*TODO FOR SOME REASON THIS WORKS WHEN ADDING USER TEXT*/}
-            <button onClick={() => addUserText("Test")}>Add User Text Test</button>
+            <div className="journal-entry-button-container">
+                <button className="delete-journal-entry-button old-journal-entry-button" onClick={deleteEntry}>Delete Journal Entry</button>
+                <button className="return-to-home-button old-journal-entry-button" onClick={() => history.push('/')}>Return to Dashboard</button>
+            </div>
         </div>
     );
 }
