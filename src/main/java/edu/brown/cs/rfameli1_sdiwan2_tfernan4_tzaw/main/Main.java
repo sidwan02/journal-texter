@@ -111,6 +111,7 @@ public final class Main {
     Spark.post("/handleCreateEntry", new GUIHandler.HandleCreateEntry());
     Spark.post("/handleUserHistorySummary", new GUIHandler.HandleRequestUserHistorySummary());
     Spark.post("/handleUserHistoryRequest", new GUIHandler.HandleRequestUserSpecificHistory());
+    Spark.post("/handleDeletionRequest", new GUIHandler.HandleDeletionRequest());
   }
 
   /**

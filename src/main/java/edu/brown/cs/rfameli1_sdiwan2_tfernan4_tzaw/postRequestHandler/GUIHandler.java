@@ -62,6 +62,9 @@ public class GUIHandler {
 
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
+        // reset the entry
+        jtDB.resetEntryText(entryId);
+
         // save the question
         jtDB.addToEntry(entryId, entryInfo);
 
@@ -172,8 +175,8 @@ public class GUIHandler {
         jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
-          "tags", foundTags,
-          "sentiment", sentiment);
+            "tags", foundTags,
+            "sentiment", sentiment);
       } else if (state.equals("saveEntry")) {
         // convert JSONArray
         List<String> responses = new ArrayList<>();
@@ -348,6 +351,35 @@ public class GUIHandler {
       on its id, or all entries from a given date.
        */
       /*-------*/
+      return GSON.toJson(variables);
+    }
+  }
+
+  public static class HandleDeletionRequest implements Route {
+    private static final Gson GSON = new Gson();
+
+    /**
+     * Handles a deletion request for an entry
+     *
+     * @param request  - request object for Axios request
+     * @param response - response object for Axios request
+     * @return a JSON object representing information to be used by the front end
+     * @throws Exception if data cannot be accessed from given JSON object
+     */
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+
+      JSONObject data = new JSONObject(request.body());
+      Map<String, Object> variables;
+
+      Integer entryId = Integer.parseInt(data.getString("entryID"));
+
+      JournalTexterDB jtDB = JournalTexterDB.getInstance();
+
+      jtDB.deleteEntry(entryId);
+
+      variables = ImmutableMap.of("entryID", entryId);
+
       return GSON.toJson(variables);
     }
   }

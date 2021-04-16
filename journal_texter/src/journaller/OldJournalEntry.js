@@ -17,7 +17,7 @@ export default function OldJournalEntry(props) {
         setTexts(texts =>
             [...texts, <div className="journal-entry-text-container align-right">
                 <div className="journal-entry-text">{userResponse}</div>
-        </div>]);
+            </div>]);
     }
 
     function addPromptText(prompt) {
@@ -71,9 +71,25 @@ export default function OldJournalEntry(props) {
 
 
     const deleteEntry = () => {
-        //TODO DELETE ENTRY ID
-        alert("Entry ID = " + entryID);
-        history.push('/');
+        const toSend = {
+            entryID: entryID
+        }
+
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+
+        axios.post(
+            "http://localhost:4567/handleDeletionRequest",
+            toSend,
+            config
+        ).then(() => {
+            alert("This entry will now be deleted");
+            history.push('/');
+        })
     }
 
     return (
@@ -83,8 +99,12 @@ export default function OldJournalEntry(props) {
                 {texts}
             </div>
             <div className="journal-entry-button-container">
-                <button className="delete-journal-entry-button old-journal-entry-button" onClick={deleteEntry}>Delete Journal Entry</button>
-                <button className="return-to-home-button old-journal-entry-button" onClick={() => history.push('/')}>Return to Dashboard</button>
+                <button className="delete-journal-entry-button old-journal-entry-button" onClick={deleteEntry}>Delete
+                    Journal Entry
+                </button>
+                <button className="return-to-home-button old-journal-entry-button"
+                        onClick={() => history.push('/')}>Return to Dashboard
+                </button>
             </div>
         </div>
     );

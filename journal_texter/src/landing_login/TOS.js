@@ -29,7 +29,8 @@ export default function TOS() {
                 <p className="tos-paragraph"><strong>JournalTexter</strong> was designed and built in the United
                     States. Under United States copyright law, all images and text on this screen are copyright to
                     the owner's of <strong>JournalTexter</strong>.Users may not steal any content from
-                    this website, and text that they enter may be used by <strong>JournalTexter</strong> however it chooses.
+                    this website, and text that they enter may be used by <strong>JournalTexter</strong> however it
+                    chooses.
                 </p>
 
                 <h3 className="tos-section-header">Termination</h3>
