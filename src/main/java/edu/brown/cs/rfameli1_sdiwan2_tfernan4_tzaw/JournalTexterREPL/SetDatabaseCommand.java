@@ -11,9 +11,16 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Command class that sets the database for the JournalTexterDB.
+ */
 public class SetDatabaseCommand implements REPLCommand {
   private final JournalTexterDB jtDatabase;
 
+  /**
+   * Constructs the command.
+   * @param jtDatabase the JournalTexterDB that will be used
+   */
   public SetDatabaseCommand(JournalTexterDB jtDatabase) {
     this.jtDatabase = jtDatabase;
   }

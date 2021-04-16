@@ -9,19 +9,33 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A Read-eval-print-loop.
+ */
 public class REPL {
   private final Pattern regexParse = Pattern.compile("(\".*?\"|\\S+)");
   private final HashSet<REPLCommand> registeredCommands;
 
 
+  /**
+   * Constructor that sets the set of registered commands to be empty.
+   */
   public REPL() {
     this.registeredCommands = new HashSet<>();
   }
 
+  /**
+   * Registers a command class to the REPL.
+   * @param replCommand a command class that implements REPLCommand
+   */
   public void registerCommand(REPLCommand replCommand) {
     registeredCommands.add(replCommand);
   }
 
+  /**
+   * Starts the REPL.
+   * @throws IOException if an error occurs with input or output
+   */
   public void start() throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     String input = br.readLine();
