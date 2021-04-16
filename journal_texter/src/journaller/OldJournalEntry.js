@@ -11,7 +11,7 @@ function OldJournalEntry(props) {
     const loadEntry = async () => {
 
         const toSend = {
-            entryID: 1, // TODO: Replace with actual entryID
+            entryID: entryID, // TODO: Replace with actual entryID
             userID: user
         }
 
@@ -36,22 +36,25 @@ function OldJournalEntry(props) {
         ).then(response => {
             let questionsList = response.data["questions"]
             let responsesList = response.data["responses"]
+
             let journalHistoryDiv = document.getElementById("journalHistory")
 
             let i;
             for (i = 0; i < questionsList.length; i++) {
-                journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
-                    + "padding: 8px; margin-top: 10px;"
-                    + "max-width: 600px; word-wrap: break-word\">"
-                    + questionsList[i] + "</div>"
-                    + "<div style=\"float: left; height: 1px; width: 1000px; \"/>"
+                let question = questionsList[i].substring(1);
+                if (question !== "") {
+                    journalHistoryDiv.innerHTML += "<div style=\"float: left; border-style: solid;"
+                        + "padding: 8px; margin-top: 10px;"
+                        + "max-width: 600px; word-wrap: break-word\">"
+                        + question + "</div>"
+                        + "<div style=\"float: left; height: 1px; width: 1000px; \"/>"
+                }
 
-                let j;
-                for (j = 0; j < responsesList[i].length; j++) {
+                if (i < responsesList.length) {
                     journalHistoryDiv.innerHTML += "<div style=\"float: right; border-style: solid;"
                         + "padding: 8px; margin-top: 10px;"
                         + "max-width: 600px; word-wrap: break-word\">"
-                        + responsesList[i][j] + "</div>"
+                        + responsesList[i] + "</div>"
                         + "<div style=\"float: right; height: 1px; width: 1000px;\"/>"
                 }
             }
