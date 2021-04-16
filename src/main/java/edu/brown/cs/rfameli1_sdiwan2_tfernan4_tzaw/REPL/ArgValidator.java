@@ -23,6 +23,7 @@ public final class ArgValidator {
    * @param argFormats A List of ArgTypes that specify what format the command's arguments must be
    *                   in
    * @param args       The arguments that will be checked
+   * @throws IllegalArgumentException if no argFormat was found to match the args
    * @return an ArgHolder with all the arguments in their proper type
    */
   public static ArgHolder parseInputByFormats(String command, List<List<ArgTypes>> argFormats,
@@ -51,6 +52,7 @@ public final class ArgValidator {
    * @param command     The command for which parseInput is validating arguments for
    * @param inputFormat A List of ArgTypes that specifies what format the args must be in.
    * @param args        a List<String> of arguments to be checked for validity
+   * @throws IllegalArgumentException if the args do not match the inputFormat
    * @return an ArgHolder with all the arguments in their proper type
    */
   private static ArgHolder parseInput(String command, List<ArgTypes> inputFormat, List<String> args)

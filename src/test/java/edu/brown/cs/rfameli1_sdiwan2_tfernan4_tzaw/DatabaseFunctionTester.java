@@ -1,6 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.Database;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DbUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,25 +10,59 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseFunctionTester {
-  private DatabaseFunctionTester() { }
-  private static Connection conn = null;
+  private static Connection conn;
 
-  public static Connection getConnection() {
+  private DatabaseFunctionTester() { }
+
+  public static Connection setEmptyDatabaseAndGetConn(String filename)
+      throws IOException, SQLException, ClassNotFoundException {
+    deleteTestDatabaseIfExists(filename);
+    createDatabaseIfNotExists(filename);
+    Database db = new Database(filename);
+    conn = db.getConnection();
+//    dropAllTables(conn);
+    loadAllTables(conn);
     return conn;
   }
 
-
-  public static boolean createEmptyDatabase(String filename)
-      throws IOException, SQLException, ClassNotFoundException {
-    File newDb = new File(filename);
-    deleteFileIfExists(filename);
-    if (!newDb.createNewFile()) {
-      return false;
+  public static void deleteTestDatabaseIfExists(String filename) throws SQLException, IOException {
+    // this will mess up if you use the connection elsewhere and do not close it
+    if (conn != null) {
+      if (!conn.isClosed()) {
+        DbUtils.closeQuietly(conn);
+      }
     }
-    Database db = new Database(filename);
-    conn = db.getConnection();
-    loadAllTables(db.getConnection());
-    return true;
+    File file = new File(filename);
+    if (file.exists()) {
+      if (!file.delete()) {
+        throw new IOException("ERROR: Could not delete file " + filename + " in deleteTestDatabaseIfExists");
+      }
+    }
+  }
+
+  public static void createDatabaseIfNotExists(String filename)
+      throws IOException {
+    File newDb = new File(filename);
+    if (!newDb.exists()) {
+      // Try to create the file
+      if (!newDb.createNewFile()) {
+        throw new IOException("File " + filename + " could not be created in " +
+            "DatabaseFunctionTester.createDatabaseFileIfNotExists");
+      }
+    }
+  }
+
+
+  /**
+   * Clears a given table in the current database. Only works for questions and tags tables.
+   * @param tableName the name of the table to clear
+   * @throws SQLException if no connection has been established or if an error occurs with the SQL
+   * update
+   */
+  public static void clearTable(Connection conn, String tableName) throws SQLException {
+    PreparedStatement ps = conn.prepareStatement("DELETE FROM ?");
+    ps.setString(1, tableName);
+    ps.executeUpdate();
   }
 
   private static void loadAllTables(Connection conn) throws SQLException {
@@ -98,6 +133,7 @@ public class DatabaseFunctionTester {
             ")"
     );
     ps.executeUpdate();
+    DbUtils.closeQuietly(ps);
   }
 
   public static void deleteFileIfExists(String filename) throws IOException {
@@ -109,17 +145,32 @@ public class DatabaseFunctionTester {
     }
   }
 
-  /**
-   * Clears a given table in the current database. Only works for questions and tags tables.
-   * @param tableName the name of the table to clear
-   * @throws SQLException if no connection has been established or if an error occurs with the SQL
-   * update
-   */
-  public static void clearTable(Connection conn, String tableName) throws SQLException {
-    if (tableName.equals("questions") || tableName.equals("tags")) {
-      PreparedStatement ps = conn.prepareStatement("DELETE FROM ?");
-      ps.setString(1, tableName);
-      ps.executeUpdate();
-    }
-  }
+  //  /**
+//   * Drops all JournalTexter-related tables from the database.
+//   * @param conn
+//   * @throws SQLException
+//   */
+//  public static void dropAllTables(Connection conn) throws SQLException {
+//    List<String> tableNames = Arrays.asList(
+//        "entries_to_questions", "tags_to_entries", "tags_to_questions",
+//        "users", "questions", "tags", "entries");
+//    for (String table : tableNames) {
+//      dropTable(conn, table);
+//    }
+//  }
+//
+//  /**
+//   * Drops the given table in the
+//   * @param tableName the name of the table to clear
+//   * @throws SQLException if no connection has been established or if an error occurs with the SQL
+//   * update
+//   */
+//  public static void dropTable(Connection conn, String tableName) throws SQLException {
+//    // BUG HERE
+//    PreparedStatement ps = conn.prepareStatement("DROP TABLE IF EXISTS ?");
+//    ps.setString(1, tableName);
+//    ps.executeUpdate();
+//    DbUtils.closeQuietly(ps);
+//  }
+
 }
