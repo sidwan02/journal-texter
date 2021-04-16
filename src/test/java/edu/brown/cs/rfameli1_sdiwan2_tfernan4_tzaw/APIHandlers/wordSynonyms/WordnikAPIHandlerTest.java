@@ -27,7 +27,7 @@ public class WordnikAPIHandlerTest {
       add("a la sourdine");
     }};
 
-//    assertEquals(synonyms, expectedSynonyms);
+    assertEquals(synonyms, expectedSynonyms);
   }
 
   @Test

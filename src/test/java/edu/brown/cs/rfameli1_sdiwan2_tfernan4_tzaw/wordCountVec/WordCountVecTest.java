@@ -214,6 +214,8 @@ public class WordCountVecTest {
     expectedFreq.put("helps", 1);
     expectedFreq.put("study", 1);
 
+    // THIS TEST SOMETIMES DOES NOT WORK DUE TO THE API'S RESTRICTIONS. THERE IS A RESTRICTION ON
+    // HOW MANY REQUESTS CAN BE SENT IN A GIVEN PERIOD OF TIME
 //    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
   }
 
