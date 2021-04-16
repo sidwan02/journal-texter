@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
@@ -231,5 +232,23 @@ public class WordCountVecTest {
     expectedFreq.put("world", 1);
 
     assertEquals(frequencies, expectedFreq);
+  }
+
+  @Test
+  public void something() {
+    WordCountVec vectorizor = new WordCountVec();
+
+    Map<String, Integer> frequencies = new TreeMap<>();
+    frequencies.put("bomb", 1);
+    frequencies.put("discovered", 10);
+    frequencies.put("history", 12);
+    frequencies.put("terrible", 8);
+    frequencies.put("world", 3);
+
+    SortedSet<Map.Entry<String, Integer>> sortedFrequencies
+      = vectorizor.sortByValues(frequencies);
+
+    assertEquals(sortedFrequencies.first().getKey(), "history");
+    assertEquals(sortedFrequencies.last().getKey(), "bomb");
   }
 }

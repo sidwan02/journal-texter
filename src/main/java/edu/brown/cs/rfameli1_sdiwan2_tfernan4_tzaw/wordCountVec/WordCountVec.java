@@ -16,6 +16,13 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class WordCountVec {
+
+  /**
+   * Gets the synonyms of a desired word.
+   *
+   * @param text text to be cleaned.
+   * @return cleaned text without stopwords, without consecutive spaces and all lowered.
+   */
   public String cleanText(String text) {
     List<String> stopwords = new ArrayList<>();
     try {
@@ -32,28 +39,39 @@ public class WordCountVec {
     return cleanedText.replaceAll("[^a-zA-Z0-9 ]", "");
   }
 
+  /**
+   * Gets the synonyms of a desired word.
+   *
+   * @param cleanedText cleaned text from cleanText method.
+   * @param delimiter characters to split text by.
+   * @return text split by the delimiter.
+   */
   public List<String> splitText(String cleanedText, String delimiter) {
     return Arrays.asList(cleanedText.split(delimiter));
   }
 
+  /**
+   * Get the phrase tokens from nDiff words.
+   *
+   * @param splitText a list of delimited words.
+   * @param nDiff number of words to be contained within each phrase token.
+   * @return a list of tokens, each of word length nDiff.
+   */
   public List<String> getNDiffCombinations(List<String> splitText, int nDiff) {
     List<String> nDiffSplitText = new ArrayList<>();
 
     int maxIterations = splitText.size() - (nDiff - 1);
 
     int currentIteration = 0;
-//    System.out.println("maxIterations: " + maxIterations);
     if (currentIteration >= maxIterations) {
       // suggests that there are fewer words than n-diff
       nDiffSplitText.add(String.join(" ", splitText));
     }
     while (currentIteration < maxIterations) {
-//      System.out.println("currentIteration: " + currentIteration);
       int currentNCountIndex = 0;
       StringBuilder currentNDiffJointWord = new StringBuilder(splitText.get(currentIteration));
       try {
         while (currentNCountIndex < (nDiff - 1)) {
-//          System.out.println("currentNCountIndex: " + currentNCountIndex);
           currentNDiffJointWord
             .append(" ").append(splitText.get(currentIteration + currentNCountIndex + 1));
           currentNCountIndex++;
@@ -68,6 +86,13 @@ public class WordCountVec {
     return nDiffSplitText;
   }
 
+  /**
+   * Get a map of all tokens and the frequency of their occurrence.
+   *
+   * @param splitText a list of delimited words.
+   * @param nDiff number of words to be contained within each phrase token.
+   * @return a map of tokens and frequencies.
+   */
   public TreeMap<String, Integer> getFrequenciesFromSplitText(List<String> splitText,
                                                               int nDiff) {
     TreeMap<String, Integer> nWordFrequencies = new TreeMap<>();
@@ -83,17 +108,11 @@ public class WordCountVec {
         // word not in map
         System.out.println("word NOT in map");
 
-//        WordnikAPIHandler wordnikConnection = new WordnikAPIHandler();
         ProxiedSynonymFetcher prox = ProxiedSynonymFetcher.INSTANCE;
         Set<String> synonyms = prox.get(nDiffWords);
         // check if any synonyms in map
         int synCount = 0;
-//        for (String synonym : wordnikConnection.getSynonyms(nDiffWords)) {
         for (String synonym : synonyms) {
-//          System.out.println(synonym);
-//          System.out.println("ambient");
-//          System.out.println(nWordFrequencies.keySet());
-//          System.out.println(synonym.equals("ambient"));
           if (nWordFrequencies.containsKey(synonym)) {
             System.out.println("synonym in map");
             nWordFrequencies.put(synonym, nWordFrequencies.get(synonym) + 1);
@@ -109,18 +128,34 @@ public class WordCountVec {
     return nWordFrequencies;
   }
 
+  /**
+   * Generate frequencies of tokens from a String.
+   *
+   * @param text cleaned text from cleanText method.
+   * @param nDiff number of words to be contained within each phrase token.
+   * @return the frequency map of tokens to occurrence.
+   */
   public TreeMap<String, Integer> getFrequenciesFromText(String text, int nDiff) {
     List<String> splitText = splitText(cleanText(text), " ");
     return getFrequenciesFromSplitText(splitText, nDiff);
   }
 
   // https://stackoverflow.com/questions/2864840/treemap-sort-by-value
+  /**
+   * Sort the frequencies map into descending order of frequency.
+   *
+   * @param <K> .
+   * @param <V> .
+   * @param map the frequency map to be sorted.
+   * @return a sorted Set of all tokens by descending order of frequency.
+   */
   public <K, V extends Comparable<? super V>>
       SortedSet<Map.Entry<K, V>> sortByValues(Map<K, V> map) {
     SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<>(
           (e1, e2) -> {
               int res = e1.getValue().compareTo(e2.getValue());
-              return res != 0 ? res : 1;
+//              return res != 0 ? res : 1;
+              return -1 * res;
           }
         );
     sortedEntries.addAll(map.entrySet());
