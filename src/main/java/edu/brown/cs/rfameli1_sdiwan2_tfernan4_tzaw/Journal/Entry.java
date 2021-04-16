@@ -31,11 +31,14 @@ public class Entry<T extends JournalText> {
     // Questions will be represented as {@question}
     this.id = id;
     this.date = date;
-    Pattern regexParse = Pattern.compile(Pattern.quote("{([^{}]*)}"));
-    Matcher m = regexParse.matcher(stringRepresentation);
     List<T> questionsResponses = new ArrayList<>();
+    //Pattern regexParse = Pattern.compile(Pattern.quote("{([^{}]*)}"));
+    Pattern regexParse = Pattern.compile("\\{([\\s\\S]+?)\\}");
+    Matcher m = regexParse.matcher(stringRepresentation);
     while (m.find()) {
       String questionOrResponseText = m.group();
+      questionOrResponseText =
+          questionOrResponseText.substring(1, questionOrResponseText.length() - 1);
       if (questionOrResponseText.charAt(0) == '@') {
         questionsResponses.add((T) new Question(questionOrResponseText));
       } else {

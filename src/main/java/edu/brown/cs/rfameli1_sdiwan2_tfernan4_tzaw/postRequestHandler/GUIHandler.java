@@ -310,27 +310,38 @@ public class GUIHandler {
       Entry<JournalText> entry = jtDB.getEntryById(entryId);
 
       List<String> questions = new ArrayList<>();
-      List<List<String>> accumulatedResponses = new ArrayList<>();
-      List<String> responsesForQuestion = new ArrayList<>();
+      //List<List<String>> accumulatedResponses = new ArrayList<>();
+      //List<String> responsesForQuestion = new ArrayList<>();
+      List<String> responses = new ArrayList<>();
 
-      // separate out the questions and responses
-      for (JournalText jt : entry.getQuestionsAndResponses()) {
+      List<JournalText> allText = entry.getQuestionsAndResponses();
+
+      for (JournalText jt : allText) {
+        // Separate out questions and responses
         if (jt.getType() == JournalTextType.QUESTION) {
           questions.add(jt.getText());
-          accumulatedResponses.add(responsesForQuestion);
-          responsesForQuestion = new ArrayList<>();
+          // accumulatedResponses.add(responsesForQuestion);
+          // responsesForQuestion = new ArrayList<>();
         } else {
-          responsesForQuestion.add(jt.getText());
+          //responsesForQuestion.add(jt.getText());
+          responses.add(jt.getText());
         }
       }
 
       variables = ImmutableMap.of(
           "questions", questions,
-          "responses", accumulatedResponses,
+          //"responses", accumulatedResponses,
+          "responses", responses,
           "date", entry.getDate(),
-          "tags", entry.getTags(),
+          //"tags", entry.getTags(),
           "sentiment", entry.getSentiment());
-
+      /*-------*/
+      /*
+      Assuming this relates to seeing all the text of the entry after a user pulls it up, this can
+      be done by sending the id of the entry. I can create a method to retrieve the entry based
+      on its id, or all entries from a given date.
+       */
+      /*-------*/
       return GSON.toJson(variables);
     }
   }
