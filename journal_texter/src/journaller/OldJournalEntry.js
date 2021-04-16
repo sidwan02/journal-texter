@@ -36,6 +36,8 @@ function OldJournalEntry(props) {
         ).then(response => {
             let questionsList = response.data["questions"]
             let responsesList = response.data["responses"]
+            console.log(questionsList)
+            console.log(responsesList)
 
             let journalHistoryDiv = document.getElementById("journalHistory")
 
@@ -51,16 +53,16 @@ function OldJournalEntry(props) {
                 }
 
                 if (i < responsesList.length) {
-                    journalHistoryDiv.innerHTML += "<div style=\"float: right; border-style: solid;"
-                        + "padding: 8px; margin-top: 10px;"
-                        + "max-width: 600px; word-wrap: break-word\">"
-                        + responsesList[i] + "</div>"
-                        + "<div style=\"float: right; height: 1px; width: 1000px;\"/>"
+                    let j;
+                    for (j = 0; j < responsesList[i].length; j++) {
+                        journalHistoryDiv.innerHTML += "<div style=\"float: right; border-style: solid;"
+                            + "padding: 8px; margin-top: 10px;"
+                            + "max-width: 600px; word-wrap: break-word\">"
+                            + responsesList[i][j] + "</div>"
+                            + "<div style=\"float: right; height: 1px; width: 1000px;\"/>"
+                    }
                 }
             }
-
-            // Hopefully this works...
-
         })
     }
 
