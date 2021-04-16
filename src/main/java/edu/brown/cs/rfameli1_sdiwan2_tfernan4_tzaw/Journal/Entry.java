@@ -33,15 +33,18 @@ public class Entry<T extends JournalText> {
     this.id = id;
     this.date = date;
     List<T> questionsResponses = new ArrayList<>();
-    //Pattern regexParse = Pattern.compile(Pattern.quote("{([^{}]*)}"));
-    Pattern regexParse = Pattern.compile("\\{([\\s\\S]+?)\\}");
+    Pattern regexParse = Pattern.compile("\\{([^{}]*)\\}");
+//    Pattern regexParse = Pattern.compile("\\{([\\s\\S]+?)\\}");
     Matcher m = regexParse.matcher(stringRepresentation);
     while (m.find()) {
       String questionOrResponseText = m.group();
+      System.out.println(questionOrResponseText);
       questionOrResponseText =
           questionOrResponseText.substring(1, questionOrResponseText.length() - 1);
-      if (questionOrResponseText.charAt(0) == '@') {
-        questionsResponses.add((T) new Question(questionOrResponseText));
+      if (!(questionOrResponseText.length() == 0) && questionOrResponseText.charAt(0) == '@') {
+        questionsResponses.add(
+            // Add the question string without the @ symbol
+            (T) new Question(questionOrResponseText.substring(1)));
       } else {
         questionsResponses.add((T) new Response(questionOrResponseText));
       }
