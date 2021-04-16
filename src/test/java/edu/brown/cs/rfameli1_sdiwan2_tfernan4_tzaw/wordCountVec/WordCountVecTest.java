@@ -158,7 +158,7 @@ public class WordCountVecTest {
   }
 
   @Test
-  public void getFrequenciesFromSplitText_SingleFrequency_SingleWord() {
+  public void testGetFrequenciesFromSplitText_SingleFrequency_SingleWord() {
     WordCountVec vectorizer = new WordCountVec();
 
     List<String> text =
@@ -171,7 +171,7 @@ public class WordCountVecTest {
   }
 
   @Test
-  public void getFrequenciesFromSplitText_SingleFrequency_Duplicates() {
+  public void testGetFrequenciesFromSplitText_SingleFrequency_Duplicates() {
     WordCountVec vectorizer = new WordCountVec();
 
     List<String> text =
@@ -184,7 +184,7 @@ public class WordCountVecTest {
   }
 
   @Test
-  public void getFrequenciesFromSplitText_NoWordsAreSynonyms() {
+  public void testGetFrequenciesFromSplitText_NoWordsAreSynonyms() {
     WordCountVec vectorizer = new WordCountVec();
 
     List<String> text =
@@ -202,7 +202,7 @@ public class WordCountVecTest {
   }
 
   @Test
-  public void getFrequenciesFromSplitText_SomeWordsAreSynonyms() {
+  public void testGetFrequenciesFromSplitText_SomeWordsAreSynonyms() {
     WordCountVec vectorizer = new WordCountVec();
 
     List<String> text =
@@ -214,17 +214,17 @@ public class WordCountVecTest {
     expectedFreq.put("helps", 1);
     expectedFreq.put("study", 1);
 
-//    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
+    assertEquals(vectorizer.getFrequenciesFromSplitText(text, 1), expectedFreq);
   }
 
   @Test
-  public void getFrequenciesFromText() {
+  public void testGetFrequenciesFromText() {
     WordCountVec vectorizer = new WordCountVec();
 
     TreeMap<String, Integer> frequencies =
       vectorizer.getFrequenciesFromText("We have discovered the most terrible bomb in the history of the world.", 1);
 
-    Map<String, Integer> expectedFreq = new TreeMap();
+    Map<String, Integer> expectedFreq = new TreeMap<>();
     expectedFreq.put("bomb", 1);
     expectedFreq.put("discovered", 1);
     expectedFreq.put("history", 1);
@@ -235,7 +235,7 @@ public class WordCountVecTest {
   }
 
   @Test
-  public void something() {
+  public void testSortByValues() {
     WordCountVec vectorizor = new WordCountVec();
 
     Map<String, Integer> frequencies = new TreeMap<>();

@@ -79,7 +79,7 @@ public class WordCountVec {
         nDiffSplitText.add(currentNDiffJointWord.toString());
         currentIteration++;
       } catch (IndexOutOfBoundsException e) {
-        System.out.println("index out of bounds");
+        System.out.println("Ndiff: index out of bounds");
       }
     }
 
