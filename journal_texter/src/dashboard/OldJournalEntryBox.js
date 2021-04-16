@@ -13,25 +13,15 @@ function OldJournalEntryBox(props) {
     const history = useHistory();
 
     function handleClick() {
-        // history.push('/journalentry');
         history.push({
             pathname: '/journalentry',
             state: {entryID: props.entryID}
         })
-
-        /*
-        history.push({
-            pathname: '/test',
-            state: {entryID: props.entryID}
-        })
-         */
     }
 
     return (
         <div className="dashboardElement" onClick={handleClick}>
             <p className="dashboardElementText">{props.date}</p>
-            <p className="dashboardElementText">{props.entryID}</p>
-            {/*<p className="dashboardElementText">{props.text}</p>*/}
         </div>
     );
 }
