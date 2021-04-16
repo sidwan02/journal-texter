@@ -16,6 +16,7 @@ export default function SignUpPage({setToken}) {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [agreeToTOS, setAgreeToTOS] = useState(false);
     const [error, setError] = useState("");
     const history = useHistory();
 
@@ -60,6 +61,8 @@ export default function SignUpPage({setToken}) {
             setError("Passwords do not match");
         } else if (username === "") {
             setError("Username cannot be blank.");
+        } else if (!document.getElementById("tos-checkbox").checked) {
+            setError("You must agree to the Terms of Service");
         } else {
             const token = await signUpUser();
 
@@ -89,6 +92,12 @@ export default function SignUpPage({setToken}) {
                     <LoginTextBox text="Username" change={setUserName} type="text"/>
                     <LoginTextBox text="Password" change={setPassword} type="password"/>
                     <LoginTextBox text="Confirm Password" change={setConfirmPassword} type="password"/>
+                    <div className="tos-agreement-container">
+                        <input type="checkbox" id="tos-checkbox"/>
+                        <label htmlFor="tos-checkbox" className="tos-checkbox-label">
+                            Agree to the <a href="/tos" target='_blank' className="link-to-tos">Terms of Service</a>
+                        </label>
+                    </div>
                     <p className="login-form-error-text">{error}</p>
                     <button className="login-page-submit" type="submit" onClick={handleSubmit}>Submit</button>
                 </div>
