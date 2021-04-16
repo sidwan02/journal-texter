@@ -8,30 +8,39 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 public class DatabaseFunctionTester {
-  private static Database db;
   private static Connection conn;
 
   private DatabaseFunctionTester() { }
 
-  public static Connection getConnection() {
-    return conn;
-  }
-
-  public static boolean setEmptyDatabase(String filename)
+  public static Connection setEmptyDatabaseAndGetConn(String filename)
       throws IOException, SQLException, ClassNotFoundException {
-    createDatabaseFileIfNotExists(filename);
-    db = new Database(filename);
+    deleteTestDatabaseIfExists(filename);
+    createDatabaseIfNotExists(filename);
+    Database db = new Database(filename);
     conn = db.getConnection();
 //    dropAllTables(conn);
     loadAllTables(conn);
-    return true;
+    return conn;
   }
 
-  public static void createDatabaseFileIfNotExists(String filename)
+  public static void deleteTestDatabaseIfExists(String filename) throws SQLException, IOException {
+    // this will mess up if you use the connection elsewhere and do not close it
+    if (conn != null) {
+      if (!conn.isClosed()) {
+        DbUtils.closeQuietly(conn);
+      }
+    }
+    File file = new File(filename);
+    if (file.exists()) {
+      if (!file.delete()) {
+        throw new IOException("ERROR: Could not delete file " + filename + " in deleteTestDatabaseIfExists");
+      }
+    }
+  }
+
+  public static void createDatabaseIfNotExists(String filename)
       throws IOException {
     File newDb = new File(filename);
     if (!newDb.exists()) {
@@ -43,32 +52,6 @@ public class DatabaseFunctionTester {
     }
   }
 
-  /**
-   * Drops all JournalTexter-related tables from the database.
-   * @param conn
-   * @throws SQLException
-   */
-  public static void dropAllTables(Connection conn) throws SQLException {
-    List<String> tableNames = Arrays.asList("entries", "entries_to_questions",
-        "questions", "tags", "tags_to_entries", "tags_to_questions", "users");
-    for (String table : tableNames) {
-      dropTable(conn, table);
-    }
-  }
-
-  /**
-   * Clears a given table in the current database. Only works for questions and tags tables.
-   * @param tableName the name of the table to clear
-   * @throws SQLException if no connection has been established or if an error occurs with the SQL
-   * update
-   */
-  public static void dropTable(Connection conn, String tableName) throws SQLException {
-    // BUG HERE
-    PreparedStatement ps = conn.prepareStatement("DROP TABLE IF EXISTS ?");
-    ps.setString(1, tableName);
-    ps.executeUpdate();
-    DbUtils.closeQuietly(ps);
-  }
 
   /**
    * Clears a given table in the current database. Only works for questions and tags tables.
@@ -161,4 +144,33 @@ public class DatabaseFunctionTester {
       }
     }
   }
+
+  //  /**
+//   * Drops all JournalTexter-related tables from the database.
+//   * @param conn
+//   * @throws SQLException
+//   */
+//  public static void dropAllTables(Connection conn) throws SQLException {
+//    List<String> tableNames = Arrays.asList(
+//        "entries_to_questions", "tags_to_entries", "tags_to_questions",
+//        "users", "questions", "tags", "entries");
+//    for (String table : tableNames) {
+//      dropTable(conn, table);
+//    }
+//  }
+//
+//  /**
+//   * Drops the given table in the
+//   * @param tableName the name of the table to clear
+//   * @throws SQLException if no connection has been established or if an error occurs with the SQL
+//   * update
+//   */
+//  public static void dropTable(Connection conn, String tableName) throws SQLException {
+//    // BUG HERE
+//    PreparedStatement ps = conn.prepareStatement("DROP TABLE IF EXISTS ?");
+//    ps.setString(1, tableName);
+//    ps.executeUpdate();
+//    DbUtils.closeQuietly(ps);
+//  }
+
 }
