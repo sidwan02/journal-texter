@@ -111,3 +111,17 @@
 .login-page .sign-up-link:hover {
     font-weight: bold;
 }
+
+.tos-agreement-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tos-checkbox-label {
+    color: var(--blue-900);
+}
+
+.link-to-tos {
+    color: var(--blue-700);
+}
