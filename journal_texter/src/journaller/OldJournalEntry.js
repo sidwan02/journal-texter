@@ -50,7 +50,7 @@ export default function OldJournalEntry(props) {
             let responsesList = response.data["responses"]
             let i;
             for (i = 0; i < questionsList.length; i++) {
-                let question = questionsList[i].substring(1);
+                let question = questionsList[i]
                 if (question !== "") {
                     addPromptText(question)
                 }
