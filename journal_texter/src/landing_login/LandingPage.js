@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import React from "react";
 import "../css/LandingPage.css";
 import logo from "../images/logo192.png"
@@ -11,11 +11,13 @@ import logo from "../images/logo192.png"
  * @constructor
  */
 function LandingPage() {
+    const history = useHistory();
+
     return (
         <div className="landing-page">
             <div className="landing-page-nav-bar">
                 <div className="landing-page-nav-login-link-container">
-                    <button className="landing-page-nav-login-link">Sign In</button>
+                    <button className="landing-page-nav-login-link" onClick={() => history.push('/login')}>Sign In</button>
                 </div>
             </div>
             <div className="landing-page-header">

@@ -87,9 +87,15 @@ export default function OldJournalEntry(props) {
             toSend,
             config
         ).then(() => {
-            alert("This entry will now be deleted");
             history.push('/');
         })
+    }
+
+    const confirmDeleteEntry = () => {
+        let delEntry = window.confirm("Would you like to delete this entry?");
+        if (delEntry) {
+            deleteEntry();
+        }
     }
 
     return (
@@ -99,7 +105,7 @@ export default function OldJournalEntry(props) {
                 {texts}
             </div>
             <div className="journal-entry-button-container">
-                <button className="delete-journal-entry-button old-journal-entry-button" onClick={deleteEntry}>Delete
+                <button className="delete-journal-entry-button old-journal-entry-button" onClick={confirmDeleteEntry}>Delete
                     Journal Entry
                 </button>
                 <button className="return-to-home-button old-journal-entry-button"

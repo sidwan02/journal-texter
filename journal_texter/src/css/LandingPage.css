@@ -25,12 +25,13 @@
     border-radius: 1rem;
     border: 2px solid #1893ff;
     color: #1893ff;
-    background-color: var(--blue-300);
+    background-color: var(--blue-200);
     transition: background-color 250ms ease;
+    font-size: 1.1rem;
 }
 
 .landing-page-nav-login-link:hover {
-    background-color: var(--blue-400);
+    background-color: var(--blue-300);
     cursor: pointer;
 }
 
