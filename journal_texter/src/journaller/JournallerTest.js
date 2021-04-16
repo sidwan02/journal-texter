@@ -9,9 +9,7 @@ export default function (props) {
     const [userResponse, setUserResponse] = useState("");
     const [texts, setTexts] = useState([]);
     const [recentUserResponse, setRecentUserResponse] = useState([]);
-    const [showQuestionDisplay, setShowQuestionDisplay] = useState(true);
-    // const [questions, setQuestions] = useState(["", "", "", "", ""]);
-    // for testing
+    const [showQuestionDisplay, setShowQuestionDisplay] = useState(false);
     const [questions, setQuestions] = useState(["", "", "", "", ""]);
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
