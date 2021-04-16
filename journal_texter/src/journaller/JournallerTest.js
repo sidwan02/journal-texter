@@ -57,35 +57,47 @@ export default function (props) {
      * Updates the journal with user input. Sends a POST request to the backend to generate new questions
      */
     const addResponse = () => {
-        setTexts(texts.concat(
-            <div className="journal-entry-text-container align-right">
-                <div className="journal-entry-text">{userResponse}</div>
-            </div>));
+        // Filters out certain characters from the userResponse
+        let filteredResponse = userResponse.replaceAll('<', '');
+        filteredResponse = filteredResponse.replaceAll('>', '');
+        filteredResponse = filteredResponse.replaceAll(';', '');
+        filteredResponse = filteredResponse.replaceAll('{', '');
+        filteredResponse = filteredResponse.replaceAll('}', '');
+        filteredResponse = filteredResponse.replaceAll('@', '');
 
-        setRecentUserResponse(recentUserResponse.concat(userResponse));
+        if (filteredResponse !== '') {
+            setShowQuestionDisplay(true);
 
-        const toSend = {
-            entryID: entryID,
-            userID: user,
-            text: recentUserResponse,
-            state: "requestQuestion"
-        }
+            setTexts(texts.concat(
+                <div className="journal-entry-text-container align-right">
+                    <div className="journal-entry-text">{filteredResponse}</div>
+                </div>));
 
-        let config = {
-            headers: {
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*',
+            setRecentUserResponse(recentUserResponse.concat(filteredResponse));
+
+            const toSend = {
+                entryID: entryID,
+                userID: user,
+                text: recentUserResponse,
+                state: "requestQuestion"
             }
-        }
 
-        axios.post(
-            "http://localhost:4567/handleRequestQuestion",
-            toSend,
-            config
-        ).then(response => {
-            let questionsList = response.data["questions"]
-            setQuestions(questionsList);
-        })
+            let config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                }
+            }
+
+            axios.post(
+                "http://localhost:4567/handleRequestQuestion",
+                toSend,
+                config
+            ).then(response => {
+                let questionsList = response.data["questions"]
+                setQuestions(questionsList);
+            })
+        }
     }
 
     /**
@@ -111,10 +123,9 @@ export default function (props) {
             "http://localhost:4567/handleSaveUserInputs",
             toSend,
             config
-        ).then(response => {
-
+        ).then(() => {
+            history.push('/');
         })
-        history.push('/');
     }
 
     function enterPressed(event) {
@@ -125,8 +136,6 @@ export default function (props) {
     }
 
     function submitUserResponse() {
-        setShowQuestionDisplay(true);
-
         addResponse();
         setUserResponse("");
         document.getElementById("journaling-text-box").value = '';

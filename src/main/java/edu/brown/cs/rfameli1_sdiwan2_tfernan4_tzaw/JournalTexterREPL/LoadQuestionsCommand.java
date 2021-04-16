@@ -7,9 +7,17 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPLCommand;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Command class for loading questions into the database.
+ */
 public class LoadQuestionsCommand implements REPLCommand {
 
   private final JournalTexterDB jtDatabase;
+
+  /**
+   * Constructs the command.
+   * @param jtDatabase the database that will be used
+   */
   public LoadQuestionsCommand(JournalTexterDB jtDatabase) {
     this.jtDatabase = jtDatabase;
   }

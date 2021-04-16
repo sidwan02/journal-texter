@@ -310,9 +310,9 @@ public class GUIHandler {
       Entry<JournalText> entry = jtDB.getEntryById(entryId);
 
       List<String> questions = new ArrayList<>();
-      //List<List<String>> accumulatedResponses = new ArrayList<>();
-      //List<String> responsesForQuestion = new ArrayList<>();
-      List<String> responses = new ArrayList<>();
+      List<List<String>> accumulatedResponses = new ArrayList<>();
+      List<String> responsesForQuestion = new ArrayList<>();
+      //List<String> responses = new ArrayList<>();
 
       List<JournalText> allText = entry.getQuestionsAndResponses();
 
@@ -320,18 +320,24 @@ public class GUIHandler {
         // Separate out questions and responses
         if (jt.getType() == JournalTextType.QUESTION) {
           questions.add(jt.getText());
-          // accumulatedResponses.add(responsesForQuestion);
-          // responsesForQuestion = new ArrayList<>();
+          if (!responsesForQuestion.isEmpty()) {
+            accumulatedResponses.add(responsesForQuestion);
+            responsesForQuestion = new ArrayList<>();
+          }
         } else {
-          //responsesForQuestion.add(jt.getText());
-          responses.add(jt.getText());
+          responsesForQuestion.add(jt.getText());
+          //responses.add(jt.getText());
         }
+      }
+
+      if (!responsesForQuestion.isEmpty()) {
+        accumulatedResponses.add(responsesForQuestion);
       }
 
       variables = ImmutableMap.of(
           "questions", questions,
-          //"responses", accumulatedResponses,
-          "responses", responses,
+          "responses", accumulatedResponses,
+          //"responses", responses,
           "date", entry.getDate(),
           //"tags", entry.getTags(),
           "sentiment", entry.getSentiment());

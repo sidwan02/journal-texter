@@ -20,7 +20,7 @@ export default function QuestionDisplay(props) {
                 question: question,
                 userID: user,
                 text: recentUserResponse,
-                state: "saveEntry"
+                state: "saveQuestion"
             }
 
             let config = {
@@ -34,7 +34,7 @@ export default function QuestionDisplay(props) {
                 "http://localhost:4567/handleSaveUserInputs",
                 toSend,
                 config
-            ).then(response => {
+            ).then(() => {
                 props.setTexts(props.texts.concat(
                     <div className="journal-entry-text-container align-left">
                         <div className="journal-entry-text">{question}</div>
