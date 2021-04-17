@@ -102,11 +102,9 @@ public class WordCountVec {
     for (String nDiffWords : nDiffWordCombinations) {
       if (nWordFrequencies.containsKey(nDiffWords)) {
         // word in map
-        System.out.println("word in map");
         nWordFrequencies.put(nDiffWords, nWordFrequencies.get(nDiffWords) + 1);
       } else {
         // word not in map
-        System.out.println("word NOT in map");
 
         ProxiedSynonymFetcher prox = ProxiedSynonymFetcher.INSTANCE;
         Set<String> synonyms = prox.get(nDiffWords);
@@ -114,7 +112,7 @@ public class WordCountVec {
         int synCount = 0;
         for (String synonym : synonyms) {
           if (nWordFrequencies.containsKey(synonym)) {
-            System.out.println("synonym in map");
+//            System.out.println("synonym in map");
             nWordFrequencies.put(synonym, nWordFrequencies.get(synonym) + 1);
             synCount++;
           }
