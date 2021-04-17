@@ -21,7 +21,7 @@ function LandingPage() {
             </div>
             <div className="landing-page-header">
                 <div className="landing-page-title-container">
-                    <h1 className="landing-page-title">Journal Texter</h1>
+                    <h1 className="landing-page-title">JournalTexter</h1>
                     <h3 className="landing-page-subtitle">Journaling made easy!</h3>
                 </div>
             </div>

@@ -212,6 +212,7 @@ export default function (props) {
                 <input type="text" onKeyPress={enterPressed}
                        autoComplete="off"
                        onChange={event => setUserResponse(event.target.value)}
+                       autoFocus
                        placeholder="Respond Here (Longer Responses Are Better!)"
                        id="journaling-text-box"
                        className="grid-element journal-type-box"/>
