@@ -22,8 +22,6 @@ export default function Dashboard() {
     async function getUserJournals() {
         const toSend = JSON.parse(localStorage.getItem('token'));
 
-        console.log(toSend);
-
         let config = {
             headers: {
                 "Content-Type": "application/json",
