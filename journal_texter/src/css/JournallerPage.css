@@ -86,7 +86,7 @@
 }
 
 .question-display-element>div {
-    padding: 1rem;
+    padding: 1.5rem;
     text-align: center;
 }
 
@@ -99,17 +99,31 @@
 }
 
 .prompt-selector {
-    height: 16%;
+    height: 13%;
     background-color: var(--blue-100);
     transition: background-color 125ms ease;
+    cursor: pointer;
 }
 
 .prompt-selector:hover {
     background-color: var(--blue-300);
 }
 
+.question-display-footer {
+    height: 15%;
+    background-color: var(--blue-400);
+    font-size: 1.25rem;
+    font-weight: 500;
+    transition: background-color 125ms ease;
+    cursor: pointer;
+}
+
+.question-display-footer:hover {
+    background-color: var(--blue-600);
+}
+
 .journal-button {
-    background: var(--blue-300);
+    background: var(--blue-400);
     transition: background-color 125ms ease;
 }
 

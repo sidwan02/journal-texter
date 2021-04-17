@@ -13,7 +13,6 @@ export default function QuestionDisplay(props) {
     )
 
     const handleQuestion = (question) => {
-
         if (question !== "") {
             const toSend = {
                 entryID: entryID,
@@ -47,6 +46,10 @@ export default function QuestionDisplay(props) {
         }
     }
 
+    function requestNewQuestions() {
+        alert("Requesting new questions");
+    }
+
     return (
         <div className="question-display grid-element">
             <div className="question-display-header question-display-element">
@@ -55,6 +58,11 @@ export default function QuestionDisplay(props) {
                 </div>
             </div>
             {questionElements}
+            <div className="question-display-footer question-display-element">
+                <div onClick={requestNewQuestions} className="question-display-footer-text">
+                    Click to Refresh Prompts!
+                </div>
+            </div>
         </div>
     );
 }
