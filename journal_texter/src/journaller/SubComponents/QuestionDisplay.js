@@ -47,7 +47,6 @@ export default function QuestionDisplay(props) {
     }
 
     function requestNewQuestions() {
-        //alert("Requesting new questions");
         props.loadNewQuestions();
     }
 

@@ -9,6 +9,7 @@
     margin: 1rem auto;
 
     width: 85%;
+    max-width: 70rem;
     height: 80%;
 
     display: grid;
@@ -124,6 +125,10 @@
 
 .question-display-footer:hover {
     background-color: var(--blue-600);
+}
+
+.hidden-question-display-text {
+    text-align: center;
 }
 
 .journal-button {
