@@ -55,6 +55,16 @@ public final class DbUtils {
   }
 
   /**
+   * Closes a ResultSet and PreparedStatement quietly.
+   * @param rs the ResultSet to close
+   * @param ps the PreparedStatement to close
+   */
+  public static void closeResultSetAndPrepStatement(ResultSet rs, PreparedStatement ps) {
+    closeQuietly(rs);
+    closeQuietly(ps);
+  }
+
+  /**
    * Closes a ResultSet, PreparedStatement, and a Connection while silencing exceptions.
    * @param rs the ResultSet to close
    * @param ps the PreparedStatement to close

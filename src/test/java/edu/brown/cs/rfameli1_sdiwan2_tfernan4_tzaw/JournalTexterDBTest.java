@@ -1,5 +1,6 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DbUtils;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
@@ -86,6 +87,20 @@ public class JournalTexterDBTest {
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", rs.getString(3));
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", jtDb.getEntryById(1).getString());
 
+    // Delete entry
+    jtDb.deleteEntry(1);
+    ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
+    rs = ps.executeQuery();
+    assertFalse(rs.next());
+
+    // Clear entry
+    jtDb.resetEntryText(2);
+    ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=2");
+    rs = ps.executeQuery();
+    while (rs.next()) {
+      assertEquals(rs.getString(1), "");
+    }
+    DbUtils.closeResultSetAndPrepStatement(rs, ps);
   }
 
   @Test
@@ -109,11 +124,16 @@ public class JournalTexterDBTest {
   }
 
   @Test
-  public void testLoadAndFindQuestions() {
+  public void testQuestionAndTagMethods() {
+
+
+
+
     // TODO add a test questions sheet to load in data from
   }
+
   @Test
-  public void testAuthenticateUser() throws FailedLoginException, SQLException {
+  public void testUserMethods() throws FailedLoginException, SQLException {
     byte[] siddyPassword = "siddy".getBytes(StandardCharsets.UTF_8);
 
     jtDb.registerUser("siddy", siddyPassword);

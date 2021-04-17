@@ -48,7 +48,9 @@ public final class SpreadsheetReader {
     List<String> fileHeaders = Arrays.asList(line.split(separator));
     if (!fileHeaders.equals(headers)) {
       throw new HeaderException("Headers do not match the provided headers given in "
-          + "parseSpreadsheet");
+          + "parseSpreadsheet."
+          + " Provided headers: " + headers.toString()
+          + ", File headers: " + fileHeaders.toString());
     }
 
     // return null if there are no headers
