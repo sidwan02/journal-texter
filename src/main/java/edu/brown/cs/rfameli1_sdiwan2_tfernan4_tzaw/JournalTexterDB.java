@@ -17,7 +17,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -153,7 +152,6 @@ public final class JournalTexterDB {
       return true;
     } catch (HeaderException | IOException | SQLException | InvalidFileException e) {
       System.out.println("ERROR: " + e.getMessage());
-      e.printStackTrace();
       return false;
     }
   }
