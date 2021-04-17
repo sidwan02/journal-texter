@@ -102,6 +102,34 @@ export default function (props) {
     }
 
     /**
+     * Lets the user request a set of new questions
+     */
+    const loadNewQuestions = () => {
+        const toSend = {
+            entryID: entryID,
+            userID: user,
+            text: recentUserResponse,
+            state: "requestQuestion"
+        }
+
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+
+        axios.post(
+            "http://localhost:4567/handleRequestQuestion",
+            toSend,
+            config
+        ).then(response => {
+            let questionsList = response.data["questions"]
+            setQuestions(questionsList);
+        })
+    }
+
+    /**
      * Manually saves the entry
      */
     function saveEntry() {
@@ -164,6 +192,7 @@ export default function (props) {
                     <QuestionDisplay questions={questions} texts={texts} setTexts={setTexts}
                                      recentUserResponse={recentUserResponse}
                                      setRecentUserResponse={setRecentUserResponse}
+                                     loadNewQuestions={loadNewQuestions}
                                      user={user} entryID={entryID}
                                      setShowQuestionDisplay={setShowQuestionDisplay}/>
                     : <HiddenQuestionDisplay text={"Respond to the prompt!"}/>}
