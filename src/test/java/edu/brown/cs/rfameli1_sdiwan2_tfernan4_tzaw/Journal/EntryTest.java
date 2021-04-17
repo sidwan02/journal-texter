@@ -30,10 +30,11 @@ public class EntryTest {
   @Test
   public void testConstructorUsingString() {
     LocalDate date1 = LocalDate.now();
-    Entry<JournalText> entry1 = new Entry<>(1, date1,
+    Entry<JournalText> entry1 = new Entry<>(1, date1, "entry1",
         "{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}");
     assertEquals(date1, entry1.getDate());
     assertEquals(Optional.of(1), Optional.ofNullable(entry1.getId()));
+    assertEquals("entry1", entry1.getTitle());
     List<JournalText> texts = entry1.getQuestionsAndResponses();
     assertEquals("Yo whats up", texts.get(0).getText());
     assertEquals("not much", texts.get(1).getText());
@@ -48,9 +49,10 @@ public class EntryTest {
   @Test
   public void testConstructorUsingList() {
     LocalDate date2 = LocalDate.now();
-    Entry<JournalText> entry2 = new Entry<>(2, date2, questionsResponses);
+    Entry<JournalText> entry2 = new Entry<>(2, date2, "entry2", questionsResponses);
     assertEquals(date2, entry2.getDate());
     assertEquals(Optional.of(2), Optional.ofNullable(entry2.getId()));
+    assertEquals("entry2", entry2.getTitle());
     List<JournalText> texts = entry2.getQuestionsAndResponses();
     assertEquals("How are you?", texts.get(0).getText());
     assertEquals("I am good", texts.get(1).getText());

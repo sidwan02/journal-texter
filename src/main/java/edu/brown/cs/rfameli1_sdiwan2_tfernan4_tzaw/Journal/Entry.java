@@ -1,6 +1,5 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +18,7 @@ public class Entry<T extends JournalText> {
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
+  private final String title;
   private final Double sentiment = 0.0;
   private Set<String> tags = new HashSet<>();
 
@@ -27,13 +27,15 @@ public class Entry<T extends JournalText> {
    *
    * @param id                   a unique id for the entry
    * @param date                 the date the entry was created
+   * @param entryTitle           the title of the entry
    * @param stringRepresentation a string representation representing the text of the entry
    */
-  public Entry(Integer id, LocalDate date, String stringRepresentation) {
+  public Entry(Integer id, LocalDate date, String entryTitle, String stringRepresentation) {
     // Responses will be represented as {response}
     // Questions will be represented as {@question}
     this.id = id;
     this.date = date;
+    this.title = entryTitle;
     List<T> questionsResponses = new ArrayList<>();
     Pattern regexParse = Pattern.compile("\\{([^{}]*)\\}");
     Matcher m = regexParse.matcher(stringRepresentation);
@@ -58,11 +60,13 @@ public class Entry<T extends JournalText> {
    *
    * @param id                    a unique id for the entry
    * @param date                  the date the entry was created
+   * @param entryTitle            the entryTitle of the entry
    * @param questionsAndResponses a List of Questions and Responses
    */
-  public Entry(Integer id, LocalDate date, List<T> questionsAndResponses) {
+  public Entry(Integer id, LocalDate date, String entryTitle, List<T> questionsAndResponses) {
     this.id = id;
     this.date = date;
+    this.title = entryTitle;
     this.questionsAndResponses = questionsAndResponses;
     StringBuilder stringRep = new StringBuilder();
     // Iterate through every question/response
@@ -117,6 +121,14 @@ public class Entry<T extends JournalText> {
   public Set<String> getTags() {
     // CURRENTLY NOT FUNCTIONAL
     return this.tags; // <== instantiate this when retrieving from the database
+  }
+
+  /**
+   * Gets the title of the entry.
+   * @return a String representing the entry's title
+   */
+  public String getTitle() {
+    return this.title;
   }
 
   /**

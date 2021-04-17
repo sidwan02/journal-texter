@@ -48,11 +48,6 @@ public class JournalTexterDBTest {
     conn = null;
   }
 
-//  @Test
-//  public void testEntryMethodErrors() {
-//
-//  }
-
   @Test
   public void testCreateAndAddToEntry()
       throws SQLException, FailedLoginException {

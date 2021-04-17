@@ -213,7 +213,8 @@ public final class JournalTexterDB {
    */
   public List<Entry<JournalText>> getUserEntriesByUsername(String username) throws SQLException {
     checkConnection();
-    PreparedStatement ps = conn.prepareStatement("SELECT * FROM entries WHERE author=?");
+    PreparedStatement ps = conn.prepareStatement(
+        "SELECT id, date, entry_text, title FROM entries WHERE author=?");
     ps.setString(1, username);
     ResultSet rs = ps.executeQuery();
     List<Entry<JournalText>> entries = new ArrayList<>();
@@ -222,12 +223,12 @@ public final class JournalTexterDB {
       Integer id = rs.getInt(1);
       Date date = rs.getDate(2);
       String stringRepresentation = rs.getString(3);
-      String author = rs.getString(4);
+      String title = rs.getString(4);
       // Get date into the LocalDate format
       LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())
           .atZone(ZoneId.systemDefault())
           .toLocalDate();
-      entries.add(new Entry<>(id, cleanedDate, stringRepresentation));
+      entries.add(new Entry<>(id, cleanedDate, title, stringRepresentation));
     }
     return entries;
   }
@@ -241,13 +242,16 @@ public final class JournalTexterDB {
    */
   public Entry<JournalText> getEntryById(Integer entryId) throws SQLException {
     checkConnection();
-    PreparedStatement ps = conn.prepareStatement("SELECT * FROM entries WHERE id=?");
+    PreparedStatement ps = conn.prepareStatement(
+        "SELECT id, date, entry_text, title FROM entries WHERE id=?");
     ps.setInt(1, entryId);
     ResultSet rs = ps.executeQuery();
     Integer id = rs.getInt(1);
     LocalDate date = DateConversion.dateToLocalDate(rs.getDate(2));
     String entryString = rs.getString(3);
-    return new Entry<>(id, date, entryString);
+    String title = rs.getString(4);
+    DbUtils.closeResultSetAndPrepStatement(rs, ps);
+    return new Entry<>(id, date, title, entryString);
   }
 
   /**
@@ -265,7 +269,7 @@ public final class JournalTexterDB {
     Date sqlDate = java.sql.Date.valueOf(date);
 
     PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
-        + "(date, entry_text, author) VALUES (?, ?, ?);");
+        + "(date, entry_text, author, title) VALUES (?, ?, ?, '');");
     ps.setDate(1, sqlDate);
     ps.setString(2, entryText);
     ps.setString(3, username);
@@ -334,6 +338,21 @@ public final class JournalTexterDB {
     DbUtils.closeQuietly(ps);
   }
 
+  /**
+   * Sets the title of an identified entry in the entries table.
+   * @param entryId the id of the entry
+   * @param newTitle the new title of the entry
+   * @throws SQLException if the database is missing or an error occurs when interacting with the
+   * database
+   */
+  public void setEntryTitle(Integer entryId, String newTitle) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("UPDATE entries SET title=? WHERE id=?");
+    ps.setString(1, newTitle);
+    ps.setInt(2, entryId);
+    ps.executeUpdate();
+    DbUtils.closeQuietly(ps);
+  }
 
   // ******************************
   // User Methods
