@@ -34,7 +34,9 @@ export default function NavBar() {
         <nav className="nav-bar">
             <h1 id="home-button" onClick={handleReturnToDashboard}>JournalTexter</h1>
             <div id="signout-button" onClick={handleSignOut}>
-                Sign Out
+                <div>
+                    Sign Out
+                </div>
             </div>
         </nav>
     )

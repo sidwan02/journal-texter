@@ -70,12 +70,16 @@
     grid-column: span 1;
     grid-row: span 1;
 
+    cursor: pointer;
+
     font-size: 1.75rem;
 }
 
 .grid-element.save-journal-entry {
     grid-column: span 2;
     grid-row: span 1;
+
+    cursor: pointer;
 
     font-size: 1.75rem;
 }

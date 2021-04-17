@@ -13,27 +13,45 @@
     align-items: flex-end;
 }
 
-.landing-page-nav-login-link-container {
+.landing-page-nav-links-container {
     position: absolute;
     top: 2.5%;
     right: 3%;
+
+    width: 13.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.landing-page-nav-links {
+    height: 3.25rem;
+    width: 6.25rem;
+    outline: 0;
+    border-radius: 0.75rem;
+    border: 2px solid #0080f0;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
 .landing-page-nav-login-link {
-    height: 3rem;
-    width: 6rem;
-    outline: 0;
-    border-radius: 0.75rem;
-    border: 2px solid #1893ff;
-    color: #1893ff;
+    color: #0080f0;
     background-color: var(--blue-200);
     transition: background-color 250ms ease;
-    font-size: 1.1rem;
 }
 
 .landing-page-nav-login-link:hover {
     background-color: var(--blue-300);
-    cursor: pointer;
+}
+
+.landing-page-nav-signup-link {
+    color: var(--blue-200);
+    background-color: #0080f0;
+    transition: background-color, border 250ms ease;
+}
+
+.landing-page-nav-signup-link:hover {
+    background-color: #058aff;
+    border: 2px solid #058aff;
 }
 
 /* HEADER */

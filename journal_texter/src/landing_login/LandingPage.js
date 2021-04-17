@@ -15,9 +15,9 @@ function LandingPage() {
 
     return (
         <div className="landing-page">
-            <div className="landing-page-nav-login-link-container">
-                <button className="landing-page-nav-login-link" onClick={() => history.push('/login')}>Login
-                </button>
+            <div className="landing-page-nav-links-container">
+                <button className="landing-page-nav-login-link landing-page-nav-links" onClick={() => history.push('/login')}>Login</button>
+                <button className="landing-page-nav-signup-link landing-page-nav-links" onClick={() => history.push('/signup')}>Sign Up</button>
             </div>
             <div className="landing-page-header">
                 <div className="landing-page-title-container">
@@ -57,7 +57,6 @@ function LandingPage() {
                 </div>
             </div>
             <div className="landing-page-action-bar">
-
                 <div className="landing-page-link-container">
                     <Link className="landing-page-link" to="/signup">Sign Up!</Link>
                 </div>
