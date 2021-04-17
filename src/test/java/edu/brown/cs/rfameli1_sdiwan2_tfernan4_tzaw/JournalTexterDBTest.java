@@ -112,7 +112,6 @@ public class JournalTexterDBTest {
   public void testLoadAndFindQuestions() {
     // TODO add a test questions sheet to load in data from
   }
-
   @Test
   public void testAuthenticateUser() throws FailedLoginException, SQLException {
     byte[] siddyPassword = "siddy".getBytes(StandardCharsets.UTF_8);

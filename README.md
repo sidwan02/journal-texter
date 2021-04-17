@@ -1,4 +1,9 @@
-# cs0320 Term Project 2021
+# JournalTexter
+## a cs0320 Term Project
+
+
+
+
 
 **Packages to remember to install in frontend (Remove later)**
 
@@ -30,11 +35,60 @@ And then if the part past "from" in is underlined by IntelliJ
 
 just choose do the keyboard shortcut that installs it for you
 
-**Team Members:**
-Riki Fameli,
-Siddharth Diwan,
-Theodore Fernandez,
-Thet Htay Zaw
+
+## How to Build and Run
+
+### Necessary Installations
+
+
+### Starting the backend
+
+Navigate to the root directory of the project in your terminal. Then, run  
+`mvn package`  
+Once the project has successfully packaged, run  
+`./run --gui`  
+to run the backend of the project. This will start the backend server as well as a REPL that
+can handle commands.
+
+You'll have to choose a database for the project to work.
+The default database is `data/journaltexter.db`. To set the database, run  
+`database <path_to_database>` in the REPL.
+
+Once your database is set, you can optionally load in questions and tags from a valid `.tsv` file using `load <question_spreadsheet.tsv>`
+
+With your database set, you can now run the frontend of your project.
+
+### Starting the frontend React app
+
+Navigate to `journal_texter` in the root directory of the project. From there run `npm start`.
+Note that you must have npm installed on your computer.
+
+
+### Opening the project in the browser
+
+Once you've started the project, go to `localhost:3000` to access the web interface. There
+will be a link to sign up or to log in using a previous account. Sign up with a new account 
+and accept the terms of service if you are a first-time user. 
+
+Once you've logged in, you should see your dashboard. You can click `Create new entry` in order
+to create a new entry. This will bring you to the Journaller page, where you can start writing.
+
+The Journaller will give you an automatic question to begin with. After you reply, a list 
+of suggested questions will appear in the sidebar that you can choose from. You can add as many
+replies as you want before selecting a question. Selecting a question will cause it to appear in
+the texting interface, and you can continue replying.
+
+Once you're done with an entry, you can save it and return to the dashboard. All your past entries
+will appear there, and you can click on them to see what you wrote on a given day. If you'd like,
+you can also delete entries.
+
+## About the Team
+
+**Team Members:**  
+Riki Fameli,  
+Siddharth Diwan,  
+Theodore Fernandez,  
+Thet Htay Zaw  
 
 **Team Strengths and Weaknesses:**
 * **Riki Fameli**
@@ -45,7 +99,7 @@ Thet Htay Zaw
         * Functional programming and recursion
         * S/NCing two other courses for this one xd
         * Sophomore
-            * Imagine not being a freshman
+            * Imagine being a freshman
     * Weaknesses:
         * Little experience with OOP and Java outside of this course
         * No experience with Javascript outside of this course
@@ -175,5 +229,3 @@ _On your first meeting with your mentor TA, you should plan dates for at least t
 
 **Adversary Checkpoint:** _(Schedule for on or before April 12 once you are assigned an adversary TA)_
 
-## How to Build and Run
-_A necessary part of any README!_
