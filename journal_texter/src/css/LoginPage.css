@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--blue-100);
+    background-color: var(--blue-200);
 }
 
 .login-box {
@@ -12,7 +12,7 @@
     padding: 0;
     border: 2px solid var(--blue-900);
     color: var(--blue-100);
-    border-radius: 2rem;
+    border-radius: 1rem;
     max-width: 500px;
     text-align: center;
     background-color: var(--blue-400);

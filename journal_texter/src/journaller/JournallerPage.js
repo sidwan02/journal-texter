@@ -1,6 +1,6 @@
 import '../css/JournallerPage.css';
 import NavBar from "../dashboard/NavBar";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import QuestionDisplay from "./SubComponents/QuestionDisplay";
 import HiddenQuestionDisplay from "./SubComponents/HiddenQuestionDisplay";
 import axios from "axios";
@@ -12,6 +12,7 @@ export default function (props) {
     const [recentUserResponse, setRecentUserResponse] = useState([]);
     const [showQuestionDisplay, setShowQuestionDisplay] = useState(false);
     const [questions, setQuestions] = useState(["", "", "", "", ""]);
+
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
     const history = useHistory()
@@ -141,12 +142,23 @@ export default function (props) {
         document.getElementById("journaling-text-box").value = '';
     }
 
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+
+    useEffect(() => {
+        scrollToBottom()
+    }, [texts]);
+
     return (
         <div className="journaller">
             <NavBar/>
             <div className="journaller-body">
                 <div className="text-display grid-element">
                     {texts}
+                    <div ref={messagesEndRef} />
                 </div>
                 {showQuestionDisplay ?
                     <QuestionDisplay questions={questions} texts={texts} setTexts={setTexts}
@@ -158,11 +170,11 @@ export default function (props) {
                 <input type="text" onKeyPress={enterPressed}
                        autoComplete="off"
                        onChange={event => setUserResponse(event.target.value)}
+                       placeholder="Respond Here (Longer Responses Are Better!)"
                        id="journaling-text-box"
                        className="grid-element journal-type-box"/>
-                <button onClick={submitUserResponse} className="grid-element text-submit-button journal-button">Send
-                </button>
-                <button onClick={saveEntry} className="save-journal-entry grid-element journal-button">Save</button>
+                <button onClick={submitUserResponse} className="grid-element text-submit-button journal-button">Respond</button>
+                <button onClick={saveEntry} className="save-journal-entry grid-element journal-button">Save Entry</button>
             </div>
         </div>
     );

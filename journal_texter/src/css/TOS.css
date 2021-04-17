@@ -1,16 +1,18 @@
 .terms-of-service {
-    width: 55%;
-    padding: 5rem;
-
-    margin: 0 auto;
+    width: 100%;
+    /*padding: 5rem;*/
     color: var(--blue-900);
+    background-color: var(--blue-200);
+    padding: 6rem 0;
 }
 
 .terms-of-service-container {
+    width: 50%;
     padding: 3rem;
-    background-color: var(--blue-200);
+    background-color: var(--blue-300);
     border: 2px solid var(--blue-900);
     border-radius: 1rem;
+    margin: 0 auto;
 }
 
 .tos-header {

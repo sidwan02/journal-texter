@@ -25,7 +25,7 @@ export default function NavBar() {
         localStorage.removeItem('token');
         sessionStorage.removeItem('token');
 
-        history.push('/login');
+        history.push('/');
 
         window.location.reload(false);
     }
