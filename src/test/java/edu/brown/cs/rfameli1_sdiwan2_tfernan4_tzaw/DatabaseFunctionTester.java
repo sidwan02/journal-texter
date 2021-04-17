@@ -8,23 +8,44 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
+/**
+ * Class used for testing database methods.
+ */
 public class DatabaseFunctionTester {
   private static Connection conn;
 
+  /**
+   * Constructor.
+   */
   private DatabaseFunctionTester() { }
 
+  /**
+   * Sets an empty database for use in tests.
+   * @param filename the name of the file to create the database
+   * @return a Connection to the created database
+   * @throws IOException if an error occurs with the file
+   * @throws SQLException if a faulty database connection occurs or a SQL statement fails
+   * @throws ClassNotFoundException if a class is not found during creation
+   */
   public static Connection setEmptyDatabaseAndGetConn(String filename)
       throws IOException, SQLException, ClassNotFoundException {
     deleteTestDatabaseIfExists(filename);
     createDatabaseIfNotExists(filename);
     Database db = new Database(filename);
     conn = db.getConnection();
-//    dropAllTables(conn);
-    loadAllTables(conn);
+    createAllTables(conn);
     return conn;
   }
 
+  /**
+   * Deletes the database file with the given filename if it exists
+   * @param filename the name of the file
+   * @throws SQLException if a database access error occurs
+   * @throws IOException if an error occurs checking for or deleting the file (likely due to an open
+   * connection)
+   */
   public static void deleteTestDatabaseIfExists(String filename) throws SQLException, IOException {
     // this will mess up if you use the connection elsewhere and do not close it
     if (conn != null) {
@@ -40,6 +61,11 @@ public class DatabaseFunctionTester {
     }
   }
 
+  /**
+   * Creates a database file if it does not exist already.
+   * @param filename the name of the database file
+   * @throws IOException if an error occurs creating the new file
+   */
   public static void createDatabaseIfNotExists(String filename)
       throws IOException {
     File newDb = new File(filename);
@@ -65,16 +91,37 @@ public class DatabaseFunctionTester {
     ps.executeUpdate();
   }
 
-  private static void loadAllTables(Connection conn) throws SQLException {
+  /**
+   * Creates all tables using the provided list of create statements
+   * @param createStatements a List of SQL statements for creating tables
+   * @param conn the database connection to be used
+   * @throws SQLException if a database access error occurs or if one of the create statements fail
+   */
+  public static void createAllTables(List<String> createStatements, Connection conn)
+      throws SQLException {
+    for (String createStatement : createStatements) {
+      PreparedStatement ps = conn.prepareStatement(createStatement);
+      ps.executeUpdate();
+      DbUtils.closeQuietly(ps);
+    }
+  }
+
+  /**
+   * Loads all tables based on the tables that are being created.
+   * @param conn the database connection to be used for creation
+   * @throws SQLException if an error occurs accessing the database or creating a table
+   */
+  private static void createAllTables(Connection conn) throws SQLException {
     PreparedStatement ps = conn.prepareStatement(
-        "CREATE TABLE \"entries\" ( " +
-        "  \"id\"  INTEGER NOT NULL UNIQUE, " +
-        "  \"date\"  DATE, " +
-        "  \"entry_text\"  TEXT, " +
-        "  \"author\"  TEXT, " +
-        "  FOREIGN KEY(\"author\") REFERENCES \"users\"(\"username\"), " +
-        "  PRIMARY KEY(\"id\" AUTOINCREMENT) " +
-        ")");
+        "CREATE TABLE \"entries\" (" +
+            " \"id\" INTEGER NOT NULL UNIQUE," +
+            " \"date\" DATE NOT NULL," +
+            " \"entry_text\" TEXT NOT NULL," +
+            " \"author\" TEXT NOT NULL," +
+            " \"title\" TEXT NOT NULL," +
+            " FOREIGN KEY(\"author\") REFERENCES \"users\"(\"username\")," +
+            " PRIMARY KEY(\"id\" AUTOINCREMENT)" +
+            ")");
     ps.executeUpdate();
 
     ps = conn.prepareStatement(
@@ -134,15 +181,6 @@ public class DatabaseFunctionTester {
     );
     ps.executeUpdate();
     DbUtils.closeQuietly(ps);
-  }
-
-  public static void deleteFileIfExists(String filename) throws IOException {
-    File f = new File(filename);
-    if (f.exists()) {
-      if (!f.delete()) {
-        throw new IOException("File " + filename + " could not be deleted in DatabaseGenerator.deleteDatabaseFile");
-      }
-    }
   }
 
   //  /**
