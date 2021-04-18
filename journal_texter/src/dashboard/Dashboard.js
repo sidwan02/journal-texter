@@ -50,6 +50,8 @@ export default function Dashboard() {
 
                     let tags = response.data["entries"]["values"][i]["nameValuePairs"]["tags"];
 
+                    console.log(tags);
+
                     let tagString = "";
                     let maxLength = 5;
 

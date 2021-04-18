@@ -23,7 +23,7 @@ function OldJournalEntryBox(props) {
         <div className="dashboardElement" onClick={handleClick}>
             <p className="dashboardElementText dashboard-element-text-title">{props.entryTitle}</p>
             <p className="dashboardElementText dashboard-element-text-date">{props.date}</p>
-            <p className="dashboardElementText dashboard-element-text-tags">{props.tags}</p>
+            {/*<p className="dashboardElementText dashboard-element-text-tags">{props.tags}</p>*/}
         </div>
     );
 }
