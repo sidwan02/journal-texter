@@ -86,6 +86,7 @@ public final class BackendConnection {
    * @return a set of all tags associated with the responses.
    */
   public static Set<String> getTagsFromResponses(String combinedResponses) {
+
     WordCountVec vectorizor = new WordCountVec();
 
     Map<String, Integer> frequencies = vectorizor.getFrequenciesFromText(combinedResponses, 1);

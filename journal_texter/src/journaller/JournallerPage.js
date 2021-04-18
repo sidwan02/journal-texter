@@ -13,6 +13,8 @@ export default function (props) {
     const [showQuestionDisplay, setShowQuestionDisplay] = useState(false);
     const [questions, setQuestions] = useState(["", "", "", "", ""]);
 
+    const [numUserInput, setNumUserInput] = useState(0);
+
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
     const history = useHistory()
@@ -71,13 +73,24 @@ export default function (props) {
         if (filteredResponse !== '') {
             setShowQuestionDisplay(true);
 
-            setTexts(texts.concat(
-                <div className="journal-entry-text-container align-right">
-                    <div className="journal-entry-text">{filteredResponse}</div>
-                </div>));
+            let newText = (<div className="journal-entry-text-container align-right">
+                <div className="journal-entry-text">{filteredResponse}</div>
+            </div>);
+
+            setTexts(texts.concat(newText));
 
             setRecentUserResponse(recentUserResponse.concat(filteredResponse));
 
+            setNumUserInput(numUserInput + 1);
+
+        }
+    }
+
+    /**
+     * Lets the user request a set of new questions
+     */
+    const loadNewQuestions = () => {
+        if (numUserInput !== 0) {
             const toSend = {
                 entryID: entryID,
                 userID: user,
@@ -103,33 +116,9 @@ export default function (props) {
         }
     }
 
-    /**
-     * Lets the user request a set of new questions
-     */
-    const loadNewQuestions = () => {
-        const toSend = {
-            entryID: entryID,
-            userID: user,
-            text: recentUserResponse,
-            state: "requestQuestion"
-        }
-
-        let config = {
-            headers: {
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*',
-            }
-        }
-
-        axios.post(
-            "http://localhost:4567/handleRequestQuestion",
-            toSend,
-            config
-        ).then(response => {
-            let questionsList = response.data["questions"]
-            setQuestions(questionsList);
-        })
-    }
+    useEffect(() => {
+        loadNewQuestions()
+    }, [numUserInput])
 
     /**
      * Manually saves the entry
@@ -141,8 +130,11 @@ export default function (props) {
             userID: user,
             entryTitle: entryName,
             text: recentUserResponse,
-            state: "saveEntry"
+            state: "saveEntry",
+            entryName: entryName,
         }
+
+        console.log(toSend);
 
         let config = {
             headers: {
@@ -210,6 +202,7 @@ export default function (props) {
                 <input type="text" onKeyPress={enterPressed}
                        autoComplete="off"
                        onChange={event => setUserResponse(event.target.value)}
+                       autoFocus
                        placeholder="Respond Here (Longer Responses Are Better!)"
                        id="journaling-text-box"
                        className="grid-element journal-type-box"/>
