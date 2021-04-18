@@ -2,6 +2,7 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +18,7 @@ public class Entry<T extends JournalText> {
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
   private final String title;
-  private final Double sentiment = 0.0;
-  private List<String> tags;
+  private final List<String> tags;
   private final Double totalSentiment = 0.0;
   private final Integer numberOfQuestions = 0;
 
@@ -106,7 +106,7 @@ public class Entry<T extends JournalText> {
    *
    * @return a formatted String such as "\{question\}\{response\}"
    */
-  public String getString() {
+  public String getStringRepresentation() {
     return this.stringRepresentation;
   }
 
@@ -116,7 +116,7 @@ public class Entry<T extends JournalText> {
    * @return a List of JournalText
    */
   public List<T> getQuestionsAndResponses() {
-    return this.questionsAndResponses;
+    return new ArrayList<>(this.questionsAndResponses);
   }
 
   /**
@@ -126,7 +126,7 @@ public class Entry<T extends JournalText> {
    */
   public List<String> getTags() {
     // CURRENTLY NOT FUNCTIONAL
-    return this.tags; // <== instantiate this when retrieving from the database
+    return new LinkedList<>(this.tags); // <== instantiate this when retrieving from the database
   }
 
   /**

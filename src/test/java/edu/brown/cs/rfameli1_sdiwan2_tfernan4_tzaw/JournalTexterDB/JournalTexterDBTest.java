@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.Database;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DatabaseCreator;
@@ -25,7 +25,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -85,26 +87,31 @@ public class JournalTexterDBTest {
     assertEquals("{@Yo whats up}{not much}", rs.getString(3));
     assertEquals("riki", rs.getString(4));
 
+    // Insert a tag
+    ps = conn.prepareStatement("INSERT INTO tags (text) VALUES ('yay')");
+    ps.executeUpdate();
+
     // Add a response
-    jtDb.addToEntry(1, Collections.singletonList(response1), new ArrayList<>());
+    jtDb.addToEntry(1, Collections.singletonList(response1), Collections.singletonList("yay"));
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}", rs.getString(3));
-    assertEquals("{@Yo whats up}{not much}{I am good}", jtDb.getEntryById(1).getString());
+    assertEquals("{@Yo whats up}{not much}{I am good}", jtDb.getEntryById(1).getStringRepresentation());
+    assertEquals("yay", jtDb.getEntryById(1).getTags().get(0));
 
     // Add a question
     jtDb.addToEntry(1, Collections.singletonList(question1), new ArrayList<>());
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}", rs.getString(3));
-    assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}", jtDb.getEntryById(1).getString());
+    assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}", jtDb.getEntryById(1).getStringRepresentation());
 
     // Add a question and response
     jtDb.addToEntry(1, Arrays.asList(question1, emptyQuestion, emptyResponse, response1), new ArrayList<>());
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", rs.getString(3));
-    assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", jtDb.getEntryById(1).getString());
+    assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", jtDb.getEntryById(1).getStringRepresentation());
 
     // Delete entry
     jtDb.deleteEntry(1);
@@ -138,17 +145,31 @@ public class JournalTexterDBTest {
     assertEquals(Collections.emptyList(), riddyEntries);
 
     Entry<JournalText> siddyEntry = jtDb.getUserEntriesByUsername("siddy").get(0);
-    assertEquals(siddyEntryText, siddyEntry.getString());
-    assertEquals(siddyEntryText, jtDb.getEntryById(1).getString());
+    assertEquals(siddyEntryText, siddyEntry.getStringRepresentation());
+    assertEquals(siddyEntryText, jtDb.getEntryById(1).getStringRepresentation());
   }
 
   @Test
-  public void testQuestionAndTagMethods() {
+  public void testQuestionAndTagMethods() throws SQLException {
+    jtDb.loadQuestionsAndTagsFromSheet("data/testdata/test-questions-sheet.tsv");
+    ps = conn.prepareStatement("SELECT text FROM questions");
+    rs = ps.executeQuery();
+    List<String> retrievedQuestions = new ArrayList<>();
+    while (rs.next()) {
+      retrievedQuestions.add(rs.getString(1));
+    }
+    assertEquals(Arrays.asList("How are you?", "How do you feel?", "What are you up to?", ""), retrievedQuestions);
 
+    ps = conn.prepareStatement("SELECT text FROM tags");
+    rs = ps.executeQuery();
+    List<String> retrievedTags = new ArrayList<>();
+    while (rs.next()) {
+      retrievedTags.add(rs.getString(1));
+    }
+    assertEquals(Arrays.asList("", "mood", "happy", "wee", "wow"), retrievedTags);
+    Set<String> allTags = new HashSet<>(retrievedTags);
 
-
-
-    // TODO add a test questions sheet to load in data from
+    assertEquals(allTags, jtDb.getAllTagsFromDB());
   }
 
   @Test

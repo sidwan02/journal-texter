@@ -85,7 +85,7 @@ public final class JournalTexterDB {
    * @param filename the name of the spreadsheet file to be read from (must be in .tsv format)
    * @return true if the data was successfully loaded, else false
    */
-  public boolean loadDataFromSpreadsheet(String filename) {
+  public boolean loadQuestionsAndTagsFromSheet(String filename) {
     try {
       SpreadsheetData sd = SpreadsheetReader.parseSpreadsheet(filename, "\t",
           Arrays.asList("Question", "Tags"));
@@ -116,7 +116,7 @@ public final class JournalTexterDB {
         int questionId = rs.getInt(1);
 
         // Get the tags from the second column of the spreadsheet
-        String[] tags = r.get(1).trim().split(",");
+        String[] tags = r.get(1).replaceAll("\\s", "").split(",");
         for (String tag : tags) {
           // Check if the tag has been inserted in the tags table
           ps = conn.prepareStatement("SELECT * FROM tags WHERE text=?;");
