@@ -29,9 +29,11 @@ public final class BackendConnection {
    * Get the desired number of randomly generated questions.
    *
    * @param n the number of questions required.
+   * @param questionsToExclude questions which shouldn't be re-added if already selected
+   *                           from tags
    * @return a list of questions.
    */
-  public static List<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
+  public static List<String> getRandomlyGeneratedQuestions(int n, List<String> questionsToExclude) throws SQLException {
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
     Set<String> tags = jtDB.getAllTagsFromDB();
@@ -66,12 +68,15 @@ public final class BackendConnection {
       List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
 
       for (Question q : questionsFromTag) {
-        // use the American dialect
-        // In future updates this dialect can be dynamically changed
-        // through the passing of another parameter to this method.
-        questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
-        if (questions.size() >= 5) {
-          break;
+        if (!questionsToExclude.contains(q.getText())) {
+          // question not already picked up by tags
+          // use the American dialect
+          // In future updates this dialect can be dynamically changed
+          // through the passing of another parameter to this method.
+          questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
+          if (questions.size() >= 5) {
+            break;
+          }
         }
       }
     }

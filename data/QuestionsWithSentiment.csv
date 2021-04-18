@@ -1,0 +1,51 @@
+Question,Tags,sentiment
+How is your relationship with your parents?,"relationship,parents,dad,mom,daddy,mommy,papa,mama,mother,father",0.8466758131980896
+What type of music have you been listening to?,"music,mood",0.719018816947937
+How has your relationship been with your friends?,"relationship,friends,friend",0.5245593786239624
+Did you have a good day today?,,0.7265773415565491
+What do you feel grateful for today?,,0.6173635125160217
+Have you made anything that you are proud of recently?,"creative,cooking",0.5300377607345581
+Tell me about what you've been getting into,obsessed,0.5842835307121277
+Have you been taking care of yourself recently?,mood,0.5030326843261719
+Have you eaten any good food recently?,"food,meal,meals,yummy,delicious",0.6185959577560425
+What have you been watching?,"movies,movie,netflix,youtube,film,video",0.40385890007019043
+What gets you in a good mood?,"mood,happy,sad,down",0.7124820947647095
+What's been getting you down recently?,"depressed,sad,mood,unhappy",0.6125159859657288
+What do you like to do with your friends?,friends,0.40067946910858154
+Have you been keeping up well with work?,"school,work,job",0.5550024509429932
+Tell me about your pet (If you have one),"pet,dog,cat",0.5813896059989929
+What do you hope to do in the future?,"job,career,future",0.411223441362381
+What hobbies are you interested in?,"hobby,hobbies,",0.6763819456100464
+Have you been keeping in touch with your friends?,"friends,friend",0.5043115615844727
+What's your favorite thing about where you live?,"location,home,place",0.9701372385025024
+Has there been anything that's frustrated you recently?,"frustrating,angry,annoyed,irate,annoying,annoy,frustrate,stressed,stress",0.6562771201133728
+"If you could be anywhere right now, where would you choose?","travel,get away,holiday,vacation,break,",0.4750821888446808
+What was the best year of your life?,"year,new,year's,eve",0.9115266799926758
+What's something difficult you've done recently?,"challenge,challenged",0.7569401264190674
+Do you miss anyone?,"girlfriend,boyfriend,relationship,ex,friends,friend,parents",0.7540964484214783
+What are you looking forward to?,"break,hard,difficult,stressful,stress,stressed",0.46366167068481445
+What are some things you're grateful for?,"grateful,happy,bliss,down",0.3488077223300934
+Is there anything you've been craving recently?,"food,meal,meals,shopping,want,desire,crave,craving,wanting",0.5996684432029724
+What's a goal that you'd like to accomplish soon?,"career,job,future,goal,goals,work,school",0.6484151482582092
+Tell me about how you stay in shape,"workout,fitness,exercise,diet,running,cardio,weightlifting,weights,buff",0.6225759983062744
+What do you like about the topics you're studying?,"study,studying,major,concentration,school,college",0.34817492961883545
+Is there something you're stressed about?,"stress,stressed,stressing,frustrate,frustrating,school,work,job",0.48988956212997437
+What do you like to do when it's nice out?,"weather,sunny,warm",0.6907094717025757
+How do you deal with stress?,"relief,stress,stressed,stressing,cope,relax",0.49375802278518677
+Do you have close friendships?,"friend,friends,lonely,loneliness,relationship",0.5528308153152466
+Who can you rely on if you need to talk to someone?,"friend,friends,problem",0.6376531720161438
+What makes you feel most accomplished?,"goals,goal,career,work,job,school,success,failure",0.8575525879859924
+What obstacles have you encountered recently?,"goals,goal,career,work,job,school,success,failure",0.7066239714622498
+Have you done anything you regret recently?,"goals,goal,failure,relationship",0.6262368559837341
+Who makes you happy?,"friend,friends,relationship,boyfriend,girlfriend,partner",0.8349753022193909
+Have you had any good news recently?,"happy,good,news",0.6496049165725708
+Have you been up to anything creative?,"create,creative,project",0.5221947431564331
+Have you hugged anyone recently?,"friends,relationship,partner,love",0.6023385524749756
+How has your sleep been recently?,"anxiety,sleep,insomnia,late",0.6466608047485352
+Did you go outside today?,"room,inside",0.5717735290527344
+Has anything crazy happened to you recently?,,0.7427998185157776
+What's the last good thing that happened to you?,,0.7342298626899719
+Is there anything you want to brag about?,,0.4335048794746399
+Is there anything that you think makes you a lucky person?,,0.8273729681968689
+Have you had any good conversations recently?,,0.6496049165725708
+Have you read any good books recently?,,0.5907893776893616

@@ -55,7 +55,7 @@ public class GUIHandler {
       String state = data.getString("state");
 
       if (state.equals("start")) {
-        List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(1);
+        List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(1, new ArrayList<>());
 
         List<JournalText> entryInfo = new ArrayList<>();
         entryInfo.add(new Question(questions.get(0)));
@@ -90,7 +90,7 @@ public class GUIHandler {
 
         // in case not enough questions are determined from tags
         List<String> additionalQuestions
-            = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size());
+            = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size(), questions);
 
         questions.addAll(additionalQuestions);
 
