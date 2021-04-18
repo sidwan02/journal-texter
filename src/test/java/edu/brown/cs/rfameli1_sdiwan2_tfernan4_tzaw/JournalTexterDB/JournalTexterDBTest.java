@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.Database;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DatabaseCreator;
@@ -87,12 +87,17 @@ public class JournalTexterDBTest {
     assertEquals("{@Yo whats up}{not much}", rs.getString(3));
     assertEquals("riki", rs.getString(4));
 
+    // Insert a tag
+    ps = conn.prepareStatement("INSERT INTO tags (text) VALUES ('yay')");
+    ps.executeUpdate();
+
     // Add a response
-    jtDb.addToEntry(1, Collections.singletonList(response1), new ArrayList<>());
+    jtDb.addToEntry(1, Collections.singletonList(response1), Collections.singletonList("yay"));
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}", rs.getString(3));
     assertEquals("{@Yo whats up}{not much}{I am good}", jtDb.getEntryById(1).getStringRepresentation());
+    assertEquals("yay", jtDb.getEntryById(1).getTags().get(0));
 
     // Add a question
     jtDb.addToEntry(1, Collections.singletonList(question1), new ArrayList<>());
