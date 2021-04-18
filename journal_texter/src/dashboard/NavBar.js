@@ -12,13 +12,6 @@ export default function NavBar() {
     const history = useHistory();
 
     /**
-     * Sends the user to the dashboard.
-     */
-    function handleReturnToDashboard() {
-        history.push('/');
-    }
-
-    /**
      * Deletes the users token, sends them to the login page, and reloads the page.
      */
     function handleSignOut() {
@@ -32,7 +25,7 @@ export default function NavBar() {
 
     return (
         <nav className="nav-bar">
-            <h1 id="home-button" onClick={handleReturnToDashboard}>JournalTexter</h1>
+            <h1 id="home-button" className="noselect">JournalTexter</h1>
             <div id="signout-button" onClick={handleSignOut}>
                 <div>
                     Sign Out

@@ -59,7 +59,7 @@ export default function QuestionDisplay(props) {
     }
 
     return (
-        <div className="question-display grid-element">
+        <div className="question-display grid-element noselect">
             <div className="question-display-header question-display-element">
                 <div className="question-display-header-text">
                     Select a prompt to respond to!
