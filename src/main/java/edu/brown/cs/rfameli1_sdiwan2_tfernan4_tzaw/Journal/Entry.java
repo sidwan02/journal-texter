@@ -2,9 +2,7 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,7 +18,9 @@ public class Entry<T extends JournalText> {
   private final List<T> questionsAndResponses;
   private final String title;
   private final Double sentiment = 0.0;
-  private Set<String> tags = new HashSet<>();
+  private List<String> tags;
+  private final Double totalSentiment = 0.0;
+  private final Integer numberOfQuestions = 0;
 
   /**
    * Constructs an entry using a string representation of the entry.
@@ -29,8 +29,10 @@ public class Entry<T extends JournalText> {
    * @param date                 the date the entry was created
    * @param entryTitle           the title of the entry
    * @param stringRepresentation a string representation representing the text of the entry
+   * @param tags  the tags that were found in user's responses throughout the entry
    */
-  public Entry(Integer id, LocalDate date, String entryTitle, String stringRepresentation) {
+  public Entry(Integer id, LocalDate date, String entryTitle, String stringRepresentation,
+               List<String> tags) {
     // Responses will be represented as {response}
     // Questions will be represented as {@question}
     this.id = id;
@@ -53,6 +55,7 @@ public class Entry<T extends JournalText> {
     }
     this.questionsAndResponses = questionsResponses;
     this.stringRepresentation = stringRepresentation;
+    this.tags = tags;
   }
 
   /**
@@ -62,8 +65,10 @@ public class Entry<T extends JournalText> {
    * @param date                  the date the entry was created
    * @param entryTitle            the entryTitle of the entry
    * @param questionsAndResponses a List of Questions and Responses
+   * @param tags the tags that were found in responses throughout the entry
    */
-  public Entry(Integer id, LocalDate date, String entryTitle, List<T> questionsAndResponses) {
+  public Entry(Integer id, LocalDate date, String entryTitle, List<T> questionsAndResponses,
+               List<String> tags) {
     this.id = id;
     this.date = date;
     this.title = entryTitle;
@@ -75,6 +80,7 @@ public class Entry<T extends JournalText> {
       stringRep.append(questionOrResponse.stringRepresentation());
     }
     this.stringRepresentation = stringRep.toString();
+    this.tags = tags;
   }
 
   /**
@@ -118,7 +124,7 @@ public class Entry<T extends JournalText> {
    *
    * @return a Map of tags and their frequencies in responses
    */
-  public Set<String> getTags() {
+  public List<String> getTags() {
     // CURRENTLY NOT FUNCTIONAL
     return this.tags; // <== instantiate this when retrieving from the database
   }
@@ -134,10 +140,10 @@ public class Entry<T extends JournalText> {
   /**
    * Gets the total sentiment of all responses in the entry.
    *
-   * @return a value between 0 and 1 representing the overall sentiment of all responses
+   * @return a value between 0 and 1 representing the overall weighted sentiment of all responses
    */
-  public Double getSentiment() {
-    return this.sentiment;
+  public Double getWeightedSentiment() {
+    return this.totalSentiment / this.numberOfQuestions;
   }
 
 }

@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -219,16 +220,14 @@ public final class JournalTexterDB {
     ResultSet rs = ps.executeQuery();
     List<Entry<JournalText>> entries = new ArrayList<>();
     while (rs.next()) {
-      // May or may not need to use id / author in the future
       Integer id = rs.getInt(1);
       Date date = rs.getDate(2);
       String stringRepresentation = rs.getString(3);
       String title = rs.getString(4);
       // Get date into the LocalDate format
-      LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())
-          .atZone(ZoneId.systemDefault())
-          .toLocalDate();
-      entries.add(new Entry<>(id, cleanedDate, title, stringRepresentation));
+      LocalDate cleanedDate = DateConversion.dateToLocalDate(date);
+      List<String> tags = getTagsForEntry(id);
+      entries.add(new Entry<>(id, cleanedDate, title, stringRepresentation, tags));
     }
     return entries;
   }
@@ -250,8 +249,29 @@ public final class JournalTexterDB {
     LocalDate date = DateConversion.dateToLocalDate(rs.getDate(2));
     String entryString = rs.getString(3);
     String title = rs.getString(4);
+    List<String> tags = getTagsForEntry(entryId);
     DbUtils.closeResultSetAndPrepStatement(rs, ps);
-    return new Entry<>(id, date, title, entryString);
+    return new Entry<>(id, date, title, entryString, tags);
+  }
+
+  /**
+   * Gets all tags that were found for the given entry.
+   * @param entryId the id of the entry
+   * @return a list of tags
+   * @throws SQLException if a database access error occurs or if the SQL query fails
+   */
+  private List<String> getTagsForEntry(Integer entryId) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement(
+        "SELECT text FROM tags WHERE id IN (SELECT tag_id FROM tags_to_entries WHERE entry_id=?)");
+    ps.setInt(1, entryId);
+    ResultSet rs = ps.executeQuery();
+    List<String> tags = new LinkedList<>();
+    while (rs.next()) {
+      tags.add(rs.getString(1));
+    }
+    DbUtils.closeResultSetAndPrepStatement(rs, ps);
+    return tags;
   }
 
   /**
@@ -281,14 +301,19 @@ public final class JournalTexterDB {
     return rs.getInt(1);
   }
 
+
   /**
-   * Updates an entry by adding new Questions and Responses.
+   * Updates an entry by adding new Questions and Response, as well as forming new tag-to-entry
+   * relations in the database if tagsToAdd is not empty.
    * @param entryId the id of the entry to update
-   * @param toAdd the Questions and Responses to add
+   * @param textsToAdd the Questions and Responses to add
+   * @param tagsToAdd the tags to add to the entry
    * @throws SQLException if connection has not been established or if an error occurs interacting
-   * with the database
+   * with the database, including if a tag in tagsToAdd is not in the tags table
    */
-  public void addToEntry(Integer entryId, List<JournalText> toAdd) throws SQLException {
+  public void addToEntry(Integer entryId, List<JournalText> textsToAdd, List<String> tagsToAdd)
+      throws SQLException {
+    // Note: tags are a List<String> due to how Javascript sends/accepts
     checkConnection();
     PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
     ps.setInt(1, entryId);
@@ -299,8 +324,8 @@ public final class JournalTexterDB {
     } else {
       throw new SQLException("No entry found with id " + entryId);
     }
-
-    for (JournalText jt : toAdd) {
+    // Update the entries with each new response and question
+    for (JournalText jt : textsToAdd) {
       entryText.append(jt.stringRepresentation());
     }
     ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
@@ -308,6 +333,30 @@ public final class JournalTexterDB {
     ps.setInt(2, entryId);
     ps.executeUpdate();
 
+    for (String tag : tagsToAdd) {
+      // Find the id of the tag
+      Integer tagId = null;
+      ps = conn.prepareStatement("SELECT id FROM tags WHERE text=?");
+      ps.setString(1, tag);
+      rs = ps.executeQuery();
+      while (rs.next()) {
+        tagId = rs.getInt(1);
+      }
+      if (tagId == null) {
+        throw new SQLException("Tag " + tag + " not found in the tags table (addToEntry)");
+      }
+
+      // Add new tag-entry relation in tags-to-entries table
+      ps = conn.prepareStatement(
+          "INSERT INTO tags_to_entries (tag_id, entry_id) SELECT ?, ? WHERE NOT EXISTS "
+              + "(SELECT * FROM tags_to_entries WHERE tag_id=? AND entry_id=?)");
+      ps.setInt(1, tagId);
+      ps.setInt(2, entryId);
+      ps.setInt(3, tagId);
+      ps.setInt(4, entryId);
+      ps.executeUpdate();
+    }
+    DbUtils.closeResultSetAndPrepStatement(rs, ps);
   }
 
   /**
