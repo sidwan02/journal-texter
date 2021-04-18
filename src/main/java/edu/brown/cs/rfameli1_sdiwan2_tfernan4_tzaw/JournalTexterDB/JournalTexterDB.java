@@ -115,7 +115,7 @@ public final class JournalTexterDB {
         int questionId = rs.getInt(1);
 
         // Get the tags from the second column of the spreadsheet
-        String[] tags = r.get(1).split(",");
+        String[] tags = r.get(1).trim().split(",");
         for (String tag : tags) {
           // Check if the tag has been inserted in the tags table
           ps = conn.prepareStatement("SELECT * FROM tags WHERE text=?;");
