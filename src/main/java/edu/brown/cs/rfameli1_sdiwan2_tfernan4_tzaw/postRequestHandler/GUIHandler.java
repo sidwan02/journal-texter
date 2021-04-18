@@ -89,6 +89,8 @@ public class GUIHandler {
 
         Set<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
 
+        System.out.println(questions);
+
         // in case not enough questions are determined from tags
         Set<String> additionalQuestions
             = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size());
@@ -98,8 +100,8 @@ public class GUIHandler {
         List<String> questionsList = new ArrayList<>(questions);
 
         // Deal with sentiment
-//        double sentiment = -1.0;
-        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+        double sentiment = -1.0;
+//        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
         System.out.println(sentiment);
 
         variables = ImmutableMap.of(
@@ -340,17 +342,22 @@ public class GUIHandler {
         }
       }
 
+      List<String> tags = entry.getTags();
+//      System.out.println(tags);
+
       if (!responsesForQuestion.isEmpty()) {
         accumulatedResponses.add(responsesForQuestion);
       }
 
       variables = ImmutableMap.of(
+          "entryTitle", entry.getTitle(),
           "questions", questions,
           "responses", accumulatedResponses,
           //"responses", responses,
           "date", entry.getDate(),
-          //"tags", entry.getTags(),
-          "sentiment", entry.getWeightedSentiment());
+          "tags", tags
+//          "sentiment", entry.getWeightedSentiment()
+      );
       /*-------*/
       /*
       Assuming this relates to seeing all the text of the entry after a user pulls it up, this can

@@ -143,7 +143,8 @@ public class Entry<T extends JournalText> {
    * @return a value between 0 and 1 representing the overall weighted sentiment of all responses
    */
   public Double getWeightedSentiment() {
-    return this.totalSentiment / this.numberOfQuestions;
+    return 0.;
+//    return this.totalSentiment / this.numberOfQuestions;
   }
 
 }

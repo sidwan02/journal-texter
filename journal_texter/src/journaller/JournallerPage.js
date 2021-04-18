@@ -111,6 +111,7 @@ export default function (props) {
                 toSend,
                 config
             ).then(response => {
+                console.log(response.data);
                 let questionsList = response.data["questions"]
                 setQuestions(questionsList);
             })
