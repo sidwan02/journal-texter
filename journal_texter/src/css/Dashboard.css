@@ -44,19 +44,24 @@
 }
 
 .dashboardElementText {
-    width: 80%;
+    width: 90%;
     margin: 0;
 }
 
 .dashboardElementText + .dashboardElementText {
-    margin-top: 1rem;
+    margin-top: 1.25rem;
 }
 
 .dashboard-element-text-title {
-    font-size: 1.4rem;
+    font-size: 1.75rem;
     font-weight: 600;
 }
 
-.dashboard-element-text-body {
-    font-size: 20px;
+.dashboard-element-text-date {
+    font-size: 1.25rem;
+    /*font-style: italic;*/
+}
+
+.dashboard-element-text-tags {
+    font-size: 1rem;
 }

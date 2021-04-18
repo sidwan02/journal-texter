@@ -49,9 +49,22 @@ export default function Dashboard() {
                     let date = month + "/" + day + "/" + year;
 
                     let tags = response.data["entries"]["values"][i]["nameValuePairs"]["tags"];
-                    console.log(tags);
 
-                    pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId} entryTitle={entryTitle}/>);
+                    let tagString = "";
+                    let maxLength = 5;
+
+                    if (tags.length < maxLength) {
+                        maxLength = tags.length;
+                    }
+                    for (let i = 0; i < maxLength; i++) {
+                        if (i + 1 !== maxLength) {
+                            tagString += tags[i] + ", ";
+                        } else {
+                            tagString += tags[i];
+                        }
+                    }
+
+                    pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId} entryTitle={entryTitle} tags={tagString}/>);
                     setPastEntries(pastEntries.concat(<div></div>));
                 }
 
