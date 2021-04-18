@@ -58,13 +58,13 @@ function LandingPage() {
             </div>
             <div className="landing-page-action-bar">
                 <div className="landing-page-link-container">
-                    <Link className="landing-page-link" to="/signup">Sign Up!</Link>
+                    <Link className="landing-page-link noselect" to="/signup">Sign Up!</Link>
                 </div>
                 <div className="landing-page-logo-container">
                     <img id="landing-page-logo" src={logo} alt="JournalTexter Logo"/>
                 </div>
                 <div className="landing-page-link-container">
-                    <Link className="landing-page-link" to="/login">Login!</Link>
+                    <Link className="landing-page-link noselect" to="/login">Login!</Link>
                 </div>
             </div>
         </div>

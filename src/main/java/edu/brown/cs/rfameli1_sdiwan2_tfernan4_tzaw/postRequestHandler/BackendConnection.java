@@ -31,47 +31,42 @@ public final class BackendConnection {
    * @param n the number of questions required.
    * @return a list of questions.
    */
-  public static List<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
+  public static Set<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
     Set<String> tags = jtDB.getAllTagsFromDB();
 
-    List<String> randomlyChosenTags = new ArrayList<>();
+    // get questions associated with each tag
+    Set<String> questions = new HashSet<>();
+    TranslationsAPIHandler translate = new TranslationsAPIHandler();
 
     int size = tags.size();
-    int counter = n;
     List<Integer> seenItems = new ArrayList<>();
-    while (counter > 0) {
+    while (questions.size() < n) {
       int item = new Random().nextInt(size);
       if (!seenItems.contains(item)) {
         int i = 0;
         for (String tag : tags) {
+          // get to the tag randomly selected
           if (i == item) {
             seenItems.add(item);
-            randomlyChosenTags.add(tag);
+            List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
+
+            for (Question q : questionsFromTag) {
+              // question not already picked up by tags
+              // use the American dialect
+              // In future updates this dialect can be dynamically changed
+              // through the passing of another parameter to this method.
+              questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
+              if (questions.size() >= n) {
+                break;
+              }
+            }
           }
           i++;
         }
-        counter--;
       }
-    }
-
-    TranslationsAPIHandler translate = new TranslationsAPIHandler();
-
-    // get questions associated with each tag
-    List<String> questions = new ArrayList<>();
-    for (String tag : randomlyChosenTags) {
-      List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
-
-      for (Question q : questionsFromTag) {
-        // use the American dialect
-        // In future updates this dialect can be dynamically changed
-        // through the passing of another parameter to this method.
-        questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
-        if (questions.size() >= 5) {
-          break;
-        }
-      }
+      // if the tag has been seen, go through the loop again
     }
 
     return questions;
@@ -112,10 +107,10 @@ public final class BackendConnection {
    * Get questions of desired tags.
    *
    * @param foundTags the tags associated with a user's responses.
-   * @return a list of questions.
+   * @return a set of questions.
    */
-  public static List<String> getQuestionsFromTags(List<String> foundTags) throws SQLException {
-    List<String> questions = new ArrayList<>();
+  public static Set<String> getQuestionsFromTags(List<String> foundTags) throws SQLException {
+    Set<String> questions = new HashSet<>();
 
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 

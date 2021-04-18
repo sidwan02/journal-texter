@@ -13,13 +13,13 @@ code {
 }
 
 html, body, #root, #root>div {
-  height: 100%;
+  /*height: 100%;*/
   margin: 0;
 }
 
 .App {
   width: 100vw;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
 }
 
 :root {
@@ -35,4 +35,14 @@ html, body, #root, #root>div {
   --accent-200: #ff505b;
   --accent-300: #ff3643;
   --accent-400: #ff0515;
+}
+
+.noselect {
+  /* From stack overflow */
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }

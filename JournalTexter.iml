@@ -62,6 +62,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.5" level="project" />
-    <orderEntry type="library" name="Python 3.8 (term-project-rfameli1-sdiwan2-tfernan4-tzaw) interpreter library" level="application" />
+    <orderEntry type="library" name="Python 3.9 interpreter library" level="application" />
   </component>
 </module>

@@ -86,7 +86,7 @@ export default function SignUpPage({setToken}) {
         <div className="login-page">
             <div className="login-box">
                 <div className="login-box-title">
-                    <Link className="login-box-home-link login-box-link" to="/">JournalTexter</Link>
+                    <Link className="login-box-home-link login-box-link noselect" to="/">JournalTexter</Link>
                 </div>
                 <div className="login-form">
                     <LoginTextBox text="Username" change={setUserName} type="text"/>
