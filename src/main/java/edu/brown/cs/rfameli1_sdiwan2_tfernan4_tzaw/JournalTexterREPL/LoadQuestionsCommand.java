@@ -36,7 +36,7 @@ public class LoadQuestionsCommand implements REPLCommand {
   @Override
   public void run(ArgHolder arguments) {
     String spreadsheetFile = arguments.nextString();
-    if (jtDatabase.loadDataFromSpreadsheet(spreadsheetFile)) {
+    if (jtDatabase.loadQuestionsAndTagsFromSheet(spreadsheetFile)) {
       System.out.println("Successfully loaded in questions");
     }
   }

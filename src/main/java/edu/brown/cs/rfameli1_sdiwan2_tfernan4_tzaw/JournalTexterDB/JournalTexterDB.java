@@ -85,7 +85,7 @@ public final class JournalTexterDB {
    * @param filename the name of the spreadsheet file to be read from (must be in .tsv format)
    * @return true if the data was successfully loaded, else false
    */
-  public boolean loadDataFromSpreadsheet(String filename) {
+  public boolean loadQuestionsAndTagsFromSheet(String filename) {
     try {
       SpreadsheetData sd = SpreadsheetReader.parseSpreadsheet(filename, "\t",
           Arrays.asList("Question", "Tags"));
