@@ -7,7 +7,6 @@ target/
 *.sqlite3
 *.db-journal
 data/*.db
-config.properties
 /data/stanfordSentimentTreebank/
 /data/IMDB DS
 /server/model/

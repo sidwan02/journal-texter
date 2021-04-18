@@ -29,13 +29,31 @@ Once the project has successfully packaged, run
 to run the backend of the project. This will start the backend server as well as a REPL that
 can handle commands.
 
-You'll have to choose a database for the project to work.
-The default database is `data/journaltexter.db`. To set the database, run  
-`database <path_to_database>` in the REPL.
+In order to create a new database for use in the project, type `newdb <database-path>.db` in the REPL.  
+For demonstration purposes, you can just use `newdb data/journaltexter.db`
 
-Once your database is set, you can optionally load in questions and tags from a valid `.tsv` file using `load <question_spreadsheet.tsv>`
+Once your database has been created, you can load in all the questions and tags from a formatted `.tsv` spreadsheet.
+Currently, you can use the file `data/questions-tags.tsv` to load in the most up-to-date questions
+and tags.
 
-With your database set, you can now run the frontend of your project.
+#### Loading your own questions/tags
+Loading in questions will ignore repeats, so you may also create your own questions and tags spreadsheet.
+
+The first column must exactly have the header "Questions" and the second must exactly have the header "Tags". See
+`questions-tags.tsv` for an example.
+
+#### Running the backend:
+You must first set the database to be used in the project using `database <database-path>.db`. Once the database
+is set, questions can be loaded in using `load <formatted-tsv-path>.tsv`. This may take a moment, but will load
+all questions, tags, and question-tag relations from the spreadsheet that are not already in the database.
+
+To get the project running the first time, you can basically run the following set of commands:  
+`newdb data/journaltexter.db`  
+`database data/journaltexter.db`  
+`load data/questions-tags.tsv`  
+
+If you already have the database and are running the project again, you can simply use:  
+`database <database-path>.db` (i.e. `database data/journaltexter.db`)
 
 ### Starting the frontend React app
 
@@ -60,6 +78,9 @@ the texting interface, and you can continue replying.
 Once you're done with an entry, you can save it and return to the dashboard. All your past entries
 will appear there, and you can click on them to see what you wrote on a given day. If you'd like,
 you can also delete entries.
+
+
+## Challenges faced in the project
 
 ## About the Team
 
@@ -114,7 +135,7 @@ Thet Htay Zaw
 Check [Project Outline](https://github.com/cs0320-2021/term-project-rfameli1-sdiwan2-tfernan4-tzaw/blob/master/Term%20Project%20Outline.pdf)
 for pdf version
 
-**Project Idea(s):**
+## Initial Project Ideas
 ### JournalTexter
 JournalTexter is a journaling app that makes it easy and engaging for users to type up their thoughts. After a user signs up, they can make their first entry, in which they’ll be prompted by a OldJournallerPage. The OldJournallerPage will give them a prompt, and once they answer, the OldJournallerPage will provide a few related questions to get more of their thoughts down. Unlike a chatbot, the OldJournallerPage is just there to feed you related questions/prompts to help you explore and document different aspects of your life that you may not have considered writing down. Once the user is done journaling, they can save the entry to look back on later. This makes it easy for users to keep writing, however much they want.
 
