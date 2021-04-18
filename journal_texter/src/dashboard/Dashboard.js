@@ -22,8 +22,6 @@ export default function Dashboard() {
     async function getUserJournals() {
         const toSend = JSON.parse(localStorage.getItem('token'));
 
-        console.log(toSend);
-
         let config = {
             headers: {
                 "Content-Type": "application/json",
@@ -46,10 +44,11 @@ export default function Dashboard() {
                     let month = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["month"];
                     let day = response.data["entries"]["values"][i]["nameValuePairs"]["date"]["day"];
 
-                    let entryId = response.data["entries"]["values"][i]["nameValuePairs"]["entryId"]
+                    let entryId = response.data["entries"]["values"][i]["nameValuePairs"]["entryId"];
+                    let entryTitle = response.data["entries"]["values"][i]["nameValuePairs"]["entryTitle"];
                     let date = month + "/" + day + "/" + year;
 
-                    pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId}/>);
+                    pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId} entryTitle={entryTitle}/>);
                     setPastEntries(pastEntries.concat(<div></div>));
                 }
 

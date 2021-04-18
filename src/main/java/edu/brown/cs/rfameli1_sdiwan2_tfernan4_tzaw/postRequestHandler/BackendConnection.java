@@ -86,6 +86,7 @@ public final class BackendConnection {
    * @return a set of all tags associated with the responses.
    */
   public static Set<String> getTagsFromResponses(String combinedResponses) {
+
     WordCountVec vectorizor = new WordCountVec();
 
     Map<String, Integer> frequencies = vectorizor.getFrequenciesFromText(combinedResponses, 1);
@@ -164,6 +165,7 @@ public final class BackendConnection {
       JSONObject jsonObject = new JSONObject();
       try {
         jsonObject.put("entryId", entry.getId());
+        jsonObject.put("entryTitle", entry.getTitle());
         jsonObject.put("date", entry.getDate());
         jsonObject.put("tags", entry.getTags());
         jsonObject.put("sentiment", entry.getSentiment());

@@ -12,12 +12,17 @@ export default function QuestionDisplay(props) {
         </div>
     )
 
+    /**
+     * Sends the inputted question to the backend to be saved along with recentUserResponse
+     * @param question - the chosen question that is about to be saved
+     */
     const handleQuestion = (question) => {
         if (question !== "") {
             const toSend = {
                 entryID: entryID,
                 question: question,
                 userID: user,
+                entryTitle: "",
                 text: recentUserResponse,
                 state: "saveQuestion"
             }
@@ -46,8 +51,10 @@ export default function QuestionDisplay(props) {
         }
     }
 
+    /**
+     * Function that allows the user to request new questions
+     */
     function requestNewQuestions() {
-        //alert("Requesting new questions");
         props.loadNewQuestions();
     }
 

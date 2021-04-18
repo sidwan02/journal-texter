@@ -9,6 +9,7 @@
     margin: 1rem auto;
 
     width: 85%;
+    max-width: 70rem;
     height: 80%;
 
     display: grid;
@@ -47,6 +48,8 @@
     justify-content: center;
     align-items: center;
 
+    cursor: default;
+
     font-size: 1.5em;
     font-weight: 600;
 }
@@ -67,12 +70,16 @@
     grid-column: span 1;
     grid-row: span 1;
 
+    cursor: pointer;
+
     font-size: 1.75rem;
 }
 
 .grid-element.save-journal-entry {
     grid-column: span 2;
     grid-row: span 1;
+
+    cursor: pointer;
 
     font-size: 1.75rem;
 }
@@ -94,6 +101,8 @@
     height: 20%;
     font-size: 1.5em;
     font-weight: 600;
+
+    cursor: default;
 
     background-color: var(--blue-650);
 }
@@ -120,6 +129,10 @@
 
 .question-display-footer:hover {
     background-color: var(--blue-600);
+}
+
+.hidden-question-display-text {
+    text-align: center;
 }
 
 .journal-button {
