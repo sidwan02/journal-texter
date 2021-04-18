@@ -29,8 +29,6 @@ public final class BackendConnection {
    * Get the desired number of randomly generated questions.
    *
    * @param n the number of questions required.
-   * @param questionsToExclude questions which shouldn't be re-added if already selected
-   *                           from tags
    * @return a list of questions.
    */
   public static Set<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
@@ -38,44 +36,37 @@ public final class BackendConnection {
 
     Set<String> tags = jtDB.getAllTagsFromDB();
 
-    List<String> randomlyChosenTags = new ArrayList<>();
+    // get questions associated with each tag
+    Set<String> questions = new HashSet<>();
+    TranslationsAPIHandler translate = new TranslationsAPIHandler();
 
     int size = tags.size();
-    int counter = n;
     List<Integer> seenItems = new ArrayList<>();
-    while (counter > 0) {
+    while (questions.size() < n) {
       int item = new Random().nextInt(size);
       if (!seenItems.contains(item)) {
         int i = 0;
         for (String tag : tags) {
+          // get to the tag randomly selected
           if (i == item) {
             seenItems.add(item);
-            randomlyChosenTags.add(tag);
+            List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
+
+            for (Question q : questionsFromTag) {
+              // question not already picked up by tags
+              // use the American dialect
+              // In future updates this dialect can be dynamically changed
+              // through the passing of another parameter to this method.
+              questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
+              if (questions.size() >= n) {
+                break;
+              }
+            }
           }
           i++;
         }
-        counter--;
       } else {
-        // item has been seen, go through loop again
-      }
-    }
-
-    TranslationsAPIHandler translate = new TranslationsAPIHandler();
-
-    // get questions associated with each tag
-    Set<String> questions = new HashSet<>();
-    for (String tag : randomlyChosenTags) {
-      List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
-
-      for (Question q : questionsFromTag) {
-        // question not already picked up by tags
-        // use the American dialect
-        // In future updates this dialect can be dynamically changed
-        // through the passing of another parameter to this method.
-        questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
-        if (questions.size() >= 5) {
-          break;
-        }
+        // tag has been seen, go through loop again
       }
     }
 
