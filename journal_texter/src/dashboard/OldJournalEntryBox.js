@@ -21,7 +21,6 @@ function OldJournalEntryBox(props) {
 
     return (
         <div className="dashboardElement" onClick={handleClick}>
-            <p className="dashboardElementText">{props.name}</p>
             <p className="dashboardElementText">{props.date}</p>
             <p className="dashboardElementText">{props.entryTitle}</p>
         </div>
