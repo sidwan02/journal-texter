@@ -277,14 +277,43 @@ public final class JournalTexterDB {
     return rs.getInt(1);
   }
 
+//  /**
+//   * Updates an entry by adding new Questions and Responses.
+//   * @param entryId the id of the entry to update
+//   * @param toAdd the Questions and Responses to add
+//   * @throws SQLException if connection has not been established or if an error occurs interacting
+//   * with the database
+//   */
+//  public void addToEntry(Integer entryId, List<JournalText> toAdd) throws SQLException {
+//    checkConnection();
+//    PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
+//    ps.setInt(1, entryId);
+//    ResultSet rs = ps.executeQuery();
+//    StringBuilder entryText;
+//    if (rs.next()) {
+//      entryText = new StringBuilder(rs.getString(1));
+//    } else {
+//      throw new SQLException("No entry found with id " + entryId);
+//    }
+//
+//    for (JournalText jt : toAdd) {
+//      entryText.append(jt.stringRepresentation());
+//    }
+//    ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
+//    ps.setString(1, entryText.toString());
+//    ps.setInt(2, entryId);
+//    ps.executeUpdate();
+//  }
+
   /**
    * Updates an entry by adding new Questions and Responses.
    * @param entryId the id of the entry to update
-   * @param toAdd the Questions and Responses to add
+   * @param textsToAdd the Questions and Responses to add
    * @throws SQLException if connection has not been established or if an error occurs interacting
    * with the database
    */
-  public void addToEntry(Integer entryId, List<JournalText> toAdd) throws SQLException {
+  public void addToEntry(Integer entryId, List<JournalText> textsToAdd, List<String> tagsToAdd)
+      throws SQLException {
     checkConnection();
     PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
     ps.setInt(1, entryId);
@@ -295,8 +324,8 @@ public final class JournalTexterDB {
     } else {
       throw new SQLException("No entry found with id " + entryId);
     }
-
-    for (JournalText jt : toAdd) {
+    // Update the entries with each new response and question
+    for (JournalText jt : textsToAdd) {
       entryText.append(jt.stringRepresentation());
     }
     ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
@@ -304,6 +333,16 @@ public final class JournalTexterDB {
     ps.setInt(2, entryId);
     ps.executeUpdate();
 
+    for (String tag : tagsToAdd) {
+      ps = conn.prepareStatement(
+          "INSERT INTO tags_to_entries VALUES (?, (SELECT id FROM tags WHERE text=?))");
+      ps.setInt(1, entryId);
+      ps.setString(2, tag);
+      ps.executeUpdate();
+      // Find id of tag from tags table
+      // Add new tag-entry relation in tags-to-entries table
+    }
+    DbUtils.closeQuietly(ps);
   }
 
   /**

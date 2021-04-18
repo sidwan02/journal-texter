@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * postRequestHandler class to manage all handlers to the JournalTexter Page.
@@ -66,7 +65,7 @@ public class GUIHandler {
         jtDB.resetEntryText(entryId);
 
         // save the question
-        jtDB.addToEntry(entryId, entryInfo);
+        jtDB.addToEntry(entryId, entryInfo, new ArrayList<>());
 
         variables = ImmutableMap.of(
             "questions", questions,
@@ -84,7 +83,7 @@ public class GUIHandler {
 
         String combinedResponses = String.join(" ", responses);
 
-        Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
+        List<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
         List<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
 
@@ -95,8 +94,9 @@ public class GUIHandler {
         questions.addAll(additionalQuestions);
 
         // TODO: Deal with sentiment
-        double sentiment = -1.0;
-        //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+//        double sentiment = -1.0;
+        double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
+        System.out.println(sentiment);
 
         variables = ImmutableMap.of(
             "questions", questions,
@@ -156,7 +156,7 @@ public class GUIHandler {
 
         String combinedResponses = String.join(" ", responses);
 
-        Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
+        List<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
         double sentiment = -1.0;
         //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
@@ -172,7 +172,7 @@ public class GUIHandler {
 
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
-        jtDB.addToEntry(entryId, entryInfo);
+        jtDB.addToEntry(entryId, entryInfo, foundTags);
 
         variables = ImmutableMap.of(
             "tags", foundTags,
@@ -189,7 +189,7 @@ public class GUIHandler {
 
         String combinedResponses = String.join(" ", responses);
 
-        Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
+        List<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
         double sentiment = -1.0;
         //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
@@ -202,7 +202,7 @@ public class GUIHandler {
 
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
-        jtDB.addToEntry(entryId, entryInfo);
+        jtDB.addToEntry(entryId, entryInfo, foundTags);
 
         variables = ImmutableMap.of(
             "tags", foundTags,
@@ -343,7 +343,7 @@ public class GUIHandler {
           //"responses", responses,
           "date", entry.getDate(),
           //"tags", entry.getTags(),
-          "sentiment", entry.getSentiment());
+          "sentiment", entry.getWeightedSentiment());
       /*-------*/
       /*
       Assuming this relates to seeing all the text of the entry after a user pulls it up, this can
@@ -359,7 +359,7 @@ public class GUIHandler {
     private static final Gson GSON = new Gson();
 
     /**
-     * Handles a deletion request for an entry
+     * Handles a deletion request for an entry.
      *
      * @param request  - request object for Axios request
      * @param response - response object for Axios request

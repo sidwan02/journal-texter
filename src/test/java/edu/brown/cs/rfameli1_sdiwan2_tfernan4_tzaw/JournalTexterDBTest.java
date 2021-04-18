@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -67,21 +68,21 @@ public class JournalTexterDBTest {
     assertEquals("riki", rs.getString(4));
 
     // Add a response
-    jtDb.addToEntry(1, Collections.singletonList(response1));
+    jtDb.addToEntry(1, Collections.singletonList(response1), new ArrayList<>());
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}", rs.getString(3));
     assertEquals("{@Yo whats up}{not much}{I am good}", jtDb.getEntryById(1).getString());
 
     // Add a question
-    jtDb.addToEntry(1, Collections.singletonList(question1));
+    jtDb.addToEntry(1, Collections.singletonList(question1), new ArrayList<>());
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}", rs.getString(3));
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}", jtDb.getEntryById(1).getString());
 
     // Add a question and response
-    jtDb.addToEntry(1, Arrays.asList(question1, emptyQuestion, emptyResponse, response1));
+    jtDb.addToEntry(1, Arrays.asList(question1, emptyQuestion, emptyResponse, response1), new ArrayList<>());
     ps = conn.prepareStatement("SELECT * FROM entries WHERE id=1");
     rs = ps.executeQuery();
     assertEquals("{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}", rs.getString(3));

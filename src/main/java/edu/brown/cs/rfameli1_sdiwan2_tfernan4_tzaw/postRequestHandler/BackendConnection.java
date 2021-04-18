@@ -85,7 +85,7 @@ public final class BackendConnection {
    * @param combinedResponses a combined string of all responses.
    * @return a set of all tags associated with the responses.
    */
-  public static Set<String> getTagsFromResponses(String combinedResponses) {
+  public static List<String> getTagsFromResponses(String combinedResponses) {
     WordCountVec vectorizor = new WordCountVec();
 
     Map<String, Integer> frequencies = vectorizor.getFrequenciesFromText(combinedResponses, 1);
@@ -100,13 +100,13 @@ public final class BackendConnection {
       e.printStackTrace();
     }
 
-    Set<String> foundTags = new HashSet<>();
+    List<String> foundTags = new ArrayList<>();
     for (Map.Entry<String, Integer> entry : sortedFrequencies) {
       if (tags.contains(entry.getKey())) {
         foundTags.add(entry.getKey());
       }
     }
-
+    System.out.println(foundTags);
     return foundTags;
   }
 
@@ -116,7 +116,7 @@ public final class BackendConnection {
    * @param foundTags the tags associated with a user's responses.
    * @return a list of questions.
    */
-  public static List<String> getQuestionsFromTags(Set<String> foundTags) throws SQLException {
+  public static List<String> getQuestionsFromTags(List<String> foundTags) throws SQLException {
     List<String> questions = new ArrayList<>();
 
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
@@ -166,7 +166,7 @@ public final class BackendConnection {
         jsonObject.put("entryId", entry.getId());
         jsonObject.put("date", entry.getDate());
         jsonObject.put("tags", entry.getTags());
-        jsonObject.put("sentiment", entry.getSentiment());
+        jsonObject.put("sentiment", entry.getWeightedSentiment());
       } catch (Exception e) {
         e.printStackTrace();
       }

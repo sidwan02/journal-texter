@@ -1,6 +1,5 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,8 +18,10 @@ public class Entry<T extends JournalText> {
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
-  private final Double sentiment = 0.0;
+
   private Set<String> tags = new HashSet<>();
+  private final Double totalSentiment = 0.0;
+  private final Integer numberOfQuestions = 0;
 
   /**
    * Constructs an entry using a string representation of the entry.
@@ -122,10 +123,10 @@ public class Entry<T extends JournalText> {
   /**
    * Gets the total sentiment of all responses in the entry.
    *
-   * @return a value between 0 and 1 representing the overall sentiment of all responses
+   * @return a value between 0 and 1 representing the overall weighted sentiment of all responses
    */
-  public Double getSentiment() {
-    return this.sentiment;
+  public Double getWeightedSentiment() {
+    return this.totalSentiment / this.numberOfQuestions;
   }
 
 }
