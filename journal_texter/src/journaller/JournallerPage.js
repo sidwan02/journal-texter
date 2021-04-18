@@ -71,13 +71,14 @@ export default function (props) {
         if (filteredResponse !== '') {
             setShowQuestionDisplay(true);
 
-            setTexts(texts.concat(
-                <div className="journal-entry-text-container align-right">
-                    <div className="journal-entry-text">{filteredResponse}</div>
-                </div>));
+            let newText = (<div className="journal-entry-text-container align-right">
+                <div className="journal-entry-text">{filteredResponse}</div>
+            </div>);
+
+            setTexts(texts.concat(newText));
 
             setRecentUserResponse(recentUserResponse.concat(filteredResponse));
-
+            
             const toSend = {
                 entryID: entryID,
                 userID: user,
@@ -97,6 +98,8 @@ export default function (props) {
                 toSend,
                 config
             ).then(response => {
+                console.log(response.data);
+
                 let questionsList = response.data["questions"]
                 setQuestions(questionsList);
             })

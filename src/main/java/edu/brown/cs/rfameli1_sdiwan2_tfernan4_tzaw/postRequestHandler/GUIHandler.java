@@ -86,6 +86,8 @@ public class GUIHandler {
 
         Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
+        System.out.println(foundTags);
+
         List<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
 
         // in case not enough questions are determined from tags
@@ -393,7 +395,7 @@ public class GUIHandler {
     private static final Gson GSON = new Gson();
 
     /**
-     * TODO
+     * Handles a request to sign up for journal texter.
      *
      * @param request  - request object for Axios request
      * @param response - response object for Axios request
@@ -434,7 +436,7 @@ public class GUIHandler {
     private static final Gson GSON = new Gson();
 
     /**
-     * TODO
+     * Handles requests to login to JournalTexter.
      *
      * @param request  - request object for Axios request
      * @param response - response object for Axios request
