@@ -143,6 +143,7 @@ public class GUIHandler {
       // "saveQuestion" -> after the user clicks on a new question
       // "saveEntry" -> after the user clicks on the save btn
       String state = data.getString("state");
+      String entryTitle = data.getString("entryTitle");
 
       if (state.equals("saveQuestion")) {
         // convert the JSONArray
@@ -203,6 +204,8 @@ public class GUIHandler {
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
         jtDB.addToEntry(entryId, entryInfo);
+
+        jtDB.setEntryTitle(entryId, entryTitle);
 
         variables = ImmutableMap.of(
             "tags", foundTags,

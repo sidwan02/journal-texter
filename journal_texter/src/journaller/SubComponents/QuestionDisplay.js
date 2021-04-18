@@ -18,6 +18,7 @@ export default function QuestionDisplay(props) {
                 entryID: entryID,
                 question: question,
                 userID: user,
+                entryTitle: "",
                 text: recentUserResponse,
                 state: "saveQuestion"
             }

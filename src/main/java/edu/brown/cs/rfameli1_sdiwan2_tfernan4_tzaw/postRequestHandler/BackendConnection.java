@@ -164,6 +164,7 @@ public final class BackendConnection {
       JSONObject jsonObject = new JSONObject();
       try {
         jsonObject.put("entryId", entry.getId());
+        jsonObject.put("entryTitle", entry.getTitle());
         jsonObject.put("date", entry.getDate());
         jsonObject.put("tags", entry.getTags());
         jsonObject.put("sentiment", entry.getSentiment());

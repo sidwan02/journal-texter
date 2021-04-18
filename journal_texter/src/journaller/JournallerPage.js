@@ -17,6 +17,8 @@ export default function (props) {
     const entryID = props.location.state.entryID;
     const history = useHistory()
 
+    let entryName = '';
+
     /**
      * Loads in a random question at the start
      */
@@ -137,6 +139,7 @@ export default function (props) {
             entryID: entryID,
             question: "",
             userID: user,
+            entryTitle: entryName,
             text: recentUserResponse,
             state: "saveEntry"
         }
@@ -155,6 +158,14 @@ export default function (props) {
         ).then(() => {
             history.push('/');
         })
+    }
+
+    function saveButtonClick() {
+        entryName = prompt("Please enter journal entry name:", "");
+        if (entryName != null && entryName !== "") {
+            console.log(entryName)
+            saveEntry();
+        }
     }
 
     function enterPressed(event) {
@@ -203,7 +214,7 @@ export default function (props) {
                        id="journaling-text-box"
                        className="grid-element journal-type-box"/>
                 <button onClick={submitUserResponse} className="grid-element text-submit-button journal-button">Respond</button>
-                <button onClick={saveEntry} className="save-journal-entry grid-element journal-button">Save Entry</button>
+                <button onClick={saveButtonClick} className="save-journal-entry grid-element journal-button">Save Entry</button>
             </div>
         </div>
     );
