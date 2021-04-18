@@ -33,7 +33,7 @@ public final class BackendConnection {
    *                           from tags
    * @return a list of questions.
    */
-  public static List<String> getRandomlyGeneratedQuestions(int n, List<String> questionsToExclude) throws SQLException {
+  public static Set<String> getRandomlyGeneratedQuestions(int n) throws SQLException {
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
     Set<String> tags = jtDB.getAllTagsFromDB();
@@ -63,20 +63,18 @@ public final class BackendConnection {
     TranslationsAPIHandler translate = new TranslationsAPIHandler();
 
     // get questions associated with each tag
-    List<String> questions = new ArrayList<>();
+    Set<String> questions = new HashSet<>();
     for (String tag : randomlyChosenTags) {
       List<Question> questionsFromTag = jtDB.findQuestionsFromTag(tag);
 
       for (Question q : questionsFromTag) {
-        if (!questionsToExclude.contains(q.getText())) {
-          // question not already picked up by tags
-          // use the American dialect
-          // In future updates this dialect can be dynamically changed
-          // through the passing of another parameter to this method.
-          questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
-          if (questions.size() >= 5) {
-            break;
-          }
+        // question not already picked up by tags
+        // use the American dialect
+        // In future updates this dialect can be dynamically changed
+        // through the passing of another parameter to this method.
+        questions.add(translate.convertToDialect(q.getText(), DialectType.AMERICAN));
+        if (questions.size() >= 5) {
+          break;
         }
       }
     }
@@ -122,8 +120,8 @@ public final class BackendConnection {
    * @param foundTags the tags associated with a user's responses.
    * @return a list of questions.
    */
-  public static List<String> getQuestionsFromTags(Set<String> foundTags) throws SQLException {
-    List<String> questions = new ArrayList<>();
+  public static Set<String> getQuestionsFromTags(Set<String> foundTags) throws SQLException {
+    Set<String> questions = new HashSet<>();
 
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
 

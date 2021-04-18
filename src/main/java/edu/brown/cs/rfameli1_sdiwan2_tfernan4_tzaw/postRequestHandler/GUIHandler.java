@@ -55,10 +55,11 @@ public class GUIHandler {
       String state = data.getString("state");
 
       if (state.equals("start")) {
-        List<String> questions = BackendConnection.getRandomlyGeneratedQuestions(1, new ArrayList<>());
+        Set<String> questions = BackendConnection.getRandomlyGeneratedQuestions(1);
+        List<String> questionsList = new ArrayList<>(questions);
 
         List<JournalText> entryInfo = new ArrayList<>();
-        entryInfo.add(new Question(questions.get(0)));
+        entryInfo.add(new Question(questionsList.get(0)));
 
         JournalTexterDB jtDB = JournalTexterDB.getInstance();
 
@@ -69,7 +70,7 @@ public class GUIHandler {
         jtDB.addToEntry(entryId, entryInfo);
 
         variables = ImmutableMap.of(
-            "questions", questions,
+            "questions", questionsList,
             "tags", new ArrayList<>(), // no responses data
             "sentiment", -1); // no responses data
       } else if (state.equals("requestQuestion")) {
@@ -86,20 +87,22 @@ public class GUIHandler {
 
         Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
-        List<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
+        Set<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
 
         // in case not enough questions are determined from tags
-        List<String> additionalQuestions
-            = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size(), questions);
+        Set<String> additionalQuestions
+            = BackendConnection.getRandomlyGeneratedQuestions(5 - questions.size());
 
         questions.addAll(additionalQuestions);
+
+        List<String> questionsList = new ArrayList<>(questions);
 
         // TODO: Deal with sentiment
         double sentiment = -1.0;
         //double sentiment = BackendConnection.getSentimentFromResponses(combinedResponses);
 
         variables = ImmutableMap.of(
-            "questions", questions,
+            "questions", questionsList,
             "tags", foundTags,
             "sentiment", sentiment);
       } else {
