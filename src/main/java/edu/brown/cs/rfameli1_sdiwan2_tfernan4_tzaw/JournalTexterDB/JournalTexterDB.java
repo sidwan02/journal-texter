@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DbUtils;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -115,7 +116,7 @@ public final class JournalTexterDB {
         int questionId = rs.getInt(1);
 
         // Get the tags from the second column of the spreadsheet
-        String[] tags = r.get(1).split(",");
+        String[] tags = r.get(1).trim().split(",");
         for (String tag : tags) {
           // Check if the tag has been inserted in the tags table
           ps = conn.prepareStatement("SELECT * FROM tags WHERE text=?;");
@@ -213,21 +214,20 @@ public final class JournalTexterDB {
    */
   public List<Entry<JournalText>> getUserEntriesByUsername(String username) throws SQLException {
     checkConnection();
-    PreparedStatement ps = conn.prepareStatement("SELECT * FROM entries WHERE author=?");
+    PreparedStatement ps = conn.prepareStatement(
+        "SELECT id, date, entry_text, title FROM entries WHERE author=?");
     ps.setString(1, username);
     ResultSet rs = ps.executeQuery();
     List<Entry<JournalText>> entries = new ArrayList<>();
     while (rs.next()) {
-      // May or may not need to use id / author in the future
       Integer id = rs.getInt(1);
       Date date = rs.getDate(2);
       String stringRepresentation = rs.getString(3);
-      String author = rs.getString(4);
+      String title = rs.getString(4);
       // Get date into the LocalDate format
-      LocalDate cleanedDate = Instant.ofEpochMilli(date.getTime())
-          .atZone(ZoneId.systemDefault())
-          .toLocalDate();
-      entries.add(new Entry<>(id, cleanedDate, stringRepresentation));
+      LocalDate cleanedDate = DateConversion.dateToLocalDate(date);
+      List<String> tags = getTagsForEntry(id);
+      entries.add(new Entry<>(id, cleanedDate, title, stringRepresentation, tags));
     }
     return entries;
   }
@@ -241,13 +241,37 @@ public final class JournalTexterDB {
    */
   public Entry<JournalText> getEntryById(Integer entryId) throws SQLException {
     checkConnection();
-    PreparedStatement ps = conn.prepareStatement("SELECT * FROM entries WHERE id=?");
+    PreparedStatement ps = conn.prepareStatement(
+        "SELECT id, date, entry_text, title FROM entries WHERE id=?");
     ps.setInt(1, entryId);
     ResultSet rs = ps.executeQuery();
     Integer id = rs.getInt(1);
     LocalDate date = DateConversion.dateToLocalDate(rs.getDate(2));
     String entryString = rs.getString(3);
-    return new Entry<>(id, date, entryString);
+    String title = rs.getString(4);
+    List<String> tags = getTagsForEntry(entryId);
+    DbUtils.closeResultSetAndPrepStatement(rs, ps);
+    return new Entry<>(id, date, title, entryString, tags);
+  }
+
+  /**
+   * Gets all tags that were found for the given entry.
+   * @param entryId the id of the entry
+   * @return a list of tags
+   * @throws SQLException if a database access error occurs or if the SQL query fails
+   */
+  private List<String> getTagsForEntry(Integer entryId) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement(
+        "SELECT text FROM tags WHERE id IN (SELECT tag_id FROM tags_to_entries WHERE entry_id=?)");
+    ps.setInt(1, entryId);
+    ResultSet rs = ps.executeQuery();
+    List<String> tags = new LinkedList<>();
+    while (rs.next()) {
+      tags.add(rs.getString(1));
+    }
+    DbUtils.closeResultSetAndPrepStatement(rs, ps);
+    return tags;
   }
 
   /**
@@ -265,7 +289,7 @@ public final class JournalTexterDB {
     Date sqlDate = java.sql.Date.valueOf(date);
 
     PreparedStatement ps = conn.prepareStatement("INSERT INTO entries "
-        + "(date, entry_text, author) VALUES (?, ?, ?);");
+        + "(date, entry_text, author, title) VALUES (?, ?, ?, '');");
     ps.setDate(1, sqlDate);
     ps.setString(2, entryText);
     ps.setString(3, username);
@@ -277,33 +301,6 @@ public final class JournalTexterDB {
     return rs.getInt(1);
   }
 
-//  /**
-//   * Updates an entry by adding new Questions and Responses.
-//   * @param entryId the id of the entry to update
-//   * @param toAdd the Questions and Responses to add
-//   * @throws SQLException if connection has not been established or if an error occurs interacting
-//   * with the database
-//   */
-//  public void addToEntry(Integer entryId, List<JournalText> toAdd) throws SQLException {
-//    checkConnection();
-//    PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
-//    ps.setInt(1, entryId);
-//    ResultSet rs = ps.executeQuery();
-//    StringBuilder entryText;
-//    if (rs.next()) {
-//      entryText = new StringBuilder(rs.getString(1));
-//    } else {
-//      throw new SQLException("No entry found with id " + entryId);
-//    }
-//
-//    for (JournalText jt : toAdd) {
-//      entryText.append(jt.stringRepresentation());
-//    }
-//    ps = conn.prepareStatement("UPDATE entries SET entry_text=? WHERE id=?");
-//    ps.setString(1, entryText.toString());
-//    ps.setInt(2, entryId);
-//    ps.executeUpdate();
-//  }
 
   /**
    * Updates an entry by adding new Questions and Response, as well as forming new tag-to-entry
@@ -316,6 +313,7 @@ public final class JournalTexterDB {
    */
   public void addToEntry(Integer entryId, List<JournalText> textsToAdd, List<String> tagsToAdd)
       throws SQLException {
+    // Note: tags are a List<String> due to how Javascript sends/accepts
     checkConnection();
     PreparedStatement ps = conn.prepareStatement("SELECT entry_text FROM entries WHERE id=?");
     ps.setInt(1, entryId);
@@ -389,6 +387,21 @@ public final class JournalTexterDB {
     DbUtils.closeQuietly(ps);
   }
 
+  /**
+   * Sets the title of an identified entry in the entries table.
+   * @param entryId the id of the entry
+   * @param newTitle the new title of the entry
+   * @throws SQLException if the database is missing or an error occurs when interacting with the
+   * database
+   */
+  public void setEntryTitle(Integer entryId, String newTitle) throws SQLException {
+    checkConnection();
+    PreparedStatement ps = conn.prepareStatement("UPDATE entries SET title=? WHERE id=?");
+    ps.setString(1, newTitle);
+    ps.setInt(2, entryId);
+    ps.executeUpdate();
+    DbUtils.closeQuietly(ps);
+  }
 
   // ******************************
   // User Methods

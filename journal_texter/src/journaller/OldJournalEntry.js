@@ -28,6 +28,9 @@ export default function OldJournalEntry(props) {
             </div>]);
     }
 
+    /**
+     * Loads the journal entry upon load
+     */
     const loadEntry = async () => {
         const toSend = {
             entryID: entryID,
@@ -70,6 +73,9 @@ export default function OldJournalEntry(props) {
     }, [])
 
 
+    /**
+     * Function that allows the user to delete the entry
+     */
     const deleteEntry = () => {
         const toSend = {
             entryID: entryID
@@ -91,6 +97,9 @@ export default function OldJournalEntry(props) {
         })
     }
 
+    /**
+     * Function that confirms whether the user wants to delete this entry
+     */
     const confirmDeleteEntry = () => {
         let delEntry = window.confirm("Would you like to delete this entry?");
         if (delEntry) {

@@ -18,8 +18,9 @@ public class Entry<T extends JournalText> {
   private final LocalDate date;
   private final String stringRepresentation;
   private final List<T> questionsAndResponses;
-
-  private Set<String> tags = new HashSet<>();
+  private final String title;
+  private final Double sentiment = 0.0;
+  private List<String> tags;
   private final Double totalSentiment = 0.0;
   private final Integer numberOfQuestions = 0;
 
@@ -28,13 +29,16 @@ public class Entry<T extends JournalText> {
    *
    * @param id                   a unique id for the entry
    * @param date                 the date the entry was created
+   * @param entryTitle           the title of the entry
    * @param stringRepresentation a string representation representing the text of the entry
    */
-  public Entry(Integer id, LocalDate date, String stringRepresentation) {
+  public Entry(Integer id, LocalDate date, String entryTitle, String stringRepresentation,
+               List<String> tags) {
     // Responses will be represented as {response}
     // Questions will be represented as {@question}
     this.id = id;
     this.date = date;
+    this.title = entryTitle;
     List<T> questionsResponses = new ArrayList<>();
     Pattern regexParse = Pattern.compile("\\{([^{}]*)\\}");
     Matcher m = regexParse.matcher(stringRepresentation);
@@ -52,6 +56,7 @@ public class Entry<T extends JournalText> {
     }
     this.questionsAndResponses = questionsResponses;
     this.stringRepresentation = stringRepresentation;
+    this.tags = tags;
   }
 
   /**
@@ -59,11 +64,14 @@ public class Entry<T extends JournalText> {
    *
    * @param id                    a unique id for the entry
    * @param date                  the date the entry was created
+   * @param entryTitle            the entryTitle of the entry
    * @param questionsAndResponses a List of Questions and Responses
    */
-  public Entry(Integer id, LocalDate date, List<T> questionsAndResponses) {
+  public Entry(Integer id, LocalDate date, String entryTitle, List<T> questionsAndResponses,
+               List<String> tags) {
     this.id = id;
     this.date = date;
+    this.title = entryTitle;
     this.questionsAndResponses = questionsAndResponses;
     StringBuilder stringRep = new StringBuilder();
     // Iterate through every question/response
@@ -72,6 +80,7 @@ public class Entry<T extends JournalText> {
       stringRep.append(questionOrResponse.stringRepresentation());
     }
     this.stringRepresentation = stringRep.toString();
+    this.tags = tags;
   }
 
   /**
@@ -115,9 +124,17 @@ public class Entry<T extends JournalText> {
    *
    * @return a Map of tags and their frequencies in responses
    */
-  public Set<String> getTags() {
+  public List<String> getTags() {
     // CURRENTLY NOT FUNCTIONAL
     return this.tags; // <== instantiate this when retrieving from the database
+  }
+
+  /**
+   * Gets the title of the entry.
+   * @return a String representing the entry's title
+   */
+  public String getTitle() {
+    return this.title;
   }
 
   /**

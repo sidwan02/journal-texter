@@ -5,7 +5,7 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.dialectTranslatio
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import org.json.JSONArray;
@@ -53,8 +53,6 @@ public final class BackendConnection {
           i++;
         }
         counter--;
-      } else {
-        // item has been seen, go through loop again
       }
     }
 
@@ -164,6 +162,7 @@ public final class BackendConnection {
       JSONObject jsonObject = new JSONObject();
       try {
         jsonObject.put("entryId", entry.getId());
+        jsonObject.put("entryTitle", entry.getTitle());
         jsonObject.put("date", entry.getDate());
         jsonObject.put("tags", entry.getTags());
         jsonObject.put("sentiment", entry.getWeightedSentiment());

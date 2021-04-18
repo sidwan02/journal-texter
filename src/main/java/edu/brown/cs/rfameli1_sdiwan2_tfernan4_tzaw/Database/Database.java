@@ -9,6 +9,7 @@ import java.sql.Statement;
  * Class for managing a Connection to a SQLite3 database.
  */
 public class Database {
+  private final String filename;
   private final Connection conn;
 
   /**
@@ -20,6 +21,7 @@ public class Database {
    * @throws ClassNotFoundException should never happen, since SQLite class name is well-formed
    */
   public Database(String filename) throws SQLException, ClassNotFoundException {
+    this.filename = filename;
     Class.forName("org.sqlite.JDBC");
     String urlToDB = "jdbc:sqlite:" + filename;
     conn = DriverManager.getConnection(urlToDB);
