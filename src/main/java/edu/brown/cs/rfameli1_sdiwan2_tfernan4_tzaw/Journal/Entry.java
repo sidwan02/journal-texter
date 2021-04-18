@@ -2,9 +2,7 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +29,7 @@ public class Entry<T extends JournalText> {
    * @param date                 the date the entry was created
    * @param entryTitle           the title of the entry
    * @param stringRepresentation a string representation representing the text of the entry
+   * @param tags  the tags that were found in user's responses throughout the entry
    */
   public Entry(Integer id, LocalDate date, String entryTitle, String stringRepresentation,
                List<String> tags) {
@@ -66,6 +65,7 @@ public class Entry<T extends JournalText> {
    * @param date                  the date the entry was created
    * @param entryTitle            the entryTitle of the entry
    * @param questionsAndResponses a List of Questions and Responses
+   * @param tags the tags that were found in responses throughout the entry
    */
   public Entry(Integer id, LocalDate date, String entryTitle, List<T> questionsAndResponses,
                List<String> tags) {

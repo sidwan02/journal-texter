@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,8 @@ public class EntryTest {
   public void testConstructorUsingString() {
     LocalDate date1 = LocalDate.now();
     Entry<JournalText> entry1 = new Entry<>(1, date1, "entry1",
-        "{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}");
+        "{@Yo whats up}{not much}{I am good}{@How are you?}{@How are you?}{@}{}{I am good}",
+        new LinkedList<>());
     assertEquals(date1, entry1.getDate());
     assertEquals(Optional.of(1), Optional.ofNullable(entry1.getId()));
     assertEquals("entry1", entry1.getTitle());
@@ -49,7 +51,7 @@ public class EntryTest {
   @Test
   public void testConstructorUsingList() {
     LocalDate date2 = LocalDate.now();
-    Entry<JournalText> entry2 = new Entry<>(2, date2, "entry2", questionsResponses);
+    Entry<JournalText> entry2 = new Entry<>(2, date2, "entry2", questionsResponses, new LinkedList<>());
     assertEquals(date2, entry2.getDate());
     assertEquals(Optional.of(2), Optional.ofNullable(entry2.getId()));
     assertEquals("entry2", entry2.getTitle());
