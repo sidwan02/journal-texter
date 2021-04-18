@@ -13,6 +13,8 @@ export default function (props) {
     const [showQuestionDisplay, setShowQuestionDisplay] = useState(false);
     const [questions, setQuestions] = useState(["", "", "", "", ""]);
 
+    const [numUserInput, setNumUserInput] = useState(0);
+
     const user = JSON.parse(localStorage.getItem('token'))['token'];
     const entryID = props.location.state.entryID;
     const history = useHistory()
@@ -78,7 +80,17 @@ export default function (props) {
             setTexts(texts.concat(newText));
 
             setRecentUserResponse(recentUserResponse.concat(filteredResponse));
-            
+
+            setNumUserInput(numUserInput + 1);
+
+        }
+    }
+
+    /**
+     * Lets the user request a set of new questions
+     */
+    const loadNewQuestions = () => {
+        if (numUserInput !== 0) {
             const toSend = {
                 entryID: entryID,
                 userID: user,
@@ -98,41 +110,15 @@ export default function (props) {
                 toSend,
                 config
             ).then(response => {
-                console.log(response.data);
-
                 let questionsList = response.data["questions"]
                 setQuestions(questionsList);
             })
         }
     }
 
-    /**
-     * Lets the user request a set of new questions
-     */
-    const loadNewQuestions = () => {
-        const toSend = {
-            entryID: entryID,
-            userID: user,
-            text: recentUserResponse,
-            state: "requestQuestion"
-        }
-
-        let config = {
-            headers: {
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*',
-            }
-        }
-
-        axios.post(
-            "http://localhost:4567/handleRequestQuestion",
-            toSend,
-            config
-        ).then(response => {
-            let questionsList = response.data["questions"]
-            setQuestions(questionsList);
-        })
-    }
+    useEffect(() => {
+        loadNewQuestions()
+    }, [numUserInput])
 
     /**
      * Manually saves the entry

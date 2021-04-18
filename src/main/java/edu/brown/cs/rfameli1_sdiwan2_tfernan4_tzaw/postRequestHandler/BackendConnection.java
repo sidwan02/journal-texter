@@ -86,7 +86,6 @@ public final class BackendConnection {
    * @return a set of all tags associated with the responses.
    */
   public static Set<String> getTagsFromResponses(String combinedResponses) {
-    System.out.println(combinedResponses);
 
     WordCountVec vectorizor = new WordCountVec();
 
@@ -94,14 +93,10 @@ public final class BackendConnection {
 
     SortedSet<Map.Entry<String, Integer>> sortedFrequencies = vectorizor.sortByValues(frequencies);
 
-    System.out.println("frequencies = " + frequencies);
-    System.out.println("sortedFrequencies = " + sortedFrequencies);
-
     JournalTexterDB jtDB = JournalTexterDB.getInstance();
     Set<String> tags = new HashSet<>();
     try {
       tags = jtDB.getAllTagsFromDB();
-//      System.out.println("tags =" + tags);
     } catch (SQLException e) {
       e.printStackTrace();
     }

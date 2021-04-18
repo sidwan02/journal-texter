@@ -86,8 +86,6 @@ public class GUIHandler {
 
         Set<String> foundTags = BackendConnection.getTagsFromResponses(combinedResponses);
 
-        System.out.println(foundTags);
-
         List<String> questions = BackendConnection.getQuestionsFromTags(foundTags);
 
         // in case not enough questions are determined from tags
