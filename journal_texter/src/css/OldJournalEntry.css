@@ -5,10 +5,35 @@
     background-color: var(--blue-200);
 }
 
+.old-journal-entry-title {
+    background-color: var(--blue-100);
+    border: var(--blue-900) 2px solid;
+    border-radius: 1rem;
+
+    height: 12%;
+    width: 75%;
+
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.old-journal-entry-title-text {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+
+    padding: 1rem;
+}
+
 .old-journal-entry-body {
     margin: 1rem auto;
     width: 75%;
-    height: 70%;
+    height: 60%;
     border: black solid 2px;
     border-radius: 1rem;
     overflow: auto;

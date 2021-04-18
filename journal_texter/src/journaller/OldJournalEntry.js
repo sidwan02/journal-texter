@@ -11,6 +11,7 @@ export default function OldJournalEntry(props) {
     const entryID = props.location.state.entryID;
     const history = useHistory()
 
+    let [title, setTitle] = useState("");
 
     function addUserText(userResponse) {
         console.log(userResponse);
@@ -49,7 +50,8 @@ export default function OldJournalEntry(props) {
             toSend,
             config
         ).then(response => {
-            console.log(response.data);
+            setTitle(response.data["entryTitle"]);
+
             let questionsList = response.data["questions"]
             let responsesList = response.data["responses"]
             let i;
@@ -111,6 +113,11 @@ export default function OldJournalEntry(props) {
     return (
         <div className="old-journal-entry">
             <NavBar/>
+            <div className="old-journal-entry-title">
+                <div className="old-journal-entry-title-text">
+                    {title}
+                </div>
+            </div>
             <div className="old-journal-entry-body">
                 {texts}
             </div>
