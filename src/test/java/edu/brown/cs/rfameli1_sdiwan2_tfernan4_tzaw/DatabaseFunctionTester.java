@@ -1,6 +1,7 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.Database;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DatabaseCreator;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DbUtils;
 
 import java.io.File;

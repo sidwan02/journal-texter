@@ -75,6 +75,7 @@ public class NewDatabaseCommand implements REPLCommand {
     String filename = arguments.nextString();
     try {
       DatabaseCreator.createNewDatabase(filename, tableCreateStatements);
+      System.out.println("Created new database file " + filename);
     } catch (Exception e) {
       System.out.println("ERROR: " + e.getMessage());
     }

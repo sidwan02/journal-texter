@@ -1,7 +1,5 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Spreadsheet.InvalidFileException;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,7 +19,6 @@ public final class DatabaseCreator {
    * @param filename the name of the file to be created, including its filepath within the directory
    * @param tableCreationStatements a List of SQL CREATE statements for creating all necessary
    *                                tables
-   * @return a Database object representing the created database
    * @throws IOException if the filename is invalid, the file already exists, or the file could not
    * be created
    * @throws SQLException if an error occurs creating the database or accessing the connection
@@ -31,7 +28,7 @@ public final class DatabaseCreator {
       throws IOException, SQLException, ClassNotFoundException {
     File file = new File(filename);
     // Check conditions: ends with .db, file does not already exist, file can be created
-    if (!filename.startsWith(".db", filename.length() - 4)) {
+    if (!filename.startsWith(".db", filename.length() - 3)) {
       throw new IOException("Database file requires .db file ending");
     }
     if (file.exists()) {
