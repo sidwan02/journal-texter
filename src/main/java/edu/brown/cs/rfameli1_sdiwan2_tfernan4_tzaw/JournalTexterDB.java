@@ -306,11 +306,13 @@ public final class JournalTexterDB {
 //  }
 
   /**
-   * Updates an entry by adding new Questions and Responses.
+   * Updates an entry by adding new Questions and Response, as well as forming new tag-to-entry
+   * relations in the database if tagsToAdd is not empty.
    * @param entryId the id of the entry to update
    * @param textsToAdd the Questions and Responses to add
+   * @param tagsToAdd the tags to add to the entry
    * @throws SQLException if connection has not been established or if an error occurs interacting
-   * with the database
+   * with the database, including if a tag in tagsToAdd is not in the tags table
    */
   public void addToEntry(Integer entryId, List<JournalText> textsToAdd, List<String> tagsToAdd)
       throws SQLException {
@@ -334,15 +336,29 @@ public final class JournalTexterDB {
     ps.executeUpdate();
 
     for (String tag : tagsToAdd) {
-      ps = conn.prepareStatement(
-          "INSERT INTO tags_to_entries VALUES (?, (SELECT id FROM tags WHERE text=?))");
-      ps.setInt(1, entryId);
-      ps.setString(2, tag);
-      ps.executeUpdate();
-      // Find id of tag from tags table
+      // Find the id of the tag
+      Integer tagId = null;
+      ps = conn.prepareStatement("SELECT id FROM tags WHERE text=?");
+      ps.setString(1, tag);
+      rs = ps.executeQuery();
+      while (rs.next()) {
+        tagId = rs.getInt(1);
+      }
+      if (tagId == null) {
+        throw new SQLException("Tag " + tag + " not found in the tags table (addToEntry)");
+      }
+
       // Add new tag-entry relation in tags-to-entries table
+      ps = conn.prepareStatement(
+          "INSERT INTO tags_to_entries (tag_id, entry_id) SELECT ?, ? WHERE NOT EXISTS "
+              + "(SELECT * FROM tags_to_entries WHERE tag_id=? AND entry_id=?)");
+      ps.setInt(1, tagId);
+      ps.setInt(2, entryId);
+      ps.setInt(3, tagId);
+      ps.setInt(4, entryId);
+      ps.executeUpdate();
     }
-    DbUtils.closeQuietly(ps);
+    DbUtils.closeResultSetAndPrepStatement(rs, ps);
   }
 
   /**
