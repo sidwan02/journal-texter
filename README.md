@@ -81,6 +81,9 @@ you can also delete entries.
 
 
 ## Challenges faced in the project
+With our word count vectorizing algorithm, we realised that we were not able to fully realise the potential of lemmatizing, which could have saved us some trouble when dealing with tags.
+
+We also developed a secondary algorithm for sentiment analysis, which works with 87% test accuracy, which we would have liked to use to make our algorithm even stronger. You can use the SentimentAnalysis class to predict the sentiment of any text, but we were unfortunately not able to successfully configure Python interpreters or modules on everyone's machines, so we decided to keep the python files even though we ultimately could never integrate them.
 
 ## About the Team
 
