@@ -48,6 +48,9 @@ export default function Dashboard() {
                     let entryTitle = response.data["entries"]["values"][i]["nameValuePairs"]["entryTitle"];
                     let date = month + "/" + day + "/" + year;
 
+                    let tags = response.data["entries"]["values"][i]["nameValuePairs"]["tags"];
+                    console.log(tags);
+
                     pastEntries.push(<OldJournalEntryBox date={date} entryID={entryId} entryTitle={entryTitle}/>);
                     setPastEntries(pastEntries.concat(<div></div>));
                 }

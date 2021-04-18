@@ -144,6 +144,7 @@ public class Entry<T extends JournalText> {
    */
   public Double getWeightedSentiment() {
     return 0.;
+//    return this.totalSentiment / this.numberOfQuestions;
   }
 
 }

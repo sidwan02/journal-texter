@@ -49,6 +49,7 @@ export default function OldJournalEntry(props) {
             toSend,
             config
         ).then(response => {
+            console.log(response.data);
             let questionsList = response.data["questions"]
             let responsesList = response.data["responses"]
             let i;
