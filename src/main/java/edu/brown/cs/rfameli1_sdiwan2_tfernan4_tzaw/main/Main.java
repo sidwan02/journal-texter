@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL.JournalTexterREPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.postRequestHandler.GUIHandler;

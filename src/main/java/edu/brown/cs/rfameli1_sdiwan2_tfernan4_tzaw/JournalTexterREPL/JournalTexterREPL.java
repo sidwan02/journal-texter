@@ -1,6 +1,6 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL;
 
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
 
 import java.io.IOException;

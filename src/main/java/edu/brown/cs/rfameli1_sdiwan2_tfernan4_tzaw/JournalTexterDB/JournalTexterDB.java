@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
 
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DbUtils;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;

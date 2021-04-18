@@ -5,7 +5,7 @@ import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.APIHandlers.dialectTranslatio
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
-import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.sentimentAnalysis.SentimentAnalysis;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.wordCountVec.WordCountVec;
 import org.json.JSONArray;

@@ -1,15 +1,20 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.Database;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DatabaseCreator;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.DbUtils;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Entry;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.JournalText;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Question;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Journal.Response;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB.JournalTexterDB;
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB.JournalTexterDBCreation;
 import org.junit.Test;
 import org.junit.After;
 import org.junit.Before;
 
 import javax.security.auth.login.FailedLoginException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -28,24 +33,42 @@ public class JournalTexterDBTest {
   private Connection conn = null;
   private PreparedStatement ps;
   private ResultSet rs;
-  private String testDatabaseFileName = "data/test-database.db";
+  private final String testDatabaseFileName = "data/test-database.db";
 
   Question question1 = new Question("How are you?");
   Question emptyQuestion = new Question("");
   Response response1 = new Response("I am good");
   Response emptyResponse = new Response("");
 
+  private void deleteTestFileIfExists() throws IOException {
+    File file = new File(testDatabaseFileName);
+    if (file.exists()) {
+      if (!file.delete()) {
+        throw new IOException("ERROR: Could not delete file "
+            + testDatabaseFileName + " in JournalTexterDBTest");
+      }
+    }
+  }
+
+
   @Before
   public void setUp() throws SQLException, IOException, ClassNotFoundException {
     jtDb = JournalTexterDB.getInstance();
-    jtDb.setConnection(DatabaseFunctionTester.setEmptyDatabaseAndGetConn(testDatabaseFileName));
-    conn = jtDb.getConnection();
+    // Delete the current test database file if it exists
+    deleteTestFileIfExists();
+    DatabaseCreator.createNewDatabase(
+        testDatabaseFileName, JournalTexterDBCreation.tableCreateStatements());
+    Database db = new Database(testDatabaseFileName);
+    conn = db.getConnection();
+    jtDb.setConnection(conn);
   }
 
   @After
-  public void tearDown() {
+  public void tearDown() throws IOException {
+    DbUtils.closeQuietly(conn);
     jtDb.setConnection(null);
     conn = null;
+    deleteTestFileIfExists();
   }
 
   @Test
