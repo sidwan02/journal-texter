@@ -25,7 +25,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -144,12 +146,25 @@ public class JournalTexterDBTest {
 
   @Test
   public void testQuestionAndTagMethods() throws SQLException {
-    jtDb.loadQuestionsAndTagsFromSheet("test-questions-sheet.tsv");
+    jtDb.loadQuestionsAndTagsFromSheet("data/testdata/test-questions-sheet.tsv");
     ps = conn.prepareStatement("SELECT text FROM questions");
-    if (rs.next()) {
-      assertEquals("How are you?", rs.getString(1));
+    rs = ps.executeQuery();
+    List<String> retrievedQuestions = new ArrayList<>();
+    while (rs.next()) {
+      retrievedQuestions.add(rs.getString(1));
     }
-    // TODO add a test questions sheet to load in data from
+    assertEquals(Arrays.asList("How are you?", "How do you feel?", "What are you up to?", ""), retrievedQuestions);
+
+    ps = conn.prepareStatement("SELECT text FROM tags");
+    rs = ps.executeQuery();
+    List<String> retrievedTags = new ArrayList<>();
+    while (rs.next()) {
+      retrievedTags.add(rs.getString(1));
+    }
+    assertEquals(Arrays.asList("", "mood", "happy", "wee", "wow"), retrievedTags);
+    Set<String> allTags = new HashSet<>(retrievedTags);
+
+    assertEquals(allTags, jtDb.getAllTagsFromDB());
   }
 
   @Test
