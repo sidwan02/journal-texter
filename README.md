@@ -5,7 +5,7 @@
 
 
 
-**Packages to remember to install in frontend**
+**Packages needed for the frontend**
 
 `npm install react-router-dom --save`
 (This allows for multiple pages)
