@@ -5,11 +5,12 @@
 
 
 
-**Packages to remember to install in frontend (Remove later)**
+**Packages to remember to install in frontend**
 
 `npm install react-router-dom --save`
 (This allows for multiple pages)
 
+`npm install axios`
 
 `npm install --save-dev express cors`
 In order to run a temporary login server
