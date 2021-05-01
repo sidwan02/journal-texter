@@ -1,11 +1,9 @@
 # JournalTexter
 ## a cs0320 Term Project
 
+## How to Build and Run
 
-
-
-
-**Packages needed for the frontend**
+### Packages needed for the frontend
 
 `npm install react-router-dom --save`
 (This allows for multiple pages)
@@ -15,11 +13,6 @@
 `npm install --save-dev express cors`
 In order to run a temporary login server
 Then, in the journal_texter folder, run `node server.js`.
-
-## How to Build and Run
-
-### Necessary Installations
-
 
 ### Starting the backend
 
