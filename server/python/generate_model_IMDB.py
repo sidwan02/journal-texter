@@ -41,9 +41,12 @@ def padding_(sentences, seq_len):
 x_train_pad = np.array(normalize_length(500, x_train))
 x_test_pad = np.array(normalize_length(500, x_test))
 
+print(np.shape(x_train_pad))
+
 # create Tensor datasets
 train_data = TensorDataset(torch.from_numpy(
     x_train_pad), torch.from_numpy(y_train))
+print(train_data)
 valid_data = TensorDataset(torch.from_numpy(
     x_test_pad), torch.from_numpy(y_test))
 
@@ -63,5 +66,5 @@ output_dim = 1
 hidden_dim = 256
 
 
-Train(vocab_size=vocab_size,
-      train_loader=train_loader, test_loader=valid_loader, batch_size=batch_size)
+# Train(vocab_size=vocab_size,
+#       train_loader=train_loader, test_loader=valid_loader, batch_size=batch_size)

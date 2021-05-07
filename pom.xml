@@ -160,9 +160,27 @@
 
   </dependencies>
 
+
+
   <!-- Build section -->
   <build>
     <plugins>
+
+      <!--  https://sparktutorials.github.io/2015/08/24/spark-heroku.html-->
+<!--      https://devcenter.heroku.com/articles/deploying-java-applications-with-the-heroku-maven-plugin-->
+      <plugin>
+        <groupId>com.heroku.sdk</groupId>
+        <artifactId>heroku-maven-plugin</artifactId>
+        <version>3.0.3</version>
+        <configuration>
+          <jdkVersion>1.8</jdkVersion>
+          <appName>journal-texter</appName>
+          <processTypes>
+            <!-- Tell Heroku how to launch your application -->
+            <web>java -jar ./target/my-app-1.0-jar-with-dependencies.jar</web>
+          </processTypes>
+        </configuration>
+      </plugin>
 
       <!-- Maven compiler plugin for compiling Java 11 -->
       <plugin>

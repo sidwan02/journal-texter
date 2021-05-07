@@ -41,12 +41,23 @@ public final class Main {
     this.args = args;
   }
 
+//  https://sparktutorials.github.io/2015/08/24/spark-heroku.html
+  static int getHerokuAssignedPort() {
+    ProcessBuilder processBuilder = new ProcessBuilder();
+    if (processBuilder.environment().get("PORT") != null) {
+      return Integer.parseInt(processBuilder.environment().get("PORT"));
+    }
+    return DEFAULT_PORT; //return default port if heroku-port isn't set (i.e. on localhost)
+  }
+
   private void run() {
     // Parse command line arguments
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
+//    parser.accepts("port").withRequiredArg().ofType(Integer.class)
+//        .defaultsTo(DEFAULT_PORT);
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
-        .defaultsTo(DEFAULT_PORT);
+      .defaultsTo(getHerokuAssignedPort());
     OptionSet options = parser.parse(args);
 
     if (options.has("gui")) {
