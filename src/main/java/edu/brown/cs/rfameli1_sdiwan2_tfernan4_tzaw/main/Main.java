@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
 
 import java.io.File;
 import java.io.IOException;
