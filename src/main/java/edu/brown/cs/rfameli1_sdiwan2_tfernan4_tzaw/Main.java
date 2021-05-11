@@ -1,4 +1,4 @@
-package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
+package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,10 +59,7 @@ public final class Main {
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
       .defaultsTo(getHerokuAssignedPort());
     OptionSet options = parser.parse(args);
-
-    if (options.has("gui")) {
-      runSparkServer((int) options.valueOf("port"));
-    }
+    runSparkServer((int) options.valueOf("port"));
 
 //    WordnikAPIHandler hoho = new WordnikAPIHandler();
 //    hoho.getSynonyms("earth");
@@ -90,7 +87,7 @@ public final class Main {
     return new FreeMarkerEngine(config);
   }
 
-  private void runSparkServer(int port) {
+  private static void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());

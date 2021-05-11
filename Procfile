@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Main
