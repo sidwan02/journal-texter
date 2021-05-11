@@ -173,12 +173,12 @@
         <artifactId>heroku-maven-plugin</artifactId>
         <version>3.0.3</version>
         <configuration>
-          <jdkVersion>11.0.1</jdkVersion>
+          <jdkVersion>11.0.11</jdkVersion>
           <appName>journaltexter-api</appName>
-          <processTypes>
+<!--          <processTypes>-->
             <!-- Tell Heroku how to launch your application -->
-            <web>java -jar ./target/my-app-1.0-jar-with-dependencies.jar</web>
-          </processTypes>
+<!--            <web>java -jar ./target/my-app-1.0-jar-with-dependencies.jar</web>-->
+<!--          </processTypes>-->
         </configuration>
       </plugin>
 
