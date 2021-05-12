@@ -175,6 +175,7 @@
         <configuration>
           <jdkVersion>11.0.11</jdkVersion>
           <appName>journaltexter-api</appName>
+          <!-- COMMENTED OUT THE BELOW CODE BECAUSE IT IS BEING HANDLED BY Procfile-->
 <!--          <processTypes>-->
             <!-- Tell Heroku how to launch your application -->
 <!--            <web>java -jar ./target/my-app-1.0-jar-with-dependencies.jar</web>-->
@@ -193,6 +194,31 @@
           <compilerArgument>-Xlint:all</compilerArgument>
           <showWarnings>true</showWarnings>
           <showDeprecation>true</showDeprecation>
+        </configuration>
+      </plugin>
+
+      <!-- Maven assembly plugin may be useful for deploying Spark on heroku? -->
+      <!-- https://sparktutorials.github.io/2015/08/24/spark-heroku.html -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <!-- This tells Maven to include all dependencies -->
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>Main</mainClass>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
       <plugin>
