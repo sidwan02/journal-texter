@@ -1,7 +1,6 @@
 package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -15,9 +14,7 @@ import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
-import spark.template.freemarker.FreeMarkerEngine;
 
-import freemarker.template.Configuration;
 
 /**
  * The Main class of our project. This is where execution begins.
@@ -75,18 +72,6 @@ public final class Main {
     new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
   }
 
-  private static FreeMarkerEngine createEngine() {
-    Configuration config = new Configuration();
-    File templates = new File("src/main/resources/spark/template/freemarker");
-    try {
-      config.setDirectoryForTemplateLoading(templates);
-    } catch (IOException ioe) {
-      System.out.printf("ERROR: Unable use %s for template loading.%n", templates);
-      System.exit(1);
-    }
-    return new FreeMarkerEngine(config);
-  }
-
   private static void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
@@ -109,7 +94,6 @@ public final class Main {
 
     Spark.before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 
-    FreeMarkerEngine freeMarker = createEngine();
 
     // Setup Spark Routes
     Spark.post("/login", new GUIHandler.HandleLogin());
