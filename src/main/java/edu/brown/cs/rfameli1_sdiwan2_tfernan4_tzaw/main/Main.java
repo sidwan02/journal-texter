@@ -75,7 +75,7 @@ public final class Main {
   private static void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
-    Spark.exception(Exception.class, new ExceptionPrinter());
+//    Spark.exception(Exception.class, new ExceptionPrinter());
 
     Spark.options("/*", (request, response) -> {
       String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
@@ -106,20 +106,20 @@ public final class Main {
     Spark.post("/handleDeletionRequest", new GUIHandler.HandleDeletionRequest());
   }
 
-  /**
-   * Display an error page when an exception occurs in the server.
-   */
-  private static class ExceptionPrinter implements ExceptionHandler {
-    @Override
-    public void handle(Exception e, Request req, Response res) {
-      res.status(500);
-      StringWriter stacktrace = new StringWriter();
-      try (PrintWriter pw = new PrintWriter(stacktrace)) {
-        pw.println("<pre>");
-        e.printStackTrace(pw);
-        pw.println("</pre>");
-      }
-      res.body(stacktrace.toString());
-    }
-  }
+//  /**
+//   * Display an error page when an exception occurs in the server.
+//   */
+//  private static class ExceptionPrinter implements ExceptionHandler {
+//    @Override
+//    public void handle(Exception e, Request req, Response res) {
+//      res.status(500);
+//      StringWriter stacktrace = new StringWriter();
+//      try (PrintWriter pw = new PrintWriter(stacktrace)) {
+//        pw.println("<pre>");
+//        e.printStackTrace(pw);
+//        pw.println("</pre>");
+//      }
+//      res.body(stacktrace.toString());
+//    }
+//  }
 }
