@@ -35,9 +35,10 @@ export default function LoginPage({setToken}) {
                 'Access-Control-Allow-Origin': '*',
             }
         }
-
+        const API_URL = "https://journaltexter-api.herokuapp.com/"
         return axios.post(
-            "http://localhost:4567/login",
+            API_URL + "login",
+            // "http://localhost:4567/login",
             toSend,
             config
         )

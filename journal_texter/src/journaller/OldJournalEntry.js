@@ -45,8 +45,10 @@ export default function OldJournalEntry(props) {
             }
         }
 
-        axios.post(
-            "http://localhost:4567/handleUserHistoryRequest",
+        const API_URL = "https://journaltexter-api.herokuapp.com/"
+        return axios.post(
+            API_URL + "handleUserHistoryRequest",
+            // "http://localhost:4567/handleUserHistoryRequest",
             toSend,
             config
         ).then(response => {
@@ -91,8 +93,10 @@ export default function OldJournalEntry(props) {
             }
         }
 
-        axios.post(
-            "http://localhost:4567/handleDeletionRequest",
+        const API_URL = "https://journaltexter-api.herokuapp.com/"
+        return axios.post(
+            API_URL + "handleDeletionRequest",
+            // "http://localhost:4567/handleDeletionRequest",
             toSend,
             config
         ).then(() => {

@@ -38,8 +38,12 @@ export default function SignUpPage({setToken}) {
             }
         }
 
+
+        const API_URL = "https://journaltexter-api.herokuapp.com/"
+
         return axios.post(
-            "http://localhost:4567/signup",
+            API_URL + "signup",
+            // "http://localhost:4567/signup",
             toSend,
             config
         )

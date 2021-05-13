@@ -106,8 +106,10 @@ export default function (props) {
                 }
             }
 
-            axios.post(
-                "http://localhost:4567/handleRequestQuestion",
+            const API_URL = "https://journaltexter-api.herokuapp.com/"
+            return axios.post(
+                API_URL + "handleRequestQuestion",
+                // "http://localhost:4567/handleRequestQuestion",
                 toSend,
                 config
             ).then(response => {
