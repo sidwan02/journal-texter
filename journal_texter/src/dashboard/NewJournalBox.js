@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../css/Dashboard.css'
 import {useHistory} from "react-router-dom";
 import axios from "axios";
@@ -37,8 +37,10 @@ function NewJournalBox(props) {
             }
         }
 
-        axios.post(
-            "http://localhost:4567/handleCreateEntry",
+        const API_URL = "https://journaltexter-api.herokuapp.com/"
+        return axios.post(
+            API_URL + "handleCreateEntry",
+            // "http://localhost:4567/handleCreateEntry",
             toSend,
             config
         ).then(response => {

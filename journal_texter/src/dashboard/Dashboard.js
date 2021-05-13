@@ -13,7 +13,7 @@ import NavBar from "./NavBar";
  */
 export default function Dashboard() {
     const [pastEntries, setPastEntries] = useState([]);
-
+    const API_URL = "https://journaltexter-api.herokuapp.com/"
     /**
      * Get's the user's past journal entries from the backend.
      *
@@ -29,8 +29,9 @@ export default function Dashboard() {
             }
         }
 
-        axios.post(
-            "http://localhost:4567/handleUserHistorySummary",
+        return axios.post(
+            API_URL + "handleUserHistorySummary",
+            //"http://localhost:4567/handleUserHistorySummary",
             toSend,
             config
         )

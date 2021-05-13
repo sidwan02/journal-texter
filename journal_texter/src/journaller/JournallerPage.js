@@ -20,6 +20,8 @@ export default function (props) {
 
     let entryName = '';
 
+    const API_URL = "https://journaltexter-api.herokuapp.com/"
+
     /**
      * Loads in a random question at the start
      */
@@ -38,8 +40,9 @@ export default function (props) {
             }
         }
 
-        axios.post(
-            "http://localhost:4567/handleRequestQuestion",
+        return axios.post(
+            API_URL + "handleRequestQuestion",
+            // "http://localhost:4567/handleRequestQuestion",
             toSend,
             config
         ).then(response => {
@@ -106,7 +109,6 @@ export default function (props) {
                 }
             }
 
-            const API_URL = "https://journaltexter-api.herokuapp.com/"
             return axios.post(
                 API_URL + "handleRequestQuestion",
                 // "http://localhost:4567/handleRequestQuestion",
@@ -150,8 +152,10 @@ export default function (props) {
             }
         }
 
-        axios.post(
-            "http://localhost:4567/handleSaveUserInputs",
+
+        return axios.post(
+            API_URL + "handleSaveUserInputs",
+            // "http://localhost:4567/handleSaveUserInputs",
             toSend,
             config
         ).then(() => {
