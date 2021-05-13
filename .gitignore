@@ -6,7 +6,7 @@ target/
 *.db
 *.sqlite3
 *.db-journal
-data/*.db
+!data/journaltexter.db
 /data/stanfordSentimentTreebank/
 /data/IMDB DS
 /server/model/

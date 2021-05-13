@@ -3,7 +3,9 @@ package edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.main;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 
+import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.Database.Database;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterDB.JournalTexterDB;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.JournalTexterREPL.JournalTexterREPL;
 import edu.brown.cs.rfameli1_sdiwan2_tfernan4_tzaw.REPL.REPL;
@@ -69,6 +71,18 @@ public final class Main {
 //    Double sentiment = senti.getSentimentFromText("hello there");
 //    System.out.println(sentiment);
 
+    final String databasePath = "data/journaltexter.db";
+    try {
+      Database db = new Database(databasePath);
+      // This single instance of JournalTexterDB will handle all interactions with the database
+      JournalTexterDB jtDb = JournalTexterDB.getInstance();
+      // Set jtDb to work with our pre-defined database
+      jtDb.setConnection(db.getConnection());
+    } catch (SQLException | ClassNotFoundException e) {
+      System.out.println("ERROR: Exception when connecting to journaltexter.db");
+      System.out.println(e.getMessage());
+    }
+    // Run the REPL (mainly for local use)
     new JournalTexterREPL(new REPL(), JournalTexterDB.getInstance()).start();
   }
 
